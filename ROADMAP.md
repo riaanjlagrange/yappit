@@ -2,12 +2,12 @@
 
 ## ✅ Core Functionality
 
-- [ ] User registration (email + password)
-- [ ] User login/logout (JWT authentication)
+- [x] User registration (email + password)
+- [x] User login/logout (JWT authentication)
 - [x] Create blog post (title, content, date)
 - [ ] Read blog post (public view)
 - [ ] Update blog post (only by post author)
-- [ ] Delete blog post (only by post author)
+- [x] Delete blog post (only by post author)
 - [x] List all blog posts (home page)
 - [x] Basic navigation (home, login, register, dashboard)
 
@@ -18,10 +18,10 @@
 
 ## 📦 Backend Essentials
 
-- [ ] Password hashing with bcrypt
-- [ ] Token generation with JWT
-- [ ] Protected routes for logged-in users
-- [ ] Basic database setup (e.g. SQLite, PostgreSQL, MongoDB)
+- [x] Password hashing with bcrypt
+- [x] Token generation with JWT
+- [x] Protected routes for logged-in users
+- [x] Basic database setup (e.g. SQLite, PostgreSQL, MongoDB)
 
 ## 🌍 Deployment
 
