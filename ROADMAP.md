@@ -27,6 +27,7 @@
 
 - [ ] Deploy backend (e.g. on Railway, Render, Heroku)
 - [ ] Deploy frontend (e.g. on Vercel, Netlify)
+- [ ] DB on supabase?
 
 # 🚀 Future Features (Post-MVP)
 
@@ -47,7 +48,7 @@
 - [ ] Markdown support for writing
 - [ ] Image uploads in posts
 - [ ] AI image generation
-- [ ] AI Shizoize Text (only for theory topic posts)
+- [ ] AI Schizoize Text (only for theory topic posts)
 
 ## 🧑‍💻 Admin Features (Advanced)
 

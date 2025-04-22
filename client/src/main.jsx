@@ -5,6 +5,9 @@ import "./index.css";
 import App from "./App.jsx";
 import AllPosts from "./components/posts/AllPosts.jsx";
 import CreatePost from "./components/posts/CreatePost.jsx";
+import Register from "./components/auth/Register.jsx";
+import Login from "./components/auth/Login.jsx";
+import RequireAuth from "./components/auth/RequireAuth.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,11 +17,22 @@ const router = createBrowserRouter([
       {
         path: "/posts",
         element: <AllPosts />,
-        errorElement: <div>Error loading posts</div>,
       },
       {
         path: "/posts/new",
-        element: <CreatePost />,
+        element: (
+          <RequireAuth>
+            <CreatePost />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/register",
+        element: <Register />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
   },

@@ -1,0 +1,91 @@
+const pool = require("../db");
+
+// GET all posts
+const getAllPosts = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM posts");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// GET post by id
+const getPostById = async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM posts WHERE id = $1", [
+      req.params.id,
+    ]);
+    if (result.rows.length === 0) {
+      return res.status(404).send("Post not found.");
+    } else {
+      res.json(result.rows[0]);
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// POST create a new post
+const createPost = async (req, res) => {
+  const { title, content, topic } = req.body;
+  const created_by = req.user.id; // Assuming you have user ID from authentication middleware
+  try {
+    const result = await pool.query(
+      "INSERT INTO posts (title, content, topic, created_by) VALUES ($1, $2, $3, $4) RETURNING *",
+      [title, content, topic, created_by]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// TODO: add PUT to update a post by id
+
+// DELETE a post by id
+const deletePostById = async (req, res) => {
+  try {
+    // check post ownership
+    const post = await pool.query("SELECT * FROM posts WHERE id = $1", [
+      req.params.id,
+    ]);
+
+    // check if post exists
+    if (post.rows.length === 0) {
+      return res.status(404).send("Post not found.");
+    }
+
+    // check if user is authorized to delete the post
+    console.log("Post created by:", post.rows[0].created_by);
+    console.log("User ID:", req.user.id);
+    if (post.rows[0].created_by !== req.user.id) {
+      return res
+        .status(403)
+        .send("You are not authorized to delete this post.");
+    }
+
+    const result = await pool.query(
+      "DELETE FROM posts WHERE id = $1 RETURNING *",
+      [req.params.id]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).send("Post not found.");
+    } else {
+      res.status(204).send();
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+module.exports = {
+  getAllPosts,
+  getPostById,
+  createPost,
+  deletePostById,
+};

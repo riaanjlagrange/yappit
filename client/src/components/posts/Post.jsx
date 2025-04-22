@@ -5,6 +5,7 @@ function Post({ post, onPostDeleted }) {
   const [author, setAuthor] = useState("Unknown Author");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
 
   // Fetch the author name when the component mounts or when post.created_by changes
   // TODO: could use helper function "getUserNameById" to fetch the author name in future
@@ -16,6 +17,10 @@ function Post({ post, onPostDeleted }) {
       console.log("Post deleted successfully");
     } catch (err) {
       console.error(err);
+      setDeleteError("Failed to delete post." + " " + err.message);
+      setTimeout(() => {
+        setDeleteError(null);
+      }, 3000); // Clear the error after 3 seconds
     }
   };
 
@@ -58,6 +63,7 @@ function Post({ post, onPostDeleted }) {
       >
         Delete Post
       </button>
+      {deleteError && <p className="text-red-500 mt-2">{deleteError}</p>}
     </div>
   );
 }
