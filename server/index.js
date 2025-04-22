@@ -12,11 +12,14 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
+// TODO: add /api/ prefix to all routes
+// TODO: make server and client run on same port and command
+
 // routes
 const postRoutes = require("./routes/posts");
-app.use("/posts", postRoutes);
+app.use("/api/posts", postRoutes);
 const userRoutes = require("./routes/users");
-app.use("/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 // run the server
 const PORT = process.env.PORT || 3000;

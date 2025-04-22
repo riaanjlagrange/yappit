@@ -32,11 +32,11 @@ router.get("/:id", async (req, res) => {
 
 // POST create a new post
 router.post("/", async (req, res) => {
-  const { title, content, user_id } = req.body;
+  const { title, content, topic, created_by } = req.body;
   try {
     const result = await pool.query(
-      "INSERT INTO posts (title, content, created_by) VALUES ($1, $2, $3) RETURNING *",
-      [title, content, user_id]
+      "INSERT INTO posts (title, content, topic, created_by) VALUES ($1, $2, $3, $4) RETURNING *",
+      [title, content, topic, created_by]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -44,6 +44,8 @@ router.post("/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// TODO: add PUT to update a post by id
 
 // DELETE a post by id
 router.delete("/:id", async (req, res) => {
