@@ -31,6 +31,10 @@ function CreatePost() {
     }
   };
 
+  const handleChange = (e) => {
+    setTopic(e.target.value);
+  };
+
   return (
     <div>
       <h1 className="text-2xl">Create a New Post</h1>
@@ -50,13 +54,18 @@ function CreatePost() {
           className="border p-2 rounded"
           required
         ></textarea>
-        <input
-          type="text"
-          placeholder="Topic"
+        <select
+          id="topic"
           value={topic}
-          onChange={(e) => setTopic(e.target.value)}
+          onChange={handleChange}
           className="border p-2 rounded"
-        />
+          required
+        >
+          <option value="">Select a topic</option>
+          <option value="Discussion">Discussion</option>
+          <option value="Theory">Theory</option>
+          <option value="Informational">Informational</option>
+        </select>
         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
           Create Post
         </button>

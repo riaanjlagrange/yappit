@@ -12,7 +12,6 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
-// TODO: add /api/ prefix to all routes
 // TODO: make server and client run on same port and command
 
 // routes

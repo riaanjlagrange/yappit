@@ -14,6 +14,9 @@ function AllPosts() {
     api
       .get("/posts")
       .then((response) => {
+        response.data.length === 0
+          ? setError("No posts available.")
+          : setError(null);
         setPosts(response.data);
         setLoading(false);
       })
