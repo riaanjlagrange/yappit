@@ -12,8 +12,6 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
-// TODO: make server and client run on same port and command
-
 // routes
 const postRoutes = require("./routes/posts");
 app.use("/api/posts", postRoutes);

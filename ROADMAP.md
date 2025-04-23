@@ -22,12 +22,13 @@
 - [x] Token generation with JWT
 - [x] Protected routes for logged-in users
 - [x] Basic database setup (e.g. SQLite, PostgreSQL, MongoDB)
+- [x] Run server and client simultaneously using concurrently
 
 ## 🌍 Deployment
 
 - [ ] Deploy backend (e.g. on Railway, Render, Heroku)
 - [ ] Deploy frontend (e.g. on Vercel, Netlify)
-- [ ] DB on supabase?
+- [ ] Deploy DB on supabase?
 
 # 🚀 Future Features (Post-MVP)
 
