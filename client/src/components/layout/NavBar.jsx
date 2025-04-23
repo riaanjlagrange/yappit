@@ -11,6 +11,7 @@ function NavBar() {
   const [userLoading, setUserLoading] = useState(true);
   const [userError, setUserError] = useState(null);
 
+  // Get user name by user id
   const getUserName = async (userId) => {
     try {
       const userName = await getUserNameById(userId);
@@ -40,60 +41,78 @@ function NavBar() {
     window.location.reload();
   };
 
-  return (
-    <div>
-      <nav className="bg-gray-800 p-4 text-white flex justify-between items-center">
-        <div className="text-lg font-bold">My Blog</div>
-        <ul className="flex space-x-4">
+  // Add profile picture in future
+  const showUser = () => {
+    if (isLoggedIn) {
+      if (userLoading) {
+        return (
           <li>
-            <Link to="/posts" className="hover:text-gray-400">
-              All Posts
+            <span>Loading...</span>
+          </li>
+        );
+      } else if (userError) {
+        return (
+          <li>
+            <p className="text-red-500">{userError}</p>
+          </li>
+        );
+      } else {
+        return (
+          <li className="flex flex-col items-center space-between">
+            <Link to={`/users/${user.id}`} className="hover:text-gray-400">
+              {userName || "Unknown User"}
+            </Link>
+            <button
+              className="hover:text-gray-400 cursor-pointer"
+              onClick={handleLogout}
+            >
+              Logout
+            </button>
+          </li>
+        );
+      }
+    }
+  };
+
+  return (
+    <nav className="bg-gray-800 text-white fixed w-full h-20 top-0 flex justify-between items-center px-5">
+      <ul className="flex space-x-4">
+        <li>
+          <Link to="/posts" className="hover:text-gray-400">
+            All Posts
+          </Link>
+        </li>
+
+        {/* Show "Create Post" link only if the user is logged in */}
+        {isLoggedIn && (
+          <li>
+            <Link to="/posts/new" className="hover:text-gray-400">
+              Create Post
             </Link>
           </li>
-          {isLoggedIn ? (
-            <>
-              <li>
-                <Link to="/posts/new" className="hover:text-gray-400">
-                  Create Post
-                </Link>
-              </li>
-              <li>
-                {userLoading ? (
-                  <span>Loading...</span>
-                ) : userError ? (
-                  <p className="text-red-500">{userError}</p>
-                ) : (
-                  <Link
-                    to={`/users/${user.id}`}
-                    className="hover:text-gray-400"
-                  >
-                    {userName || "Unknown User"}
-                  </Link>
-                )}
-              </li>
-              <li>
-                <button className="hover:text-gray-400" onClick={handleLogout}>
-                  Logout
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <Link to="/register" className="hover:text-gray-400">
-                  Register
-                </Link>
-              </li>
-              <li>
-                <Link to="/login" className="hover:text-gray-400">
-                  Login
-                </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </nav>
-    </div>
+        )}
+      </ul>
+
+      <ul className="flex space-x-4">
+        {showUser()}
+        {/* Show "Login" link only if the user is not logged in */}
+        {!isLoggedIn && (
+          <li>
+            <Link to="/login" className="hover:text-gray-400">
+              Login
+            </Link>
+          </li>
+        )}
+        {/* Show "Register" link only if the user is not logged in */}
+        {!isLoggedIn && (
+          <li>
+            <Link to="/register" className="hover:text-gray-400">
+              Register
+            </Link>
+          </li>
+        )}
+      </ul>
+    </nav>
   );
 }
 
