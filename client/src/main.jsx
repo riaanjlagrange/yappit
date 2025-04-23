@@ -8,6 +8,8 @@ import CreatePost from "./components/posts/CreatePost.jsx";
 import Register from "./components/auth/Register.jsx";
 import Login from "./components/auth/Login.jsx";
 import RequireAuth from "./components/auth/RequireAuth.jsx";
+import UpdatePost from "./components/posts/UpdatePost.jsx";
+import FullPost from "./components/posts/FullPost.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,18 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <CreatePost />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/posts/:postId",
+        element: <FullPost />,
+      },
+      {
+        path: "/posts/:postId/update",
+        element: (
+          <RequireAuth>
+            <UpdatePost />
           </RequireAuth>
         ),
       },

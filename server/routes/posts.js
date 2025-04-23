@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const pool = require("../db");
 const {
   getAllPosts,
   getPostById,
   createPost,
   deletePostById,
+  updatePostById,
 } = require("../controllers/postsController");
 const authenticateToken = require("../middleware/auth");
 
@@ -18,7 +18,8 @@ router.get("/:id", getPostById);
 // POST create a new post
 router.post("/", authenticateToken, createPost);
 
-// TODO: add PUT to update a post by id
+// PUT update a post by id
+router.put("/:id", authenticateToken, updatePostById);
 
 // DELETE a post by id
 router.delete("/:id", authenticateToken, deletePostById);

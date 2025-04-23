@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Post from "./Post";
+import Post from "./CardPost";
 import React from "react";
 import api from "../../utils/api";
 

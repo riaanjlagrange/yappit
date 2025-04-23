@@ -44,7 +44,40 @@ const createPost = async (req, res) => {
   }
 };
 
-// TODO: add PUT to update a post by id
+// PUT update a post by id
+const updatePostById = async (req, res) => {
+  try {
+    // check if post exists
+    const post = await pool.query("SELECT * FROM posts WHERE id = $1", [
+      req.params.id,
+    ]);
+    if (post.rows.length === 0) {
+      return res.status(404).send("Post not found.");
+    }
+    // check if user is authorized to update the post
+    if (post.rows[0].created_by !== req.user.id) {
+      return res
+        .status(403)
+        .send("You are not authorized to update this post.");
+    }
+
+    const { title, content, topic } = req.body;
+
+    const result = await pool.query(
+      "UPDATE posts SET title = $1, content = $2, topic = $3 WHERE id = $4 RETURNING *",
+      [title, content, topic, req.params.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).send("Post not found.");
+    } else {
+      res.status(200).json(result.rows[0]);
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
 
 // DELETE a post by id
 const deletePostById = async (req, res) => {
@@ -60,8 +93,6 @@ const deletePostById = async (req, res) => {
     }
 
     // check if user is authorized to delete the post
-    console.log("Post created by:", post.rows[0].created_by);
-    console.log("User ID:", req.user.id);
     if (post.rows[0].created_by !== req.user.id) {
       return res
         .status(403)
@@ -87,5 +118,6 @@ module.exports = {
   getAllPosts,
   getPostById,
   createPost,
+  updatePostById,
   deletePostById,
 };
