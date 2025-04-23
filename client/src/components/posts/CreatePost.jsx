@@ -1,10 +1,13 @@
 import { useState } from "react";
 import api from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [topic, setTopic] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,40 +33,59 @@ function CreatePost() {
     setTopic(e.target.value);
   };
 
+  const handleDiscard = (e) => {
+    e.preventDefault();
+    navigate(-1);
+  };
+
   return (
-    <div>
-      <h1 className="text-2xl">Create a New Post</h1>
+    <div className="mx-auto p-8 bg-white shadow-md mt-10 mb-10">
+      <h1 className="text-2xl mb-10">Create a New Post</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border p-2 w-full"
+            required
+          />
+          <select
+            id="topic"
+            value={topic}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            required
+          >
+            <option value="">Select a topic</option>
+            <option value="Discussion">Discussion</option>
+            <option value="Theory">Theory</option>
+            <option value="Informational">Informational</option>
+          </select>
+        </div>
         <textarea
           placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="border p-2 rounded"
+          className="border p-2 h-96"
           required
         ></textarea>
-        <select
-          id="topic"
-          value={topic}
-          onChange={handleChange}
-          className="border p-2 rounded"
-          required
-        >
-          <option value="">Select a topic</option>
-          <option value="Discussion">Discussion</option>
-          <option value="Theory">Theory</option>
-          <option value="Informational">Informational</option>
-        </select>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Create Post
-        </button>
+        <div className="flex gap-2">
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full"
+          >
+            Post
+          </button>
+          <button
+            onClick={handleDiscard}
+            type="button"
+            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded w-full"
+          >
+            Discard
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -59,7 +59,10 @@ function NavBar() {
       } else {
         return (
           <li className="flex flex-col items-center space-between">
-            <Link to={`/users/${user.id}`} className="hover:text-gray-400">
+            <Link
+              to={`/users/${user.id}`}
+              className="hover:text-gray-400 font-bold"
+            >
               {userName || "Unknown User"}
             </Link>
             <button
@@ -75,22 +78,26 @@ function NavBar() {
   };
 
   return (
-    <nav className="bg-gray-800 text-white fixed w-full h-20 top-0 flex justify-between items-center px-5">
+    <nav className="bg-white fixed w-full h-20 top-0 flex justify-between items-center px-5 shadow-md z-10">
       <ul className="flex space-x-4">
+        {/* Show "Create Post" link only if the user is logged in */}
+        {isLoggedIn && (
+          <li>
+            <Link
+              to="/posts/new"
+              className="text-white hover:text-blue-500 bg-blue-500 hover:bg-white p-2 rounded border-2 border-blue-500 font-semibold"
+              style={{ transition: "all 0.3s ease" }}
+            >
+              Create Post
+            </Link>
+          </li>
+        )}
+
         <li>
           <Link to="/posts" className="hover:text-gray-400">
             All Posts
           </Link>
         </li>
-
-        {/* Show "Create Post" link only if the user is logged in */}
-        {isLoggedIn && (
-          <li>
-            <Link to="/posts/new" className="hover:text-gray-400">
-              Create Post
-            </Link>
-          </li>
-        )}
       </ul>
 
       <ul className="flex space-x-4">

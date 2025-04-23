@@ -4,13 +4,13 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <>
+    <div className="bg-gray-100 min-h-screen">
       <NavBar />
-      <div className="container mx-auto mt-32">
+      <div className="container mx-auto pt-32 min-h-screen">
         <Outlet />
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 
