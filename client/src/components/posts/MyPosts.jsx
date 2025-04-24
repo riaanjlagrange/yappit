@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Post from "./CardPost";
 import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
@@ -11,9 +11,8 @@ function MyPosts() {
   const { user } = useAuth();
   const userId = user ? user.id : null; // Get the logged-in user's ID
 
-  const fetchPosts = () => {
+  const fetchPosts = useCallback(() => {
     setLoading(true);
-
     api
       .get(`/posts/user/${userId}`) // Fetch posts for the logged-in user
       .then((response) => {
@@ -28,11 +27,11 @@ function MyPosts() {
         setLoading(false);
         setError("Failed to load posts. Please try again later.");
       });
-  };
+  }, [userId]);
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [fetchPosts]);
 
   return (
     <div>
