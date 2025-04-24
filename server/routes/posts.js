@@ -6,6 +6,7 @@ const {
   createPost,
   deletePostById,
   updatePostById,
+  getPostsByUserId,
 } = require("../controllers/postsController");
 const authenticateToken = require("../middleware/auth");
 
@@ -14,6 +15,9 @@ router.get("/", getAllPosts);
 
 // GET post by id
 router.get("/:id", getPostById);
+
+// GET posts by userid
+router.get("/user/:id", authenticateToken, getPostsByUserId);
 
 // POST create a new post
 router.post("/", authenticateToken, createPost);

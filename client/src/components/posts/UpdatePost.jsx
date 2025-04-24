@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 
 function UpdatePost() {
@@ -11,6 +12,8 @@ function UpdatePost() {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +31,7 @@ function UpdatePost() {
         setTitle("");
         setContent("");
         setTopic("");
+        navigate(-1); // Go back to the previous page after updating
       });
     } catch (err) {
       console.error("Error creating post:", err);
@@ -61,9 +65,11 @@ function UpdatePost() {
     }
   }, [postId]); // Fetch post data when the component mounts or when postId changes
 
+  // UI needs to be updated to be the same as CreatePost.jsx
+
   return (
     <div>
-      <h1 className="text-2xl">Create a New Post</h1>
+      <h1 className="text-2xl mb-10 font-semibold">Update Post</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"

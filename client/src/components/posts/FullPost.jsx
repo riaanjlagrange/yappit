@@ -1,13 +1,61 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 
 function FullPost() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [author, setAuthor] = useState("Unknown Author");
+  const [isAuthor, setIsAuthor] = useState(false);
+
+  const [deleteError, setDeleteError] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+
+  const { user, isLoggedIn } = useAuth();
+
+  const navigate = useNavigate();
 
   const { postId } = useParams(); // Get the post ID from the URL
+
+  const handleDelete = async () => {
+    try {
+      const response = await api.delete(`/posts/${postId}`);
+      if (response.status === 204) {
+        console.log("Post deleted successfully");
+        // go back to top of the page
+        window.scrollTo(0, 0);
+        navigate("/posts"); // Redirect to the posts page after deletion
+      }
+    } catch (err) {
+      console.error(err);
+      setDeleteError("Failed to delete post." + " " + err.message);
+      setTimeout(() => {
+        setDeleteError(null);
+      }, 3000); // Clear the error after 3 seconds
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!isLoggedIn) {
+      setUpdateError("You must be logged in to update a post.");
+      setTimeout(() => {
+        setUpdateError(null);
+      }, 3000);
+      return;
+    }
+    if (user.id !== post.created_by) {
+      setUpdateError("You are not authorized to update this post.");
+      setTimeout(() => {
+        setUpdateError(null);
+      }, 3000);
+      return;
+    }
+    window.scrollTo(0, 0);
+    navigate(`/posts/${post.id}/update`);
+  };
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -15,8 +63,9 @@ function FullPost() {
         const response = await api.get(`/posts/${postId}`);
         const post = response.data;
         console.log("Fetched post data:", post);
-
         setPost(post);
+        getUserById(post.created_by); // Fetch the author name using the user ID
+        setIsAuthor(user && user.id === post.created_by); // Check if the logged-in user is the author of the post
       } catch (err) {
         console.error("Error fetching post data:", err);
         setError("Failed to load post data.");
@@ -28,7 +77,20 @@ function FullPost() {
     if (postId) {
       fetchPostData();
     }
-  }, [postId]);
+  }, [postId, user]); // Fetch post data when the component mounts or when postId changes
+
+  // Fetch the author name from the API using the user ID
+  const getUserById = async (userId) => {
+    try {
+      const response = await api.get(`/users/${userId}`);
+      if (response.data) {
+        setAuthor(response.data.name || "Unknown Author");
+      }
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      return "Unknown Author";
+    }
+  };
 
   if (loading)
     return <div className="text-center mt-10 text-gray-500">Loading...</div>;
@@ -37,20 +99,43 @@ function FullPost() {
   if (!post) return null;
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-12 px-4">
-      <div className="max-w-3xl mx-auto bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-md">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          {post.title}
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Posted by{" "}
-          <span className="font-medium">{post.author || "Unknown"}</span> •{" "}
-          {new Date(post.created_at).toLocaleString()}
+    <div className="min-h-[60vh] py-12 px-4 flex gap-5">
+      <div className="bg-white p-8 shadow-md w-full relative">
+        <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+        <p className="text-sm text-gray-500 mb-6">
+          Posted by <span className="font-semibold">{author}</span>
         </p>
         <div className="prose dark:prose-invert max-w-none">
           <p>{post.content}</p>
         </div>
+        <div className="absolute bottom-5 right-5 italic text-sm text-gray-500">
+          Posted on {new Date(post.created_at).toLocaleString("en-ZA")}
+        </div>
+        {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
+        {isLoggedIn && isAuthor && (
+          <div className="flex justify-between gap-3 absolute bottom-5 left-5 w-1/2">
+            <button
+              onClick={handleDelete}
+              className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-full cursor-pointer"
+            >
+              Delete Post
+            </button>
+            <button
+              onClick={handleUpdate}
+              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full cursor-pointer"
+            >
+              Update Post
+            </button>
+          </div>
+        )}
+        {deleteError && <p className="text-red-500 mt-2">{deleteError}</p>}
+        {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
       </div>
+      {/* TODO: implement comments section
+      <div className="bg-white p-8 shadow-md w-1/3">
+        <h1 className="text-xl font-bold mb-4">Comments</h1>
+      </div>
+    */}
     </div>
   );
 }

@@ -11,7 +11,7 @@ function Footer() {
       />
       <div className="container mx-auto text-center">
         <p>
-          <span className="font-bold">Yapper</span> &copy;{" "}
+          <span className="font-bold">Yappit</span> &copy;{" "}
           {new Date().getFullYear()}. All rights reserved.
         </p>
         <p className="italic">Created by Riaan la Grange</p>

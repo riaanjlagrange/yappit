@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import logout from "../../utils/logout";
 import getUserNameById from "../../utils/getUserById";
+import logo from "../../assets/logo.svg";
+import profilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
 // TODO: change Link to NavLink
 
 function NavBar() {
@@ -58,19 +60,28 @@ function NavBar() {
         );
       } else {
         return (
-          <li className="flex flex-col items-center space-between">
-            <Link
-              to={`/users/${user.id}`}
-              className="hover:text-gray-400 font-bold"
-            >
-              {userName || "Unknown User"}
+          <li className="flex items-center space-x-2 gap-3">
+            <div className="flex flex-col items-end justify-center space-between">
+              <Link
+                to={`/users/${user.id}`}
+                className="hover:text-gray-400 font-bold"
+              >
+                {userName || "Unknown User"}
+              </Link>
+              <button
+                className="text-gray-600 hover:text-gray-500 cursor-pointer italic"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            </div>
+            <Link to={`/users/${user.id}`}>
+              <img
+                src={profilePicture}
+                alt="Profile"
+                className="w-10 h-10 rounded-full"
+              />
             </Link>
-            <button
-              className="hover:text-gray-400 cursor-pointer"
-              onClick={handleLogout}
-            >
-              Logout
-            </button>
           </li>
         );
       }
@@ -79,7 +90,10 @@ function NavBar() {
 
   return (
     <nav className="bg-white fixed w-full h-20 top-0 flex justify-between items-center px-5 shadow-md z-10">
-      <ul className="flex space-x-4">
+      <ul className="flex space-x-4 items-center justify-center gap-5">
+        <Link to="/posts" className="text-2xl font-bold text-gray-800">
+          <img src={logo} alt="Logo" className="w-12 h-12" />
+        </Link>
         {/* Show "Create Post" link only if the user is logged in */}
         {isLoggedIn && (
           <li>
@@ -98,6 +112,15 @@ function NavBar() {
             All Posts
           </Link>
         </li>
+
+        {/* Show "My Posts" link only if the user is logged in */}
+        {isLoggedIn && (
+          <li>
+            <Link to={`/posts/user/${user.id}`} className="hover:text-gray-400">
+              My Posts
+            </Link>
+          </li>
+        )}
       </ul>
 
       <ul className="flex space-x-4">

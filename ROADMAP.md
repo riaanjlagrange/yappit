@@ -10,7 +10,7 @@
 - [x] Delete blog post (only by post author)
 - [x] List all blog posts (home page)
 - [x] Basic navigation (home, login, register, dashboard)
-- [ ] Create my posts page
+- [x] Create my posts page
 
 ## 🛡 Admin Panel (Basic)
 

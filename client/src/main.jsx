@@ -10,6 +10,7 @@ import Login from "./components/auth/Login.jsx";
 import RequireAuth from "./components/auth/RequireAuth.jsx";
 import UpdatePost from "./components/posts/UpdatePost.jsx";
 import FullPost from "./components/posts/FullPost.jsx";
+import MyPosts from "./components/posts/MyPosts.jsx";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,14 @@ const router = createBrowserRouter([
       {
         path: "/posts/:postId",
         element: <FullPost />,
+      },
+      {
+        path: "/posts/user/:userId",
+        element: (
+          <RequireAuth>
+            <MyPosts />
+          </RequireAuth>
+        ),
       },
       {
         path: "/posts/:postId/update",

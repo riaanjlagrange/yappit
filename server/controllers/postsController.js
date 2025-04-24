@@ -17,11 +17,21 @@ const getPostById = async (req, res) => {
     const result = await pool.query("SELECT * FROM posts WHERE id = $1", [
       req.params.id,
     ]);
-    if (result.rows.length === 0) {
-      return res.status(404).send("Post not found.");
-    } else {
-      res.json(result.rows[0]);
-    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+// GET posts by user id
+const getPostsByUserId = async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM posts WHERE created_by = $1",
+      [req.params.id]
+    );
+    res.json(result.rows);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -120,4 +130,5 @@ module.exports = {
   createPost,
   updatePostById,
   deletePostById,
+  getPostsByUserId,
 };
