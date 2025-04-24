@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         element: <FullPost />,
       },
       {
-        path: "/posts/user/:userId",
+        path: "/users/:userName/posts",
         element: (
           <RequireAuth>
             <MyPosts />

@@ -116,7 +116,10 @@ function NavBar() {
         {/* Show "My Posts" link only if the user is logged in */}
         {isLoggedIn && (
           <li>
-            <Link to={`/posts/user/${user.id}`} className="hover:text-gray-400">
+            <Link
+              to={`/users/${userName}/posts`}
+              className="hover:text-gray-400"
+            >
               My Posts
             </Link>
           </li>
