@@ -79,7 +79,7 @@ const Login = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full mb-6 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full mb-16 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
           required
         />
 

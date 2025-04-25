@@ -64,7 +64,7 @@ function NavBar() {
             <div className="flex flex-col items-end justify-center space-between">
               <Link
                 to={`/users/${user.id}`}
-                className="hover:text-gray-400 font-bold"
+                className="hover:text-indigo-600 font-bold"
               >
                 {userName || "Unknown User"}
               </Link>
@@ -89,7 +89,7 @@ function NavBar() {
   };
 
   return (
-    <nav className="bg-white fixed w-full h-20 top-0 flex justify-between items-center px-5 shadow-md z-10">
+    <nav className="fixed bg-white w-full h-20 top-0 flex justify-between items-center px-5 shadow-md z-10">
       <ul className="flex space-x-4 items-center justify-center gap-5">
         <Link to="/posts" className="text-2xl font-bold text-gray-800">
           <img src={logo} alt="Logo" className="w-12 h-12" />
@@ -99,7 +99,7 @@ function NavBar() {
           <li>
             <Link
               to="/posts/new"
-              className="text-white hover:text-blue-500 bg-blue-500 hover:bg-white p-2 rounded border-2 border-blue-500 font-semibold"
+              className="bg-gradient-to-br from-blue-600 via-pink-500 to-orange-400 text-white hover:bg-white p-3 rounded font-semibold"
               style={{ transition: "all 0.3s ease" }}
             >
               Create Post
@@ -108,7 +108,7 @@ function NavBar() {
         )}
 
         <li>
-          <Link to="/posts" className="hover:text-gray-400">
+          <Link to="/posts" className="hover:text-red-400">
             All Posts
           </Link>
         </li>
@@ -118,14 +118,13 @@ function NavBar() {
           <li>
             <Link
               to={`/users/${userName}/posts`}
-              className="hover:text-gray-400"
+              className="hover:text-red-400"
             >
               My Posts
             </Link>
           </li>
         )}
       </ul>
-
       <ul className="flex space-x-4">
         {showUser()}
         {/* Show "Login" link only if the user is not logged in */}

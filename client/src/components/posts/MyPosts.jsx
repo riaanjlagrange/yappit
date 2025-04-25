@@ -36,7 +36,7 @@ function MyPosts() {
   return (
     <div>
       <h1 className="text-2xl font-semibold mb-10">My Posts</h1>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-10">
         {error && <p className="italic">{error}</p>}
         {loading ? (
           <span>Loading...</span>

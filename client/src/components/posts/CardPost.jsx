@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
+import getTimeAgo from "../../utils/getTimeAgo";
 
 function CardPost({ post, onPostDeleted }) {
   // to fetch the author name from the API
@@ -20,7 +21,7 @@ function CardPost({ post, onPostDeleted }) {
   const isAuthor = user && user.id === post.created_by;
 
   // TODO: display how long ago a post was created instead of the date
-  const timeCreated = new Date(post.created_at).toLocaleString("en-ZA");
+  const postedTimeAgo = getTimeAgo(post.created_at);
 
   // Fetch the author name when the component mounts or when post.created_by changes
   // TODO: could use helper function "getUserNameById" to fetch the author name in future
@@ -81,51 +82,54 @@ function CardPost({ post, onPostDeleted }) {
   }, [post.created_by]);
 
   return (
-    <div className="p-4 shadow-md bg-white flex flex-col mb-4">
-      <div className="flex justify-between mb-2">
-        <Link
-          to={`/posts/${post.id}`}
-          className="text-xl font-semibold mb-2 hover:underline"
-        >
-          {post.title}
-        </Link>
-        <p className="font-semibold mb-4 text-sm bg-indigo-400 w-1/8 flex justify-center rounded-full text-white p-1">
-          {post.topic}
+    <div className="shadow-md rounded bg-white flex flex-col p-4">
+      <div className="flex flex-col justify-between p-4">
+        <div className="flex justify-between">
+          <Link
+            to={`/posts/${post.id}`}
+            className="text-xl font-semibold hover:text-red-400 hover:underline"
+          >
+            {post.title}
+          </Link>
+          <p className="font-semibold mb-4 text-sm bg-indigo-500 w-1/8 flex justify-center rounded-full text-white p-1">
+            {post.topic}
+          </p>
+        </div>
+
+        {loading ? (
+          <span className="italic">Loading...</span>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : (
+          <div className="mb-4">
+            <p className="text-gray-700">
+              Posted by <span className="font-bold">{author}</span>
+              <span className="text-gray-500 text-sm italic ml-2">
+                ({postedTimeAgo})
+              </span>
+            </p>
+          </div>
+        )}
+
+        <p className="text-gray-700 mb-6 overflow-ellipsis break-words line-clamp-2 border-t border-gray-300 pt-5">
+          {post.content}
         </p>
       </div>
-      <p className="text-gray-700 mb-8">{post.content}</p>
-
-      {loading ? (
-        <span className="italic">Loading...</span>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : (
-        <p className="text-gray-700 mb-4">
-          Posted by <span className="font-bold">{author}</span>
-        </p>
-      )}
-
-      <p className="text-gray-700 mb-4 text-md text-sm">{timeCreated}</p>
-      {user && user.id === post.created_by && (
-        <p className="text-gray-700 mb-4 italic text-sm">
-          You are the author of this post.
-        </p>
-      )}
 
       {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
       {isLoggedIn && isAuthor && (
-        <div className="flex justify-between gap-3">
-          <button
-            onClick={handleDelete}
-            className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-full cursor-pointer"
-          >
-            Delete Post
-          </button>
+        <div className="flex justify-end w-full gap-2">
           <button
             onClick={handleUpdate}
-            className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full cursor-pointer"
+            className="bg-indigo-500 text-white p-2 hover:bg-indigo-600 cursor-pointer rounded w-60"
           >
             Update Post
+          </button>
+          <button
+            onClick={handleDelete}
+            className="bg-red-400 text-white p-2  hover:bg-red-500 cursor-pointer rounded w-60"
+          >
+            Delete Post
           </button>
         </div>
       )}

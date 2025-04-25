@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import getTimeAgo from "../../utils/getTimeAgo";
 import api from "../../utils/api";
 
 function FullPost() {
@@ -10,6 +11,7 @@ function FullPost() {
   const [error, setError] = useState(null);
   const [author, setAuthor] = useState("Unknown Author");
   const [isAuthor, setIsAuthor] = useState(false);
+  const [timeAgo, setTimeAgo] = useState(null);
 
   const [deleteError, setDeleteError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
@@ -66,6 +68,7 @@ function FullPost() {
         setPost(post);
         getUserById(post.created_by); // Fetch the author name using the user ID
         setIsAuthor(user && user.id === post.created_by); // Check if the logged-in user is the author of the post
+        setTimeAgo(getTimeAgo(post.created_at)); // Get the time ago string
       } catch (err) {
         console.error("Error fetching post data:", err);
         setError("Failed to load post data.");
@@ -99,43 +102,48 @@ function FullPost() {
   if (!post) return null;
 
   return (
-    <div className="min-h-[60vh] py-12 px-4 flex gap-5">
-      <div className="bg-white p-8 shadow-md w-full relative">
+    <div className="mb-50">
+      <div className="bg-white min-h-[60vh] shadow-md w-full p-8 pb-20 relative">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-gray-700">
           Posted by <span className="font-semibold">{author}</span>
         </p>
-        <div className="prose dark:prose-invert max-w-none">
-          <p>{post.content}</p>
+        <div className="mb-5">
+          <span className="text-sm text-gray-500 italic">({timeAgo})</span>
         </div>
-        <div className="absolute bottom-5 right-5 italic text-sm text-gray-500">
-          Posted on {new Date(post.created_at).toLocaleString("en-ZA")}
-        </div>
+        <p className="w-full h-1/2 break-words whitespace-normal mb-10 pt-5 px-3 border-t border-gray-300">
+          {post.content}
+        </p>
+
+        <p className="font-semibold mb-4 text-sm bg-indigo-500 w-1/8 flex justify-center rounded-full text-white p-1 absolute top-5 right-5">
+          {post.topic}
+        </p>
+
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
         {isLoggedIn && isAuthor && (
-          <div className="flex justify-between gap-3 absolute bottom-5 left-5 w-1/2">
-            <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white p-2 rounded hover:bg-red-600 w-full cursor-pointer"
-            >
-              Delete Post
-            </button>
+          <div className="flex justify-between gap-3 absolute bottom-5 right-5 w-1/2">
             <button
               onClick={handleUpdate}
-              className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 w-full cursor-pointer"
+              className="bg-indigo-500 text-white p-2 rounded hover:bg-blue-600 w-full cursor-pointer"
             >
               Update Post
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-400 text-white p-2 rounded hover:bg-red-500 w-full cursor-pointer"
+            >
+              Delete Post
             </button>
           </div>
         )}
         {deleteError && <p className="text-red-500 mt-2">{deleteError}</p>}
         {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
-      </div>
-      {/* TODO: implement comments section
+        {/* TODO: implement comments section
       <div className="bg-white p-8 shadow-md w-1/3">
         <h1 className="text-xl font-bold mb-4">Comments</h1>
       </div>
     */}
+      </div>
     </div>
   );
 }

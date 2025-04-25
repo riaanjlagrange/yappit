@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Post from "./CardPost";
+import CardPost from "./CardPost";
 import React from "react";
 import api from "../../utils/api";
 
@@ -32,16 +32,16 @@ function AllPosts() {
   }, []);
 
   return (
-    <div>
+    <div className="pb-60">
       <h1 className="text-2xl font-semibold mb-10">All Posts</h1>
-      <ul className="flex flex-col gap-4">
+      <ul className="flex flex-col gap-10">
         {error && <p className="italic">{error}</p>}
         {loading ? (
           <span>Loading...</span>
         ) : (
           posts.map((post, index) => (
             <li key={post.id || index}>
-              <Post post={post} onPostDeleted={fetchPosts} />
+              <CardPost post={post} onPostDeleted={fetchPosts} />
             </li>
           ))
         )}

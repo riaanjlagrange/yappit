@@ -72,17 +72,17 @@ function CreatePost() {
           className="border p-2 h-96"
           required
         ></textarea>
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-end">
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded w-full"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded w-60"
           >
             Post
           </button>
           <button
             onClick={handleDiscard}
             type="button"
-            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded w-full"
+            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded w-60"
           >
             Discard
           </button>
