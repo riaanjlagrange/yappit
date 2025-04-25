@@ -109,15 +109,14 @@ const deletePostById = async (req, res) => {
         .send("You are not authorized to delete this post.");
     }
 
-    const result = await pool.query(
-      "DELETE FROM posts WHERE id = $1 RETURNING *",
-      [req.params.id]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).send("Post not found.");
-    } else {
-      res.status(204).send();
-    }
+    // delete all comments associated with the post
+    await pool.query("DELETE FROM comments WHERE post_id = $1", [
+      req.params.id,
+    ]);
+
+    await pool.query("DELETE FROM posts WHERE id = $1", [req.params.id]);
+
+    res.status(204).send();
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

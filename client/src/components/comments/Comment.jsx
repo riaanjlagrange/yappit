@@ -1,0 +1,59 @@
+import api from "../../utils/api";
+import { useState, useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
+import getUserNameById from "../../utils/getUserById";
+import getTimeAgo from "../../utils/getTimeAgo";
+
+function Comment({ comment, onCommentDeleted }) {
+  const [error, setError] = useState(null);
+  const [userName, setUserName] = useState("Unknown Author");
+
+  const { user } = useAuth();
+  const isAuthor = user && user.id === comment.user_id;
+
+  const getUserById = async (userId) => {
+    setUserName(await getUserNameById(userId));
+  };
+
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/comments/${comment.id}`);
+      onCommentDeleted();
+    } catch (err) {
+      console.error(err.message);
+      setError(err.message);
+      setTimeout(() => {
+        setError(null);
+      }, 3000); // Clear the error after 3 seconds
+    }
+  };
+
+  useEffect(() => {
+    getUserById(comment.user_id);
+  }, [comment.user_id]);
+
+  return (
+    <div className="flex flex-col gap-2 p-4 bg-gray-100 rounded-md shadow-md">
+      <div className="flex items-center gap-2">
+        <h2 className="text-lg font-semibold">{userName}</h2>
+        <span className="text-sm text-gray-500 italic">
+          ({getTimeAgo(comment.created_at)})
+        </span>
+      </div>
+      <p>{comment.content}</p>
+      <div className="flex gap-2 justify-end w-full">
+        {isAuthor && (
+          <button
+            onClick={handleDelete}
+            className="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded w-60 cursor-pointer"
+          >
+            Delete
+          </button>
+        )}
+      </div>
+      {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+    </div>
+  );
+}
+
+export default Comment;

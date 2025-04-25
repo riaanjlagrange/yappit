@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import getTimeAgo from "../../utils/getTimeAgo";
+import AllComments from "../comments/AllComments";
 import api from "../../utils/api";
 
 function FullPost() {
@@ -102,8 +103,8 @@ function FullPost() {
   if (!post) return null;
 
   return (
-    <div className="mb-50">
-      <div className="bg-white min-h-[60vh] shadow-md w-full p-8 pb-20 relative">
+    <div className="pb-50 flex flex-col gap-5">
+      <div className="bg-white min-h-[60vh] shadow-md w-full p-8 rounded relative">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         <p className="text-gray-700">
           Posted by <span className="font-semibold">{author}</span>
@@ -143,6 +144,10 @@ function FullPost() {
         <h1 className="text-xl font-bold mb-4">Comments</h1>
       </div>
     */}
+      </div>
+      <div className="bg-white w-full p-8 rounded shadow-md">
+        <h1 className="text-xl font-bold mb-4">Comments</h1>
+        <AllComments />
       </div>
     </div>
   );
