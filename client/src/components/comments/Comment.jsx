@@ -3,13 +3,16 @@ import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import getUserNameById from "../../utils/getUserById";
 import getTimeAgo from "../../utils/getTimeAgo";
+import { useParams } from "react-router-dom";
 
-function Comment({ comment, onCommentDeleted }) {
+function Comment({ postAuthorId, comment, onCommentDeleted }) {
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState("Unknown Author");
 
   const { user } = useAuth();
-  const isAuthor = user && user.id === comment.user_id;
+  const isCommentAuthor = user && user.id === comment.user_id;
+  const { postId } = useParams(); // Get the post ID from the URL
+  const isPostAuthor = user && user.id === postAuthorId;
 
   const getUserById = async (userId) => {
     setUserName(await getUserNameById(userId));
@@ -30,7 +33,7 @@ function Comment({ comment, onCommentDeleted }) {
 
   useEffect(() => {
     getUserById(comment.user_id);
-  }, [comment.user_id]);
+  }, [comment.user_id, postId]);
 
   return (
     <div className="flex flex-col gap-2 p-4 bg-gray-100 rounded-md shadow-md">
@@ -42,7 +45,7 @@ function Comment({ comment, onCommentDeleted }) {
       </div>
       <p>{comment.content}</p>
       <div className="flex gap-2 justify-end w-full">
-        {isAuthor && (
+        {(isCommentAuthor || isPostAuthor) && (
           <button
             onClick={handleDelete}
             className="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded w-60 cursor-pointer"

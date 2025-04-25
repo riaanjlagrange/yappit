@@ -17,6 +17,7 @@ const getPostById = async (req, res) => {
     const result = await pool.query("SELECT * FROM posts WHERE id = $1", [
       req.params.id,
     ]);
+    console.log("Fetched post:", result.rows[0]);
     res.json(result.rows[0]);
   } catch (err) {
     console.error(err.message);

@@ -48,8 +48,14 @@ const deleteComment = async (req, res) => {
     return res.status(404).send("Comment not found.");
   }
 
-  // check if user is authorized to delete the post
-  if (comment.rows[0].user_id !== req.user.id) {
+  // check if user is authorized to delete the comment
+  const post = await pool.query("SELECT * FROM posts WHERE id = $1", [
+    comment.rows[0].post_id,
+  ]);
+  // get post user id to check if the user is the author of the post
+  const postUserId = post.rows[0].created_by;
+
+  if (comment.rows[0].user_id !== req.user.id && req.user.id !== postUserId) {
     return res
       .status(403)
       .send("You are not authorized to delete this comment.");

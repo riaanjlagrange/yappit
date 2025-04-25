@@ -147,7 +147,7 @@ function FullPost() {
       </div>
       <div className="bg-white w-full p-8 rounded shadow-md">
         <h1 className="text-xl font-bold mb-4">Comments</h1>
-        <AllComments />
+        <AllComments postAuthorId={post.created_by} />
       </div>
     </div>
   );

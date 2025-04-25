@@ -6,7 +6,7 @@ import PostComment from "./PostComment.jsx";
 import useAuth from "../../hooks/useAuth.js";
 // TODO: fix url to give the postId from the url
 
-function AllComments() {
+function AllComments({ postAuthorId }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,7 +51,11 @@ function AllComments() {
           !error &&
           comments.map((comment) => (
             <li>
-              <Comment comment={comment} onCommentDeleted={fetchComments} />
+              <Comment
+                comment={comment}
+                postAuthorId={postAuthorId}
+                onCommentDeleted={fetchComments}
+              />
             </li>
           ))}
       </ul>
