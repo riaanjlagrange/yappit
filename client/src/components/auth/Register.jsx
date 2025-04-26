@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import api from "../../utils/api";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -55,10 +56,6 @@ const Register = () => {
       >
         <h2 className="text-2xl font-bold mb-6">Register</h2>
 
-        {message && (
-          <div className="mb-4 text-sm text-center text-red-400">{message}</div>
-        )}
-
         <input
           name="name"
           type="text"
@@ -85,16 +82,31 @@ const Register = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full mb-16 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
           required
         />
 
+        {message && (
+          <div className="text-sm text-center text-red-400">{message}</div>
+        )}
+
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white py-3 rounded hover:bg-indigo-500 transition"
+          className="w-full mt-5 bg-indigo-600 text-white py-3 rounded hover:bg-indigo-500 transition cursor-pointer"
         >
           Register
         </button>
+        <div className="flex flex-col items-center justify-between mt-4">
+          <span className="text-sm text-gray-500 mt-2 mb-1">
+            Don't have an account?{" "}
+          </span>
+          <Link
+            to="/register"
+            className="w-full bg-red-400 text-white py-3 rounded hover:bg-red-500 transition text-center"
+          >
+            Login here
+          </Link>
+        </div>
       </form>
     </div>
   );

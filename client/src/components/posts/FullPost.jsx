@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -125,7 +125,7 @@ function FullPost() {
           <div className="flex justify-between gap-3 absolute bottom-5 right-5 w-1/2">
             <button
               onClick={handleUpdate}
-              className="bg-indigo-500 text-white p-2 rounded hover:bg-blue-600 w-full cursor-pointer"
+              className="bg-indigo-500 text-white p-2 rounded hover:bg-indigo-600 w-full cursor-pointer"
             >
               Update Post
             </button>
@@ -148,6 +148,18 @@ function FullPost() {
       <div className="bg-white w-full p-8 rounded shadow-md">
         <h1 className="text-xl font-bold mb-4">Comments</h1>
         <AllComments postAuthorId={post.created_by} />
+        {!isLoggedIn && (
+          <p className="text-red-400 mt-2">
+            You must be logged in to post a comment. Click{" "}
+            <Link
+              className="font-semibold hover:text-indigo-500 underline italic"
+              to="/login"
+            >
+              here
+            </Link>{" "}
+            to log in.
+          </p>
+        )}
       </div>
     </div>
   );

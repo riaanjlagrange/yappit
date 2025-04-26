@@ -4,12 +4,14 @@ import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <div className="bg-indigo-50 min-h-screen">
-      <NavBar />
-      <div className="container mx-auto w-2/3 pt-32 min-h-screen">
-        <Outlet />
+    <div>
+      <div className="bg-indigo-50 min-h-screen relative">
+        <NavBar />
+        <div className="container mx-auto w-2/3 pt-32 min-h-screen">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
-      {/* <Footer /> */}
     </div>
   );
 }

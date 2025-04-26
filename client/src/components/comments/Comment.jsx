@@ -31,12 +31,16 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
     }
   };
 
+  const commentColor = isCommentAuthor ? "border-indigo-300" : "border-red-300";
+
   useEffect(() => {
     getUserById(comment.user_id);
   }, [comment.user_id, postId]);
 
   return (
-    <div className="flex flex-col gap-2 p-4 bg-gray-100 rounded-md shadow-md">
+    <div
+      className={`flex flex-col gap-2 p-4 rounded shadow-sm border-t-2 ${commentColor}`}
+    >
       <div className="flex items-center gap-2">
         <h2 className="text-lg font-semibold">{userName}</h2>
         <span className="text-sm text-gray-500 italic">
@@ -54,7 +58,7 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
           </button>
         )}
       </div>
-      {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+      {error && <div className="text-red-400 text-sm mt-2">{error}</div>}
     </div>
   );
 }

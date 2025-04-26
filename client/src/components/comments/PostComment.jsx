@@ -31,22 +31,22 @@ function PostComment({ onCommentPosted }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 p-4 bg-gray-100 rounded-md shadow-md"
+      className="flex flex-col gap-2 p-4 rounded shadow-sm border-t-2 border-indigo-500"
     >
       <textarea
         value={commentContent}
         onChange={(e) => setCommentContent(e.target.value)}
         placeholder="Write a comment..."
-        className="p-2 border border-gray-300 rounded-md"
+        className="p-2 border-b border-gray-300 rounded-md italic min-h-20 max-h-40 resize-none"
         required
       ></textarea>
       <button
         type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded-md"
+        className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md cursor-pointer"
       >
         Post Comment
       </button>
-      {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+      {error && <div className="text-red-400 text-sm mt-2">{error}</div>}
     </form>
   );
 }

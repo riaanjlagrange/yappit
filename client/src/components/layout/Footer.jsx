@@ -1,20 +1,24 @@
 import logo from "../../assets/logo.svg";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-white py-4 mt-10 h-72 flex flex-col justify-center items-center inset-shadow-md z-10">
-      <img
-        src={logo}
-        alt="Logo"
-        className="mx-auto mb-8"
-        style={{ width: "80px", height: "auto" }}
-      />
-      <div className="container mx-auto text-center">
-        <p>
-          <span className="font-bold">Yappit</span> &copy;{" "}
-          {new Date().getFullYear()}. All rights reserved.
+    <footer className="bg-white fixed right-0 bottom-0 w-1/8 flex justify-evenly items-center py-4 gap-3 rounded-tl">
+      <img src={logo} alt="Yappit Logo" className="w-1/4 h-1/4" />
+      <div className="text-center">
+        <p className="text-sm">
+          © 2025 <span className="font-extrabold text-indigo-400">Yapp</span>
+          <span className="font-bold text-red-400">it</span>
         </p>
-        <p className="italic">Created by Riaan la Grange</p>
+        <p className="text-sm">Made by</p>
+        {/* Add github logo here */}
+        <a
+          href="https://github.com/riaanjlagrange"
+          target="_blank"
+          className="text-sm font-semibold hover:text-red-400 hover:underline"
+        >
+          riaanjlagrange
+        </a>
       </div>
     </footer>
   );
