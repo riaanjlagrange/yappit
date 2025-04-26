@@ -1,21 +1,14 @@
 const express = require("express");
-const {
-  getAllUsers,
-  getUserById,
-  deleteUserById,
-} = require("../controllers/usersController");
+const usersController = require("../controllers/usersController");
 
 const router = express.Router();
 
-// GET all users
-router.get("/", getAllUsers);
+router.get("/", usersController.getAllUsers);
 
-// GET user by id
-router.get("/:id", getUserById);
+router.get("/:id", usersController.getUserById);
 
 // TODO: Implement PUT/PATCH to update a user
 
-// DELETE a user
-router.delete("/:id", deleteUserById);
+router.delete("/:id", usersController.deleteUserById);
 
 module.exports = router;

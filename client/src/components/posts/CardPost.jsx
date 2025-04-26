@@ -20,7 +20,6 @@ function CardPost({ post, onPostDeleted }) {
   // Check if the user is logged in and if they are the author of the post
   const isAuthor = user && user.id === post.created_by;
 
-  // TODO: display how long ago a post was created instead of the date
   const postedTimeAgo = getTimeAgo(post.created_at);
 
   // Fetch the author name when the component mounts or when post.created_by changes

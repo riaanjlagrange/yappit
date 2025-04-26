@@ -1,4 +1,5 @@
 const pool = require("../db");
+const { get } = require("../routes/votes");
 
 // GET all posts
 const getAllPosts = async (req, res) => {
@@ -36,6 +37,28 @@ const getPostsByUserId = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
+  }
+};
+
+// GET posts score
+const getPostScore = async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const post = await pool.query(
+      "SELECT score FROM posts WHERE post_id = $1",
+      [postId]
+    );
+
+    if (post.rows.length === 0) {
+      return res.status(404).json({ error: "Post not found." });
+    }
+
+    const score = post.rows[0].score;
+    res.status(200).json({ score });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong fetching votes." });
   }
 };
 
@@ -131,4 +154,5 @@ module.exports = {
   updatePostById,
   deletePostById,
   getPostsByUserId,
+  getPostScore,
 };
