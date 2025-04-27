@@ -3,6 +3,7 @@ import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import getTimeAgo from "../../utils/getTimeAgo";
+import Votes from "../votes/Votes";
 
 function CardPost({ post, onPostDeleted }) {
   // to fetch the author name from the API
@@ -81,7 +82,7 @@ function CardPost({ post, onPostDeleted }) {
   }, [post.created_by]);
 
   return (
-    <div className="shadow-md rounded bg-white flex flex-col p-4">
+    <div className="shadow-md rounded bg-white flex flex-col p-4 relative">
       <div className="flex flex-col justify-between p-4">
         <div className="flex justify-between">
           <Link
@@ -110,28 +111,32 @@ function CardPost({ post, onPostDeleted }) {
           </div>
         )}
 
-        <p className="text-gray-700 mb-6 overflow-ellipsis break-words line-clamp-2 border-t border-gray-300 pt-5">
+        <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 border-t border-gray-300 py-10">
           {post.content}
         </p>
       </div>
 
-      {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
-      {isLoggedIn && isAuthor && (
-        <div className="flex justify-end w-full gap-2">
-          <button
-            onClick={handleUpdate}
-            className="bg-indigo-500 text-white p-2 hover:bg-indigo-600 cursor-pointer rounded w-60"
-          >
-            Update Post
-          </button>
-          <button
-            onClick={handleDelete}
-            className="bg-red-400 text-white p-2  hover:bg-red-500 cursor-pointer rounded w-60"
-          >
-            Delete Post
-          </button>
-        </div>
-      )}
+      <div className="flex justify-between items-center">
+        <Votes postId={post.id} />
+
+        {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
+        {isLoggedIn && isAuthor && (
+          <div className="flex justify-end w-full gap-2">
+            <button
+              onClick={handleUpdate}
+              className="bg-indigo-500 text-white p-2 hover:bg-indigo-600 cursor-pointer rounded w-60"
+            >
+              Update Post
+            </button>
+            <button
+              onClick={handleDelete}
+              className="bg-red-400 text-white p-2  hover:bg-red-500 cursor-pointer rounded w-60"
+            >
+              Delete Post
+            </button>
+          </div>
+        )}
+      </div>
       {deleteError && <p className="text-red-500 mt-2">{deleteError}</p>}
       {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
     </div>

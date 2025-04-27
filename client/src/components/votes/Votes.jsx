@@ -4,21 +4,16 @@ import { useEffect, useState } from "react";
 
 function Votes({ postId }) {
   const [vote, setVote] = useState(0);
-  const [voteLoading, setVoteLoading] = useState(true);
-  const [voteMessage, setVoteMessage] = useState(null);
 
   const [score, setScore] = useState(0);
-  const [scoreLoading, setLoading] = useState(true);
-  const [scoreError, setError] = useState(null);
+  const [scoreLoading, setScoreLoading] = useState(true);
+  const [scoreError, setScoreError] = useState(null);
 
   const { user, isLoggedIn } = useAuth();
 
   const castVote = async (voteValue) => {
-    if (!isLoggedIn) {
-      setVoteMessage("You must be logged in to vote.");
-      setTimeout(() => {
-        setVoteMessage(null);
-      }, 3000);
+    if (!isLoggedIn || !user) {
+      console.log("You must be logged in to vote.");
       return;
     }
 
@@ -32,41 +27,33 @@ function Votes({ postId }) {
     if (vote === voteValue) {
       try {
         await api.delete(`/votes/${data.postId}`);
-        setVoteMessage("Vote deleted successfully.");
+        console.log("Vote deleted successfully.");
 
         //TODO: setVote should not set itself == to voteValue, retriggers this if you press it again because it is equal again. setVote should only be set by api call
         setVote(0);
         setScore((prevScore) => prevScore - voteValue);
       } catch (err) {
-        setVoteMessage(err.message);
-      } finally {
-        setVoteLoading(false);
+        console.log(err.message);
       }
     } else if (vote === 0) {
       try {
         await api.post("/votes/", data);
-        setVoteMessage("Vote added successfully!");
+        console.log("Vote added successfully!");
 
-        // need to move these functions out of the useeffect
         setVote(voteValue);
         setScore((prevScore) => prevScore + voteValue);
       } catch (err) {
-        setVoteMessage(err.message);
-      } finally {
-        setVoteLoading(false);
+        console.log(err.message);
       }
     } else {
       try {
         await api.patch("/votes/", data);
-        setVoteMessage("Vote changed successfully!");
+        console.log("Vote changed successfully!");
 
-        // need to move these functions out of the useeffect
         setVote(voteValue);
         setScore((prevScore) => prevScore - vote + voteValue);
       } catch (err) {
-        setVoteMessage(err.message);
-      } finally {
-        setVoteLoading(false);
+        console.log(err.message);
       }
     }
   };
@@ -76,13 +63,14 @@ function Votes({ postId }) {
       if (!isLoggedIn) return;
       try {
         const response = await api.get(`/votes/${postId}`);
-        console.log("Vote response:", response.data);
         setVote(response.data.vote);
-        console.log("Vote:", response.data.vote);
       } catch (err) {
-        setVoteMessage(err.message);
-      } finally {
-        setVoteLoading(false);
+        if (err.response && err.response.status === 404) {
+          setVote(0); // No vote found, set to 0
+          console.log("No vote found for this post.");
+          return;
+        }
+        console.log(err.message);
       }
     };
 
@@ -91,9 +79,12 @@ function Votes({ postId }) {
         const response = await api.get(`/posts/score/${postId}`);
         setScore(response.data.score);
       } catch (err) {
-        setError(err.message);
+        setScoreError(err.message);
+        setTimeout(() => {
+          setScoreError(null);
+        }, 3000); // Clear the error after 3 seconds
       } finally {
-        setLoading(false);
+        setScoreLoading(false);
       }
     };
 
@@ -101,28 +92,28 @@ function Votes({ postId }) {
     getPostScore();
   }, [postId, isLoggedIn]);
   return (
-    <div className="votes">
+    <div className="flex gap-5 justify-evenly items-center">
+      <span
+        className={`font-bold ${
+          score >= 0 ? "text-indigo-500" : "text-red-500"
+        }`}
+      >
+        {score}
+      </span>
       <button
         onClick={() => castVote(1)}
-        className={`${vote === 1 ? "bg-green-500" : "bg-white"}`}
+        className={`border p-2 ${vote === 1 ? "bg-indigo-500" : "bg-white"}`}
       >
-        upvote
+        Upvote
       </button>
       <button
         onClick={() => castVote(-1)}
-        className={`${vote === -1 ? "bg-red-500" : "bg-white"}`}
+        className={`border p-2 ${vote === -1 ? "bg-red-400" : "bg-white"}`}
       >
-        downvote
+        Downvote
       </button>
-      {voteLoading && (
-        <div className="text-center mt-10 text-gray-500">Loading...</div>
-      )}
-      {voteMessage && (
-        <div className="text-center mt-10 text-gray-500">{voteMessage}</div>
-      )}
-      <span>{score}</span>
       {scoreLoading && (
-        <div className="text-center mt-10 text-gray-500">Loading...</div>
+        <div className="text-center mt-10 text-gray-500">Score Loading...</div>
       )}
       {scoreError && (
         <div className="text-center mt-10 text-gray-500">{scoreError}</div>

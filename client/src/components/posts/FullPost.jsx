@@ -121,6 +121,10 @@ function FullPost() {
           {post.topic}
         </p>
 
+        <div className="absolute bottom-5 left-5">
+          <Votes postId={postId} />
+        </div>
+
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
         {isLoggedIn && isAuthor && (
           <div className="flex justify-between gap-3 absolute bottom-5 right-5 w-1/2">
@@ -145,7 +149,6 @@ function FullPost() {
         <h1 className="text-xl font-bold mb-4">Comments</h1>
       </div>
     */}
-        <Votes postId={postId} />
       </div>
       <div className="bg-white w-full p-8 rounded shadow-md">
         <h1 className="text-xl font-bold mb-4">Comments</h1>
