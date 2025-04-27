@@ -50,7 +50,7 @@ function AllComments({ postAuthorId }) {
         {!loading &&
           !error &&
           comments.map((comment) => (
-            <li>
+            <li key={comment.id}>
               <Comment
                 comment={comment}
                 postAuthorId={postAuthorId}

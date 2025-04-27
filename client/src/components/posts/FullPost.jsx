@@ -4,6 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import getTimeAgo from "../../utils/getTimeAgo";
 import AllComments from "../comments/AllComments";
+import Votes from "../votes/Votes";
 import api from "../../utils/api";
 
 function FullPost() {
@@ -144,6 +145,7 @@ function FullPost() {
         <h1 className="text-xl font-bold mb-4">Comments</h1>
       </div>
     */}
+        <Votes postId={postId} />
       </div>
       <div className="bg-white w-full p-8 rounded shadow-md">
         <h1 className="text-xl font-bold mb-4">Comments</h1>

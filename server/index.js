@@ -21,6 +21,8 @@ const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 const commentRoutes = require("./routes/comments");
 app.use("/api/comments", commentRoutes);
+const voteRoutes = require("./routes/votes");
+app.use("/api/votes", voteRoutes);
 
 // run the server
 const PORT = process.env.PORT || 3000;

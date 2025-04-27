@@ -1,9 +1,11 @@
 const pool = require("../db");
-const { get } = require("../routes/votes");
 
 // GET VOTE
 const getVote = async (req, res) => {
-  const { userId, postId } = req.body;
+  const { postId } = req.params;
+  const userId = req.user.id;
+  console.log("User ID:", userId);
+  console.log("Post ID:", postId);
 
   try {
     const existingVote = await pool.query(
@@ -116,19 +118,23 @@ const changeVote = async (req, res) => {
 
 // DELETE VOTE
 const deleteVote = async (req, res) => {
-  const { userId, postId } = req.body;
+  const { postId } = req.params;
+  const userId = req.user.id;
+  console.log("User ID:", userId);
+  console.log("Post ID:", parseInt(postId));
 
   try {
-    const existingVote = pool.query(
-      "SELECT votes FROM post_votes WHERE user_id = $1 AND post_id = $2",
+    const existingVote = await pool.query(
+      "SELECT vote FROM post_votes WHERE user_id = $1 AND post_id = $2",
       [userId, postId]
     );
 
-    if (existingVote.rows.length === 0) {
+    if (!existingVote && existingVote.rows.length === 0) {
       res.status(400).json({ error: "No vote to delete." });
     }
 
     const oldVote = existingVote.rows[0].vote;
+    console.log("Old Vote:", oldVote);
 
     await pool.query(
       "DELETE FROM post_votes WHERE user_id = $1 AND post_id = $2",
