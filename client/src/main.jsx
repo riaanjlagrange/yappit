@@ -12,6 +12,7 @@ import UpdatePost from "./components/posts/UpdatePost.jsx";
 import FullPost from "./components/posts/FullPost.jsx";
 import MyPosts from "./components/posts/MyPosts.jsx";
 import NotFoundPage from "./components/layout/NotFoundPage.jsx";
+import AdminPanel from "./components/admin/AdminPanel.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/admin",
+        element: (
+          <RequireAuth>
+            <AdminPanel />
+          </RequireAuth>
+        ),
       },
     ],
   },

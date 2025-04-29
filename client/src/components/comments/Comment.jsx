@@ -47,7 +47,7 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
           ({getTimeAgo(comment.created_at)})
         </span>
       </div>
-      <p>{comment.content}</p>
+      <p className="break-words">{comment.content}</p>
       <div className="flex gap-2 justify-end w-full">
         {(isCommentAuthor || isPostAuthor) && (
           <button
