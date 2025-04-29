@@ -43,6 +43,7 @@ const Register = () => {
       console.log(res.data);
       navigate("/login", { replace: true });
     } catch (err) {
+      // TODO: show appropriate error message to user like if email already exists
       console.error(err);
       setMessage(err.response?.data?.error || "Something went wrong");
     }

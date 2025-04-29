@@ -17,11 +17,10 @@ const Login = () => {
   // check where the user is coming from
   const location = useLocation();
   const from = location.state?.from?.pathname || "/posts";
-
   const navigate = useNavigate();
 
   // if already logged in, redirect to previous page
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, login } = useAuth();
   useEffect(() => {
     if (isLoggedIn) {
       navigate(from, { replace: true });
@@ -42,8 +41,8 @@ const Login = () => {
     try {
       const res = await api.post("/auth/login", formData);
       setMessage("Login successful!");
-      localStorage.setItem("token", res.data.token);
-      window.location.reload();
+      // use login from context to manage auth
+      login(res.data.token);
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);

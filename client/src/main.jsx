@@ -13,11 +13,16 @@ import FullPost from "./components/posts/FullPost.jsx";
 import MyPosts from "./components/posts/MyPosts.jsx";
 import NotFoundPage from "./components/layout/NotFoundPage.jsx";
 import AdminPanel from "./components/admin/AdminPanel.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    ),
     children: [
       {
         path: "/posts",

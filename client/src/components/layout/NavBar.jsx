@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import logout from "../../utils/logout";
 import getUserNameById from "../../utils/getUserById";
 import logo from "../../assets/logo.svg";
 import profilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
 // TODO: change Link to NavLink
 
 function NavBar() {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth();
   const [userName, setUserName] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [userError, setUserError] = useState(null);
@@ -40,7 +39,6 @@ function NavBar() {
 
   const handleLogout = () => {
     logout();
-    window.location.reload();
   };
 
   // Add profile picture in future

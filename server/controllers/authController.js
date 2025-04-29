@@ -25,11 +25,12 @@ const registerUser = async (req, res) => {
       [name, email, hashedPassword]
     );
 
-    const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    // const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_SECRET, {
+    //   expiresIn: "10s",
+    // });
+    // console.log(token);
 
-    res.json({ token, user: newUser.rows[0] });
+    res.json({ user: newUser.rows[0] });
   } catch (err) {
     console.error("Error registering user:", err);
     res.status(500).json({ message: "Server error" });
@@ -57,7 +58,7 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "10s",
     });
 
     res.json({ token, user: user.rows[0] });
