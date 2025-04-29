@@ -5,13 +5,13 @@ import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
 
 // TODO: add validation for email and password from client side
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  // set message to show success or error message to user
   const [message, setMessage] = useState(null);
 
   // check where the user is coming from
@@ -19,9 +19,11 @@ const Login = () => {
   const from = location.state?.from?.pathname || "/posts";
   const navigate = useNavigate();
 
-  // if already logged in, redirect to previous page
+  // useAuth to get auth from AuthContext
   const { isLoggedIn, login } = useAuth();
+
   useEffect(() => {
+    // if already logged in, redirect to previous page
     if (isLoggedIn) {
       navigate(from, { replace: true });
     }
@@ -46,7 +48,7 @@ const Login = () => {
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
-      setMessage(err.response?.data?.error || "Something went wrong");
+      setMessage(err.message || "Something went wrong");
     }
   };
 

@@ -1,10 +1,23 @@
-const pool = require("../db");
+const prisma = require("../prisma/client");
 
 // GET all users
 const getAllUsers = async (req, res) => {
   try {
-    const result = await pool.query("SELECT id, name, email FROM users");
-    res.json(result.rows);
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    // Check if users exist
+    if (users.length === 0) {
+      return res.status(404).send("No users found.");
+    }
+    console.log("Fetched users:", users);
+
+    res.json(users);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -13,16 +26,23 @@ const getAllUsers = async (req, res) => {
 
 // GET user by id
 const getUserById = async (req, res) => {
+  const userId = parseInt(req.params.id);
   try {
-    const result = await pool.query(
-      "SELECT id, name, email FROM users WHERE id = $1",
-      [req.params.id]
-    );
-    if (result.rows.length === 0) {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(req.params.id) },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    // Check if user exists
+    if (!user) {
       return res.status(404).send("User not found.");
-    } else {
-      res.json(result.rows[0]);
     }
+
+    res.json(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -31,16 +51,22 @@ const getUserById = async (req, res) => {
 
 // DELETE a user
 const deleteUserById = async (req, res) => {
+  const userId = parseInt(req.params.id);
   try {
-    const result = await pool.query(
-      "DELETE FROM users WHERE id = $1 RETURNING *",
-      [req.params.id]
-    );
-    if (result.rows.length === 0) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // Check if user exists
+    if (!user) {
       res.status(404).send("User not found.");
-    } else {
-      res.status(204).send();
     }
+
+    await prisma.user.delete({
+      where: { id: userId },
+    });
+
+    res.status(204).send();
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

@@ -1,16 +1,30 @@
-const pool = require("../db");
+const prisma = require("../prisma/client");
 
 // GET all comments from post
 const getAllCommentsFromPost = async (req, res) => {
-  const postId = req.params.postId;
+  const postId = parseInt(req.params.postId);
 
   try {
-    const response = await pool.query(
-      "SELECT c.*, u.name FROM comments c JOIN users u ON c.user_id = u.id WHERE c.post_id = $1",
-      [postId]
-    );
-    console.log("Fetched comments:", response.rows);
-    res.json(response.rows);
+    const comments = await prisma.comment.findMany({
+      where: {
+        post_id: postId,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    const formattedComments = comments.map((comment) => ({
+      ...comment,
+      name: comment.user.name,
+    }));
+
+    console.log("Fetched comments:", formattedComments);
+    res.json(formattedComments);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });
@@ -19,15 +33,19 @@ const getAllCommentsFromPost = async (req, res) => {
 
 // POST a comment
 const postComment = async (req, res) => {
-  const postId = req.params.postId;
+  const postId = parseInt(req.params.postId);
   const { userId, content } = req.body;
 
   try {
-    const response = await pool.query(
-      "INSERT INTO comments (post_id, user_id, content) VALUES ($1, $2, $3) RETURNING *",
-      [postId, userId, content]
-    );
-    res.status(201).json(response.rows[0]);
+    const newComment = await prisma.comment.create({
+      data: {
+        post_id: postId,
+        user_id: userId,
+        content: content,
+      },
+    });
+
+    res.status(201).json(newComment);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });
@@ -36,39 +54,45 @@ const postComment = async (req, res) => {
 
 // DELETE a comment
 const deleteComment = async (req, res) => {
-  const commentId = req.params.commentId;
-  // check post ownership
-  const comment = await pool.query("SELECT * FROM comments WHERE id = $1", [
-    commentId,
-  ]);
-  console.log("Fetched comment:", comment.rows[0]);
-
-  // check if post exists
-  if (comment.rows.length === 0) {
-    return res.status(404).send("Comment not found.");
-  }
-
-  // check if user is authorized to delete the comment
-  const post = await pool.query("SELECT * FROM posts WHERE id = $1", [
-    comment.rows[0].post_id,
-  ]);
-  // get post user id to check if the user is the author of the post
-  const postUserId = post.rows[0].created_by;
-
-  if (comment.rows[0].user_id !== req.user.id && req.user.id !== postUserId) {
-    return res
-      .status(403)
-      .send("You are not authorized to delete this comment.");
-  }
+  const commentId = parseInt(req.params.commentId);
 
   try {
-    const response = await pool.query(
-      "DELETE FROM comments WHERE id = $1 RETURNING *",
-      [commentId]
-    );
-    if (response.rows.length === 0) {
-      return res.status(404).json({ message: "Comment not found." });
+    // Find the comment
+    const comment = await prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+
+    // Check if comment exists
+    if (!comment) {
+      return res.status(404).send("Comment not found.");
     }
+
+    // Find the post to check ownership
+    const post = await prisma.post.findUnique({
+      where: {
+        id: comment.post_id,
+      },
+    });
+
+    // Get post user id to check if the user is the author of the post
+    const postUserId = post.created_by;
+
+    // Check if user is authorized to delete the comment
+    if (comment.user_id !== req.user.id && req.user.id !== postUserId) {
+      return res
+        .status(403)
+        .send("You are not authorized to delete this comment.");
+    }
+
+    // Delete the comment
+    await prisma.comment.delete({
+      where: {
+        id: commentId,
+      },
+    });
+
     res.json({ message: "Comment deleted successfully." });
   } catch (err) {
     console.error(err.message);

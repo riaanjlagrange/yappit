@@ -1,23 +1,30 @@
-const pool = require("../db");
+const prisma = require("../prisma/client.js");
 
 // GET VOTE
 const getVote = async (req, res) => {
-  const { postId } = req.params;
+  const postId = parseInt(req.params.postId);
   const userId = req.user.id;
   console.log("User ID:", userId);
   console.log("Post ID:", postId);
 
   try {
-    const existingVote = await pool.query(
-      "SELECT vote FROM post_votes WHERE user_id = $1 AND post_id = $2",
-      [userId, postId]
-    );
+    const existingVote = await prisma.postVote.findUnique({
+      where: {
+        user_id_post_id: {
+          user_id: userId,
+          post_id: postId,
+        },
+      },
+      select: {
+        vote: true,
+      },
+    });
 
-    if (existingVote.rows.length === 0) {
+    if (!existingVote) {
       return res.status(404).json({ error: "No vote found." });
     }
 
-    res.status(200).json(existingVote.rows[0]);
+    res.status(200).json(existingVote);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Something went wrong fetching your vote." });
@@ -27,90 +34,136 @@ const getVote = async (req, res) => {
 // CAST A VOTE
 const vote = async (req, res) => {
   const { userId, postId, vote } = req.body; // vote = 1 or -1
+  const parsedPostId = parseInt(postId);
+  const parsedUserId = parseInt(userId);
 
   // check if vote is either 1 or -1
-  if (![1, -1].includes(vote))
+  if (![1, -1].includes(vote)) {
     return res.status(400).json({ error: "Vote must be 1 or -1" });
+  }
 
   try {
-    await pool.query("BEGIN");
-
-    const existingVote = await pool.query(
-      "SELECT vote FROM post_votes WHERE user_id = $1 AND post_id = $2",
-      [userId, postId]
-    );
-
-    // if no existing vote, insert new vote
-    if (existingVote.rows.length === 0) {
-      await pool.query(
-        "INSERT INTO post_votes (user_id, post_id, vote) VALUES ($1, $2, $3)",
-        [userId, postId, vote]
-      );
-      await pool.query("UPDATE posts SET score = score + $1 WHERE id = $2", [
-        vote,
-        postId,
-      ]);
-    } else {
-      // user already voted
-      return res.status(400).json({
-        error: "You have already voted. Use PATCH to change your vote.",
+    // Use a transaction to ensure data consistency
+    const result = await prisma.$transaction(async (prisma) => {
+      // Check for existing vote
+      const existingVote = await prisma.postVote.findFirst({
+        where: {
+          user_id: parsedUserId,
+          post_id: parsedPostId,
+        },
       });
+
+      // If no existing vote, insert new vote
+      if (!existingVote) {
+        // Create the vote
+        await prisma.postVote.create({
+          data: {
+            user_id: parsedUserId,
+            post_id: parsedPostId,
+            vote: vote,
+          },
+        });
+
+        // Update the post score
+        await prisma.post.update({
+          where: { id: parsedPostId },
+          data: {
+            score: { increment: vote },
+          },
+        });
+
+        return { success: true, message: "Vote registered successfully!" };
+      } else {
+        // User already voted
+        return {
+          success: false,
+          error: "You have already voted. Use PATCH to change your vote.",
+        };
+      }
+    });
+
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
     }
 
-    await pool.query("COMMIT");
-    res.status(201).json({ message: "Vote registered successfully!" });
+    res.status(201).json({ message: result.message });
   } catch (err) {
-    await pool.query("ROLLBACK");
     console.error(err);
     res.status(500).json({ error: "Something went wrong voting." });
   }
 };
 
-// CHANGE VOTE TO TO THE OPPOSITE IF YOU ALREADY VOTED (CHANGED FROM UPVOTE TO DOWNVOTE AND VICE VERSA)
+// CHANGE VOTE TO THE OPPOSITE IF YOU ALREADY VOTED (CHANGED FROM UPVOTE TO DOWNVOTE AND VICE VERSA)
 const changeVote = async (req, res) => {
   const { userId, postId, vote } = req.body; // vote = 1 or -1
+  const parsedPostId = parseInt(postId);
+  const parsedUserId = parseInt(userId);
 
   // check if vote is either 1 or -1
-  if (![1, -1].includes(vote))
+  if (![1, -1].includes(vote)) {
     return res.status(400).json({ error: "Vote must be 1 or -1" });
+  }
 
   try {
-    await pool.query("BEGIN");
+    // Use a transaction to ensure data consistency
+    const result = await prisma.$transaction(async (prisma) => {
+      // Check for existing vote
+      const existingVote = await prisma.postVote.findUnique({
+        where: {
+          user_id_post_id: {
+            user_id: parsedUserId,
+            post_id: parsedPostId,
+          },
+        },
+      });
 
-    const existingVote = await pool.query(
-      "SELECT vote FROM post_votes WHERE user_id = $1 AND post_id = $2",
-      [userId, postId]
-    );
+      // If no existing vote, return error
+      if (!existingVote) {
+        return {
+          success: false,
+          error: "No existing vote to change. Use POST to vote first.",
+        };
+      }
 
-    // if no existing vote, insert new vote
-    if (existingVote.rows.length === 0) {
-      return res
-        .status(400)
-        .json({ error: "No existing vote to change. Use POST to vote first." });
+      const oldVote = existingVote.vote;
+
+      // If same vote, return error
+      if (oldVote === vote) {
+        return { success: false, error: "You already voted this way." };
+      }
+
+      // Update the vote
+      await prisma.postVote.update({
+        where: {
+          user_id_post_id: {
+            user_id: parsedUserId,
+            post_id: parsedPostId,
+          },
+        },
+        data: {
+          vote: vote,
+          updated_at: new Date(),
+        },
+      });
+
+      // Update the post score - adjust by 2x vote (to reverse the old vote and add the new one)
+      const scoreChange = 2 * vote;
+      await prisma.post.update({
+        where: { id: parsedPostId },
+        data: {
+          score: { increment: scoreChange },
+        },
+      });
+
+      return { success: true, message: "Vote changed successfully!" };
+    });
+
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
     }
 
-    const oldVote = existingVote.rows[0].vote;
-
-    if (oldVote === vote) {
-      return res.status(400).json({ error: "You already voted this way." });
-    }
-
-    await pool.query(
-      "UPDATE post_votes SET vote = $1, updated_at = NOW() WHERE user_id = $2 AND post_id = $3",
-      [vote, userId, postId]
-    );
-
-    // change score on posts table and adjust for change
-    const scoreChange = 2 * vote;
-    await pool.query("UPDATE posts SET score = score + $1 WHERE id = $2", [
-      scoreChange,
-      postId,
-    ]);
-
-    await pool.query("COMMIT");
-    res.status(201).json({ message: "Vote changed successfully!" });
+    res.status(200).json({ message: result.message });
   } catch (err) {
-    await pool.query("ROLLBACK");
     console.error(err);
     res.status(500).json({ error: "Something went wrong changing your vote." });
   }
@@ -118,39 +171,59 @@ const changeVote = async (req, res) => {
 
 // DELETE VOTE
 const deleteVote = async (req, res) => {
-  const { postId } = req.params;
+  const postId = parseInt(req.params.postId);
   const userId = req.user.id;
   console.log("User ID:", userId);
-  console.log("Post ID:", parseInt(postId));
+  console.log("Post ID:", postId);
 
   try {
-    const existingVote = await pool.query(
-      "SELECT vote FROM post_votes WHERE user_id = $1 AND post_id = $2",
-      [userId, postId]
-    );
+    // Use a transaction to ensure data consistency
+    const result = await prisma.$transaction(async (prisma) => {
+      // Check for existing vote
+      const existingVote = await prisma.postVote.findUnique({
+        where: {
+          user_id_post_id: {
+            user_id: userId,
+            post_id: postId,
+          },
+        },
+      });
 
-    if (!existingVote && existingVote.rows.length === 0) {
-      res.status(400).json({ error: "No vote to delete." });
+      if (!existingVote) {
+        return { success: false, error: "No vote to delete." };
+      }
+
+      const oldVote = existingVote.vote;
+      console.log("Old Vote:", oldVote);
+
+      // Delete the vote
+      await prisma.postVote.delete({
+        where: {
+          user_id_post_id: {
+            user_id: userId,
+            post_id: postId,
+          },
+        },
+      });
+
+      // Update the post score
+      await prisma.post.update({
+        where: { id: postId },
+        data: {
+          score: { decrement: oldVote },
+        },
+      });
+
+      return { success: true, message: "Vote deleted successfully." };
+    });
+
+    if (!result.success) {
+      return res.status(400).json({ error: result.error });
     }
 
-    const oldVote = existingVote.rows[0].vote;
-    console.log("Old Vote:", oldVote);
-
-    await pool.query(
-      "DELETE FROM post_votes WHERE user_id = $1 AND post_id = $2",
-      [userId, postId]
-    );
-
-    await pool.query("UPDATE posts SET score = score - $1 WHERE id = $2", [
-      oldVote,
-      postId,
-    ]);
-
-    await pool.query("COMMIT;");
-    res.json({ message: "Vote deleted successfully." });
+    res.json({ message: result.message });
   } catch (err) {
-    pool.query("ROLLBACK");
-    console.log(err);
+    console.error(err);
     res.status(500).json({ error: "Something went wrong deleting your vote." });
   }
 };

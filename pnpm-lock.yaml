@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@prisma/client':
+        specifier: ^6.7.0
+        version: 6.7.0
     devDependencies:
       '@tailwindcss/line-clamp':
         specifier: ^0.4.4
@@ -16,6 +20,18 @@ importers:
         version: 9.1.2
 
 packages:
+
+  '@prisma/client@6.7.0':
+    resolution: {integrity: sha512-+k61zZn1XHjbZul8q6TdQLpuI/cvyfil87zqK2zpreNIXyXtpUv3+H/oM69hcsFcZXaokHJIzPAt5Z8C8eK2QA==}
+    engines: {node: '>=18.18'}
+    peerDependencies:
+      prisma: '*'
+      typescript: '>=5.1.0'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+      typescript:
+        optional: true
 
   '@tailwindcss/line-clamp@0.4.4':
     resolution: {integrity: sha512-5U6SY5z8N42VtrCrKlsTAA35gy2VSyYtHWCsg1H87NU1SXnEfekTVlrga9fzUDrrHcGi2Lb5KenUWb4lRQT5/g==}
@@ -126,6 +142,8 @@ packages:
     engines: {node: '>=12'}
 
 snapshots:
+
+  '@prisma/client@6.7.0': {}
 
   '@tailwindcss/line-clamp@0.4.4(tailwindcss@4.1.4)':
     dependencies:

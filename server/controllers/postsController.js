@@ -1,10 +1,18 @@
-const pool = require("../db");
+const prisma = require("../prisma/client");
 
 // GET all posts
 const getAllPosts = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM posts");
-    res.json(result.rows);
+    const posts = await prisma.post.findMany({
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+    res.json(posts);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -14,11 +22,23 @@ const getAllPosts = async (req, res) => {
 // GET post by id
 const getPostById = async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM posts WHERE id = $1", [
-      req.params.id,
-    ]);
-    console.log("Fetched post:", result.rows[0]);
-    res.json(result.rows[0]);
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(req.params.id) },
+      include: {
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    if (!post) {
+      return res.status(404).send("Post not found.");
+    }
+
+    console.log("Fetched post:", post);
+    res.json(post);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -27,12 +47,14 @@ const getPostById = async (req, res) => {
 
 // GET posts by user id
 const getPostsByUserId = async (req, res) => {
+  const userId = parseInt(req.params.id);
+
   try {
-    const result = await pool.query(
-      "SELECT * FROM posts WHERE created_by = $1",
-      [req.params.id]
-    );
-    res.json(result.rows);
+    const posts = await prisma.post.findMany({
+      where: { created_by: userId },
+    });
+
+    res.json(posts);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -41,19 +63,23 @@ const getPostsByUserId = async (req, res) => {
 
 // GET posts score
 const getPostScore = async (req, res) => {
-  const postId = req.params.id;
+  const postId = parseInt(req.params.id);
 
   try {
-    const post = await pool.query("SELECT score FROM posts WHERE id = $1", [
-      postId,
-    ]);
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+      select: {
+        score: true,
+      },
+    });
 
-    if (post.rows.length === 0) {
+    if (!post) {
       return res.status(404).json({ error: "Post not found." });
     }
 
-    const score = post.rows[0].score;
-    res.status(200).json({ score });
+    res.status(200).json({ score: post.score });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Something went wrong fetching votes." });
@@ -63,13 +89,18 @@ const getPostScore = async (req, res) => {
 // POST create a new post
 const createPost = async (req, res) => {
   const { title, content, topic } = req.body;
-  const created_by = req.user.id; // Assuming you have user ID from authentication middleware
+  const created_by = req.user.id;
   try {
-    const result = await pool.query(
-      "INSERT INTO posts (title, content, topic, created_by) VALUES ($1, $2, $3, $4) RETURNING *",
-      [title, content, topic, created_by]
-    );
-    res.status(201).json(result.rows[0]);
+    const newPost = await prisma.post.create({
+      data: {
+        title,
+        content,
+        topic,
+        created_by,
+        score: 0,
+      },
+    });
+    res.status(201).json(newPost);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -78,16 +109,20 @@ const createPost = async (req, res) => {
 
 // PUT update a post by id
 const updatePostById = async (req, res) => {
+  const postId = parseInt(req.params.id);
+
   try {
-    // check if post exists
-    const post = await pool.query("SELECT * FROM posts WHERE id = $1", [
-      req.params.id,
-    ]);
-    if (post.rows.length === 0) {
+    // check if post exists and user is owner
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
       return res.status(404).send("Post not found.");
     }
+
     // check if user is authorized to update the post
-    if (post.rows[0].created_by !== req.user.id) {
+    if (post.created_by !== req.user.id) {
       return res
         .status(403)
         .send("You are not authorized to update this post.");
@@ -95,16 +130,16 @@ const updatePostById = async (req, res) => {
 
     const { title, content, topic } = req.body;
 
-    const result = await pool.query(
-      "UPDATE posts SET title = $1, content = $2, topic = $3 WHERE id = $4 RETURNING *",
-      [title, content, topic, req.params.id]
-    );
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        title,
+        content,
+        topic,
+      },
+    });
 
-    if (result.rows.length === 0) {
-      return res.status(404).send("Post not found.");
-    } else {
-      res.status(200).json(result.rows[0]);
-    }
+    res.status(200).json(updatedPost);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -113,32 +148,42 @@ const updatePostById = async (req, res) => {
 
 // DELETE a post by id
 const deletePostById = async (req, res) => {
-  try {
-    // check post ownership
-    const post = await pool.query("SELECT * FROM posts WHERE id = $1", [
-      req.params.id,
-    ]);
+  const postId = parseInt(req.params.id);
 
-    // check if post exists
-    if (post.rows.length === 0) {
+  try {
+    // check post ownership and exists
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+    });
+
+    if (!post) {
       return res.status(404).send("Post not found.");
     }
 
     // check if user is authorized to delete the post
-    if (post.rows[0].created_by !== req.user.id) {
+    if (post.created_by !== req.user.id) {
       return res
         .status(403)
         .send("You are not authorized to delete this post.");
     }
 
-    // delete all comments associated with the post
-    await pool.query("DELETE FROM comments WHERE post_id = $1", [
-      req.params.id,
+    // use a prisma transaction to delete posts and comments
+    await prisma.$transaction([
+      // delete the comments
+      prisma.comment.deleteMany({
+        where: { post_id: postId },
+      }),
+      //delete the votes
+      prisma.postVote.deleteMany({
+        where: { post_id: postId },
+      }),
+      // delete the post
+      prisma.post.deleteMany({
+        where: { id: postId },
+      }),
     ]);
 
-    await pool.query("DELETE FROM posts WHERE id = $1", [req.params.id]);
-
-    res.status(204).send();
+    res.status(204).send("Post deleted successfully.");
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
