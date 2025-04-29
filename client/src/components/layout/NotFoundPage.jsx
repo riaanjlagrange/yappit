@@ -1,6 +1,6 @@
 function NotFoundPage() {
   return (
-    <div className="min-w-screen min-h-screen flex items-center justify-center bg-gray-100 text-gray-800">
+    <div className="min-w-screen min-h-screen flex items-center justify-center bg-indigo-50 text-gray-800">
       <div className="text-center">
         <h1 className="text-9xl font-extrabold text-red-400 tracking-widest">
           404

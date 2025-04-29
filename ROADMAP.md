@@ -29,7 +29,7 @@
 
 - [ ] Deploy backend (e.g. on Railway, Render, Heroku)
 - [ ] Deploy frontend (e.g. on Vercel, Netlify)
-- [ ] Deploy DB on supabase?
+- [x] Deploy DB on prisma?
 
 # 🚀 Future Features (Post-MVP)
 

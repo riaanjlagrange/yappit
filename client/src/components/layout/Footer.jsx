@@ -7,7 +7,7 @@ function Footer() {
       <img src={logo} alt="Yappit Logo" className="w-1/4 h-1/4" />
       <div className="text-center">
         <p className="text-sm">
-          © 2025 <span className="font-extrabold text-indigo-400">Yapp</span>
+          © 2025 <span className="font-extrabold text-indigo-500">Yapp</span>
           <span className="font-bold text-red-400">it</span>
         </p>
         <p className="text-sm">Made by</p>
