@@ -102,13 +102,17 @@ function Votes({ postId }) {
       </span>
       <button
         onClick={() => castVote(1)}
-        className={`border p-2 ${vote === 1 ? "bg-indigo-500" : "bg-white"}`}
+        className={`border p-2 ${
+          vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
+        }`}
       >
         Upvote
       </button>
       <button
         onClick={() => castVote(-1)}
-        className={`border p-2 ${vote === -1 ? "bg-red-400" : "bg-white"}`}
+        className={`border p-2 ${
+          vote === -1 ? "bg-red-400 text-white" : "bg-white"
+        }`}
       >
         Downvote
       </button>

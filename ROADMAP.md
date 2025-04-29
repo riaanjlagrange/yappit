@@ -45,8 +45,8 @@
 
 - [ ] Categories / tags for posts
 - [ ] Post search
-- [ ] Post comments
-- [ ] Likes or reactions
+- [x] Post comments
+- [x] Likes or reactions
 - [ ] Markdown support for writing
 - [ ] Image uploads in posts
 - [ ] AI image generation
@@ -67,7 +67,7 @@
 - [ ] Rich text editor for posts
 - [ ] Add Animations
 - [ ] Add Icons
-- [ ] Change Fonts
+- [x] Change Fonts
 
 ## 🧠 Technical Improvements
 

@@ -42,6 +42,11 @@ function UpdatePost() {
     setTopic(e.target.value);
   };
 
+  const handleDiscard = (e) => {
+    e.preventDefault();
+    navigate(-1); // Go back to the previous page
+  };
+
   useEffect(() => {
     const fetchPostData = async () => {
       try {
@@ -68,41 +73,55 @@ function UpdatePost() {
   // UI needs to be updated to be the same as CreatePost.jsx
 
   return (
-    <div>
-      <h1 className="text-2xl mb-10 font-semibold">Update Post</h1>
+    <div className="mx-auto p-8 bg-white shadow-md mt-10 mb-10">
+      <h1 className="text-2xl font-semibold mb-10">Update Post</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-2 rounded"
-          required
-        />
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border p-2 w-full"
+            required
+          />
+          <select
+            id="topic"
+            value={topic}
+            onChange={handleChange}
+            className="border p-2 w-full"
+            required
+          >
+            <option value="">Select a topic</option>
+            <option value="Discussion">Discussion</option>
+            <option value="Theory">Theory</option>
+            <option value="Informational">Informational</option>
+          </select>
+        </div>
         <textarea
           placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="border p-2 rounded"
+          className="border p-2 h-96"
           required
         ></textarea>
-        <select
-          id="topic"
-          value={topic}
-          onChange={handleChange}
-          className="border p-2 rounded"
-          required
-        >
-          <option value="">Select a topic</option>
-          <option value="Discussion">Discussion</option>
-          <option value="Theory">Theory</option>
-          <option value="Informational">Informational</option>
-        </select>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Update Post
-        </button>
+        <div className="flex gap-2 justify-end">
+          <button
+            type="submit"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded w-60"
+          >
+            Post
+          </button>
+          <button
+            onClick={handleDiscard}
+            type="button"
+            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded w-60"
+          >
+            Discard
+          </button>
+        </div>
         {loading && <span>Loading...</span>}
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-400">{error}</p>}
       </form>
     </div>
   );

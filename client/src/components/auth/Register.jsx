@@ -101,7 +101,7 @@ const Register = () => {
             Don't have an account?{" "}
           </span>
           <Link
-            to="/register"
+            to="/login"
             className="w-full bg-red-400 text-white py-3 rounded hover:bg-red-500 transition text-center"
           >
             Login here
