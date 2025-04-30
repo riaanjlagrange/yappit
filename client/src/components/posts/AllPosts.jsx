@@ -33,7 +33,7 @@ function AllPosts() {
 
   return (
     <div className="pb-60">
-      <h1 className="text-2xl font-semibold mb-10">All Posts</h1>
+      <h1 className="text-2xl font-semibold mb-10 pageTitle">All Posts</h1>
       <ul className="flex flex-col gap-10">
         {error && <p className="italic">{error}</p>}
         {loading ? (

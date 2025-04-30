@@ -74,7 +74,7 @@ function UpdatePost() {
 
   return (
     <div className="mx-auto p-8 bg-white shadow-md mt-10 mb-10">
-      <h1 className="text-2xl font-semibold mb-10">Update Post</h1>
+      <h1 className="text-2xl font-semibold mb-10 pageTitle">Update Post</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex gap-2">
           <input
@@ -108,14 +108,14 @@ function UpdatePost() {
         <div className="flex gap-2 justify-end">
           <button
             type="submit"
-            className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded w-60"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded w-60 cursor-pointer"
           >
             Post
           </button>
           <button
             onClick={handleDiscard}
             type="button"
-            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded w-60"
+            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded w-60 cursor-pointer"
           >
             Discard
           </button>

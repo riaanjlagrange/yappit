@@ -97,7 +97,8 @@ function NavBar() {
           <li>
             <Link
               to="/posts/new"
-              className="bg-gradient-to-br from-blue-600 via-pink-500 to-orange-400 text-white hover:bg-white p-3 rounded font-semibold"
+              // className="bg-gradient-to-br from-blue-600 via-pink-500 to-orange-400 text-white hover:bg-white p-3 rounded font-semibold"
+              className="text-white bg-red-400 hover:bg-red-500 p-3 rounded font-semibold"
               style={{ transition: "all 0.3s ease" }}
             >
               Create Post

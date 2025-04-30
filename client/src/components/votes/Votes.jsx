@@ -29,7 +29,6 @@ function Votes({ postId }) {
         await api.delete(`/votes/${data.postId}`);
         console.log("Vote deleted successfully.");
 
-        //TODO: setVote should not set itself == to voteValue, retriggers this if you press it again because it is equal again. setVote should only be set by api call
         setVote(0);
         setScore((prevScore) => prevScore - voteValue);
       } catch (err) {
@@ -100,6 +99,8 @@ function Votes({ postId }) {
       >
         {score}
       </span>
+      {scoreLoading && <div className="text-gray-500">Score Loading...</div>}
+      {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(1)}
         className={`border p-2 ${
@@ -116,12 +117,6 @@ function Votes({ postId }) {
       >
         Downvote
       </button>
-      {scoreLoading && (
-        <div className="text-center mt-10 text-gray-500">Score Loading...</div>
-      )}
-      {scoreError && (
-        <div className="text-center mt-10 text-gray-500">{scoreError}</div>
-      )}
     </div>
   );
 }

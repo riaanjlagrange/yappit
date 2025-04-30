@@ -41,7 +41,9 @@ function CreatePost() {
 
   return (
     <div className="mx-auto p-8 bg-white shadow-md mt-10 mb-10">
-      <h1 className="text-2xl font-semibold mb-10">Create a New Post</h1>
+      <h1 className="text-2xl font-semibold mb-10 pageTitle">
+        Create a New Post
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex gap-2">
           <input

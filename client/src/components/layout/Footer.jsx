@@ -15,7 +15,7 @@ function Footer() {
         <a
           href="https://github.com/riaanjlagrange"
           target="_blank"
-          className="text-sm font-semibold hover:text-red-400 hover:underline"
+          className="text-sm font-semibold hover:text-red-400 hover:underline pageTitle"
         >
           riaanjlagrange
         </a>
