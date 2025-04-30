@@ -41,6 +41,12 @@ function AllComments({ postAuthorId }) {
 
   return (
     <div className="flex flex-col gap-8">
+      <div className="flex gap-2 items-center">
+        <h1 className="text-xl font-bold mb-4">Comments</h1>
+        <span className="text-md text-gray-500 mb-4">
+          ({comments.length > 0 ? comments.length : 0})
+        </span>
+      </div>
       <ul className="flex flex-col gap-2">
         {loading && <li>Loading...</li>}
         {error && <li>{error}</li>}
