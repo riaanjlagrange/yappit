@@ -25,11 +25,35 @@ const registerUser = async (req, res) => {
         name,
         email,
         password: hashedPassword,
+        userRoles: {
+          create: {
+            role: {
+              connect: {
+                name: "USER",
+              },
+            },
+          },
+        },
+      },
+      include: {
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
 
-    const { password: _, ...userWithoutPassword } = newUser;
-    res.json({ user: userWithoutPassword });
+    const userResponse = {
+      id: newUser.id,
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.userRoles.map((ur) => ur.role.name),
+    };
+
+    console.log(userResponse);
+
+    res.status(201).json({ user: userResponse });
   } catch (err) {
     console.error("Error registering user:", err);
     res.status(500).json({ message: "Server error" });
@@ -45,6 +69,13 @@ const loginUser = async (req, res) => {
     // check if user exists
     const user = await prisma.user.findUnique({
       where: { email },
+      include: {
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -57,15 +88,37 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
+    // generate jwt token with roles
+    const roles = user.userRoles.map((ur) => ur.role.name);
+    const token = jwt.sign(
+      { id: user.id, email: user.email, roles },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+      },
+    );
 
-    const { password: _, ...userWithoutPassword } = user;
-    res.json({ token, user: userWithoutPassword });
+    const userResponse = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      roles,
+    };
+    console.log(userResponse);
+
+    res.json({ token, user: userResponse });
   } catch (err) {
     console.error("Error logging in user:", err);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllRoles = async (req, res) => {
+  try {
+    const roles = await prisma.role.findMany();
+    res.json(roles);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 };
 

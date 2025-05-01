@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const postsController = require("../controllers/postsController");
-const authenticateToken = require("../middleware/auth");
+const { authenticateToken } = require("../middleware/auth");
 
 // GET all posts
 router.get("/", postsController.getAllPosts);
