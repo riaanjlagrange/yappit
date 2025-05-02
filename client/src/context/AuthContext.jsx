@@ -6,13 +6,19 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [roles, setRoles] = useState([])
+  const [isAdmin, setIsAdmin] = useState(false);
   const [logoutTimer, setLogoutTimer] = useState(null);
 
   // Helper: logout user and clear state
+
+
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
     setIsLoggedIn(false);
+    setIsAdmin(false);
+    setRoles()
     if (logoutTimer) clearTimeout(logoutTimer);
   };
 
@@ -21,8 +27,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", token);
     try {
       const decoded = jwtDecode(token);
-      setUser(decoded);
       setIsLoggedIn(true);
+      setUser(decoded);
+      setRoles(decoded.roles || [])
+      setIsAdmin(decoded.roles.includes("ADMIN"));
 
       // Schedule logout when token expires
       const timeUntilExpiry = decoded.exp * 1000 - Date.now();
@@ -47,8 +55,9 @@ export const AuthProvider = ({ children }) => {
       if (isExpired) {
         logout();
       } else {
-        setUser(decoded);
         setIsLoggedIn(true);
+        setUser(decoded);
+        setRoles(decoded.roles || []);
 
         // Schedule logout
         const timer = setTimeout(() => {
@@ -62,7 +71,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, roles, isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

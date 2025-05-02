@@ -4,7 +4,7 @@ const rolesController = require("../controllers/rolesController");
 const { authenticateToken, isAdmin } = require("../middleware/auth");
 
 router.get("/", authenticateToken, isAdmin, rolesController.getAllRoles);
-router.post("/assign", authenticateToken, isAdmin, rolesController.assignRole);
+router.post("/assign", authenticateToken, rolesController.assignRole);
 router.delete(
   "/remove",
   authenticateToken,

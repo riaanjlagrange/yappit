@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
-
+import useAuth from "../../hooks/useAuth";
 function AdminPanel() {
+  const { roles } = useAuth();
+
+  // RequireAdmin should check this but just to make double sure.
+  // if (!roles.includes("ADMIN")) {
+  //   return <p>ACCESS DENIED</p>;
+  // }
+
   return (
     <div className="admin-panel">
       <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>

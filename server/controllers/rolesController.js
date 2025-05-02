@@ -39,6 +39,7 @@ const assignRole = async (req, res) => {
         role_id: role.id,
       },
     });
+    res.send("Role successfully assigned");
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
