@@ -62,6 +62,10 @@ const deleteUserById = async (req, res) => {
       res.status(404).send("User not found.");
     }
 
+    await prisma.userRole.deleteMany({
+      where: { user_id: userId },
+    });
+
     await prisma.user.delete({
       where: { id: userId },
     });
