@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 function AdminPanel() {
+
   return (
     <div className="admin-panel">
       <h1 className="text-2xl font-bold mb-4">Admin Panel</h1>

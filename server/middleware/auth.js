@@ -14,6 +14,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+// isAdmin middleware must be called always after authenticateToken middleware
 const isAdmin = async (req, res, next) => {
   const user = req.user;
 
@@ -32,4 +33,22 @@ const isAdmin = async (req, res, next) => {
 };
 
 // TODO: Add hasRole middleware to check custom roles
-module.exports = { authenticateToken, isAdmin };
+// Middleware to check if user is authenticated and has required role
+
+// hasRole middleware must be called always after authenticateToken middleware
+const hasRole = (roles) => async (req, res, next) => {
+  const user = req.user;
+
+  try {
+    const hasRequiredRole = roles.some((role) => user.roles.includes(role));
+
+    if (!hasRequiredRole) {
+      return res.status(403).json({ error: "Insufficient permissions" });
+    }
+    next();
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+};
+
+module.exports = { authenticateToken, isAdmin, hasRole };

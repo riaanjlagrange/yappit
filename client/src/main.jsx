@@ -8,12 +8,15 @@ import CreatePost from "./components/posts/CreatePost.jsx";
 import Register from "./components/auth/Register.jsx";
 import Login from "./components/auth/Login.jsx";
 import RequireAuth from "./components/auth/RequireAuth.jsx";
+import RequireAdmin from "./components/auth/RequireAdmin.jsx";
 import UpdatePost from "./components/posts/UpdatePost.jsx";
 import FullPost from "./components/posts/FullPost.jsx";
 import MyPosts from "./components/posts/MyPosts.jsx";
 import NotFoundPage from "./components/layout/NotFoundPage.jsx";
 import AdminPanel from "./components/admin/AdminPanel.jsx";
+import ManageUsers from "./components/admin/ManageUsers.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import AssignAdmin from "./components/auth/AssignAdmin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -67,11 +70,27 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: (
-          <RequireAuth>
+          <RequireAdmin>
             <AdminPanel />
-          </RequireAuth>
+          </RequireAdmin>
         ),
       },
+      {
+        path: "/admin/users",
+        element: (
+          <RequireAdmin>
+            <ManageUsers />
+          </RequireAdmin>
+        ),
+      },
+      {
+        path: "/admin/assign",
+        element: (
+          <RequireAuth>
+            <AssignAdmin />
+          </RequireAuth>
+        )
+      }
     ],
   },
   {
