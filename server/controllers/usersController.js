@@ -27,6 +27,11 @@ const getAllUsers = async (req, res) => {
 // GET user by id
 const getUserById = async (req, res) => {
   const userId = parseInt(req.params.id);
+
+  if (isNaN(userId)) {
+    return res.status(400).send("Invalid user ID.");
+  }
+
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
