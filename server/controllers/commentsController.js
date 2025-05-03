@@ -18,13 +18,13 @@ const getAllCommentsFromPost = async (req, res) => {
       },
     });
 
-    const formattedComments = comments.map((comment) => ({
-      ...comment,
-      name: comment.user.name,
-    }));
+    // const formattedComments = comments.map((comment) => ({
+    //   ...comment,
+    //   name: comment.user.name,
+    // }));
 
-    console.log("Fetched comments:", formattedComments);
-    res.json(formattedComments);
+    console.log("Fetched comments:", comments);
+    res.json(comments);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: "Server error" });

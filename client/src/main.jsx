@@ -14,6 +14,7 @@ import FullPost from "./components/posts/FullPost.jsx";
 import MyPosts from "./components/posts/MyPosts.jsx";
 import NotFoundPage from "./components/layout/NotFoundPage.jsx";
 import AdminPanel from "./components/admin/AdminPanel.jsx";
+import ManageUsers from "./components/admin/ManageUsers.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import AssignAdmin from "./components/auth/AssignAdmin.jsx";
 
@@ -71,6 +72,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAdmin>
             <AdminPanel />
+          </RequireAdmin>
+        ),
+      },
+      {
+        path: "/admin/users",
+        element: (
+          <RequireAdmin>
+            <ManageUsers />
           </RequireAdmin>
         ),
       },
