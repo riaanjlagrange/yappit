@@ -29,7 +29,7 @@ const getUserById = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id: userId },
       select: {
         id: true,
         name: true,
