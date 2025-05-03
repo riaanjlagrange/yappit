@@ -9,7 +9,7 @@ router.delete(
   "/remove",
   authenticateToken,
   isAdmin,
-  rolesController.removeRole,
+  rolesController.removeRole
 );
 
 module.exports = router;
