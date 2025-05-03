@@ -18,7 +18,7 @@ function FullPost() {
   const [deleteError, setDeleteError] = useState(null);
   const [updateError, setUpdateError] = useState(null);
 
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, isAdmin, isModerator } = useAuth();
 
   const navigate = useNavigate();
 
@@ -50,13 +50,13 @@ function FullPost() {
       }, 3000);
       return;
     }
-    if (user.id !== post.created_by) {
-      setUpdateError("You are not authorized to update this post.");
-      setTimeout(() => {
-        setUpdateError(null);
-      }, 3000);
-      return;
-    }
+    // if (user.id !== post.created_by) {
+    //   setUpdateError("You are not authorized to update this post.");
+    //   setTimeout(() => {
+    //     setUpdateError(null);
+    //   }, 3000);
+    //   return;
+    // }
     window.scrollTo(0, 0);
     navigate(`/posts/${post.id}/update`);
   };
@@ -126,7 +126,7 @@ function FullPost() {
         </div>
 
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
-        {isLoggedIn && isAuthor && (
+        {(isAuthor || isAdmin || isModerator) && (
           <div className="flex justify-between gap-3 absolute bottom-5 right-5 w-1/2">
             <button
               onClick={handleUpdate}

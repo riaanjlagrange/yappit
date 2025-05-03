@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [roles, setRoles] = useState([])
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isModerator, setIsModerator] = useState(false);
   const [logoutTimer, setLogoutTimer] = useState(null);
 
   // Helper: logout user and clear state
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setIsLoggedIn(false);
     setIsAdmin(false);
+    setIsModerator(false);
     setRoles()
     if (logoutTimer) clearTimeout(logoutTimer);
   };
@@ -31,6 +33,7 @@ export const AuthProvider = ({ children }) => {
       setUser(decoded);
       setRoles(decoded.roles || [])
       setIsAdmin(decoded.roles.includes("ADMIN"));
+      setIsModerator(decoded.roles.includes("MODERATOR"));
 
       // Schedule logout when token expires
       const timeUntilExpiry = decoded.exp * 1000 - Date.now();
@@ -58,6 +61,8 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setUser(decoded);
         setRoles(decoded.roles || []);
+        setIsAdmin(decoded.roles.includes("ADMIN"));
+        setIsModerator(decoded.roles.includes("MODERATOR"));
 
         // Schedule logout
         const timer = setTimeout(() => {
@@ -71,7 +76,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, roles, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ user, roles, isAdmin, isModerator, isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

@@ -55,6 +55,8 @@ const postComment = async (req, res) => {
 // DELETE a comment
 const deleteComment = async (req, res) => {
   const commentId = parseInt(req.params.commentId);
+  const isAdmin = req.user.roles.includes("ADMIN");
+  const isModerator = req.user.roles.includes("MODERATOR");
 
   try {
     // Find the comment
@@ -80,7 +82,12 @@ const deleteComment = async (req, res) => {
     const postUserId = post.created_by;
 
     // Check if user is authorized to delete the comment
-    if (comment.user_id !== req.user.id && req.user.id !== postUserId) {
+    if (
+      comment.user_id !== req.user.id &&
+      req.user.id !== postUserId &&
+      !isAdmin &&
+      !isModerator
+    ) {
       return res
         .status(403)
         .send("You are not authorized to delete this comment.");

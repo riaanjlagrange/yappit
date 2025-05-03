@@ -9,10 +9,11 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
   const [error, setError] = useState(null);
   const [userName, setUserName] = useState("Unknown Author");
 
-  const { user } = useAuth();
+  const { user, isAdmin, isModerator } = useAuth();
   const isCommentAuthor = user && user.id === comment.user_id;
   const { postId } = useParams(); // Get the post ID from the URL
   const isPostAuthor = user && user.id === postAuthorId;
+
 
   const getUserById = async (userId) => {
     setUserName(await getUserNameById(userId));
@@ -49,7 +50,7 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
       </div>
       <p className="break-words">{comment.content}</p>
       <div className="flex gap-2 justify-end w-full">
-        {(isCommentAuthor || isPostAuthor) && (
+        {(isCommentAuthor || isPostAuthor || isAdmin || isModerator) && (
           <button
             onClick={handleDelete}
             className="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded w-60 cursor-pointer"

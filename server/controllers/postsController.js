@@ -110,6 +110,8 @@ const createPost = async (req, res) => {
 // PUT update a post by id
 const updatePostById = async (req, res) => {
   const postId = parseInt(req.params.id);
+  const isAdmin = req.user.roles.includes("ADMIN");
+  const isModerator = req.user.roles.includes("MODERATOR");
 
   try {
     // check if post exists and user is owner
@@ -122,12 +124,11 @@ const updatePostById = async (req, res) => {
     }
 
     // check if user is authorized to update the post
-    if (post.created_by !== req.user.id) {
+    if (post.created_by !== req.user.id && !isAdmin && !isModerator) {
       return res
         .status(403)
         .send("You are not authorized to update this post.");
     }
-
     const { title, content, topic } = req.body;
 
     const updatedPost = await prisma.post.update({
@@ -149,6 +150,8 @@ const updatePostById = async (req, res) => {
 // DELETE a post by id
 const deletePostById = async (req, res) => {
   const postId = parseInt(req.params.id);
+  const isAdmin = req.user.roles.includes("ADMIN");
+  const isModerator = req.user.roles.includes("MODERATOR");
 
   try {
     // check post ownership and exists
@@ -161,7 +164,8 @@ const deletePostById = async (req, res) => {
     }
 
     // check if user is authorized to delete the post
-    if (post.created_by !== req.user.id) {
+    // allow admins and moderators to delete any post
+    if (post.created_by !== req.user.id && !isAdmin && !isModerator) {
       return res
         .status(403)
         .send("You are not authorized to delete this post.");
