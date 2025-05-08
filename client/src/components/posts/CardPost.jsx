@@ -103,7 +103,13 @@ function CardPost({ post, onPostDeleted }) {
         ) : (
           <div className="mb-4">
             <p className="text-gray-700">
-              Posted by <span className="font-bold">{author}</span>
+              Posted by{" "}
+              <Link
+                to={`/users/${post.created_by}`}
+                className="font-bold hover:underline hover:text-red-400"
+              >
+                {author}
+              </Link>
               <span className="text-gray-500 text-sm italic ml-2">
                 ({postedTimeAgo})
               </span>
