@@ -108,7 +108,13 @@ function FullPost() {
       <div className="bg-white min-h-[60vh] shadow-md w-full p-8 rounded relative">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         <p className="text-gray-700">
-          Posted by <span className="font-semibold">{author}</span>
+          Posted by{" "}
+          <Link
+            to={`/users/${post.created_by}`}
+            className="font-semibold hover:underline hover:text-red-400"
+          >
+            {author}
+          </Link>
         </p>
         <div className="mb-5">
           <span className="text-sm text-gray-500 italic">({timeAgo})</span>

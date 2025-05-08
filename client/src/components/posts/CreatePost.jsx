@@ -77,14 +77,14 @@ function CreatePost() {
         <div className="flex gap-2 justify-end">
           <button
             type="submit"
-            className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded w-60"
+            className="bg-indigo-500 hover:bg-indigo-600 text-white p-2 rounded w-60 cursor-pointer"
           >
             Post
           </button>
           <button
             onClick={handleDiscard}
             type="button"
-            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded w-60"
+            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded w-60 cursor-pointer"
           >
             Discard
           </button>

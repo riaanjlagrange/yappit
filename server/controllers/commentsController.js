@@ -2,7 +2,7 @@ const prisma = require("../prisma/client");
 
 // GET all comments from post
 const getAllCommentsFromPost = async (req, res) => {
-  const postId = parseInt(req.params.postId);
+  const postId = req.params.postId;
 
   try {
     const comments = await prisma.comment.findMany({
@@ -33,7 +33,7 @@ const getAllCommentsFromPost = async (req, res) => {
 
 // POST a comment
 const postComment = async (req, res) => {
-  const postId = parseInt(req.params.postId);
+  const postId = req.params.postId;
   const { userId, content } = req.body;
 
   try {
@@ -54,9 +54,7 @@ const postComment = async (req, res) => {
 
 // DELETE a comment
 const deleteComment = async (req, res) => {
-  const commentId = parseInt(req.params.commentId);
-  const isAdmin = req.user.roles.includes("ADMIN");
-  const isModerator = req.user.roles.includes("MODERATOR");
+  const commentId = req.params.commentId;
 
   try {
     // Find the comment
@@ -82,12 +80,7 @@ const deleteComment = async (req, res) => {
     const postUserId = post.created_by;
 
     // Check if user is authorized to delete the comment
-    if (
-      comment.user_id !== req.user.id &&
-      req.user.id !== postUserId &&
-      !isAdmin &&
-      !isModerator
-    ) {
+    if (comment.user_id !== req.user.id && req.user.id !== postUserId) {
       return res
         .status(403)
         .send("You are not authorized to delete this comment.");

@@ -26,12 +26,7 @@ const getAllUsers = async (req, res) => {
 
 // GET user by id
 const getUserById = async (req, res) => {
-  const userId = parseInt(req.params.id);
-
-  if (isNaN(userId)) {
-    return res.status(400).send("Invalid user ID.");
-  }
-
+  const userId = req.params.id;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -39,6 +34,12 @@ const getUserById = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        description: true,
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
 
@@ -54,9 +55,38 @@ const getUserById = async (req, res) => {
   }
 };
 
+// PUT update user by id
+const updateUserById = async (req, res) => {
+  const userId = req.params.id;
+  const { name, email } = req.body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name,
+        email,
+      },
+    });
+
+    res.json(updatedUser);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
 // DELETE a user
 const deleteUserById = async (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -85,5 +115,6 @@ const deleteUserById = async (req, res) => {
 module.exports = {
   getAllUsers,
   getUserById,
+  updateUserById,
   deleteUserById,
 };
