@@ -24,6 +24,7 @@ const registerUser = async (req, res) => {
       data: {
         name,
         email,
+        description: "Hey there! I am a new user.",
         password: hashedPassword,
         userRoles: {
           create: {
@@ -95,7 +96,7 @@ const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "1h",
-      },
+      }
     );
 
     const userResponse = {

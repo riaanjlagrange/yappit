@@ -2,19 +2,30 @@ import api from "../../utils/api";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useParams } from "react-router-dom";
+import profilePicture from "../../assets/temp-profile.svg";
 
 function Profile() {
-  const [user, setUser] = useState(null);
+  const [profileUser, setProfileUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const { userId } = useParams();
+  // get userId from params in as int
+  const profileUserId = parseInt(useParams().userId);
+
+  // check if user is author
+  const { user } = useAuth();
+  const userId = user.id;
+
+  const isAuthor = userId === profileUserId;
+  console.log(userId);
+  console.log(profileUserId);
+  console.log(isAuthor);
 
   useEffect(() => {
-    const getUser = async (userId) => {
+    const getUser = async (profileUserId) => {
       try {
-        const user = await api.get(`/users/${userId}`);
-        setUser(user.data);
+        const user = await api.get(`/users/${profileUserId}`);
+        setProfileUser(user.data);
         console.log(user);
       } catch (err) {
         console.error(err);
@@ -23,18 +34,21 @@ function Profile() {
         setLoading(false);
       }
     };
-    getUser(userId);
-  }, [userId]);
+    getUser(profileUserId);
+  }, [profileUserId]);
 
   if (loading) return <div>Loading...</div>;
   if (errorMessage) return <div>{errorMessage}</div>;
 
   return (
     <div className="flex w-full h-full flex-col items-center">
-      <div className="w-2/3 bg-white h-full flex items-center flex-col p-8 rounded-sm">
-        <p>{user.name}</p>
-        <p>{user.email}</p>
-        <p>{user.id}</p>
+      <div className="w-2/3 bg-white h-full flex items-center flex-col p-8 rounded-sm gap-5 justify-evenly">
+        <img src={profilePicture} href="Profile Picture" className="max-w-32" />
+        <p>{profileUser.name}</p>
+        <p>{profileUser.email}</p>
+        <p>{profileUser.id}</p>
+        <p>{profileUser.description}</p>
+        {isAuthor && <div>You are the author</div>}
       </div>
     </div>
   );

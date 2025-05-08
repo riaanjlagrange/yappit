@@ -29,11 +29,17 @@ const getUserById = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id: userId },
       select: {
         id: true,
         name: true,
         email: true,
+        description: true,
+        userRoles: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
 
@@ -43,6 +49,34 @@ const getUserById = async (req, res) => {
     }
 
     res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+};
+
+const updateUserById = async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { name, email } = req.body;
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name,
+        email,
+      },
+    });
+
+    res.json(updatedUser);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -80,5 +114,6 @@ const deleteUserById = async (req, res) => {
 module.exports = {
   getAllUsers,
   getUserById,
+  updateUserById,
   deleteUserById,
 };
