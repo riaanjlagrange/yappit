@@ -2,7 +2,7 @@ const prisma = require("../prisma/client.js");
 
 // GET VOTE
 const getVote = async (req, res) => {
-  const postId = parseInt(req.params.postId);
+  const postId = req.params.postId;
   const userId = req.user.id;
   console.log("User ID:", userId);
   console.log("Post ID:", postId);
@@ -34,8 +34,6 @@ const getVote = async (req, res) => {
 // CAST A VOTE
 const vote = async (req, res) => {
   const { userId, postId, vote } = req.body; // vote = 1 or -1
-  const parsedPostId = parseInt(postId);
-  const parsedUserId = parseInt(userId);
 
   // check if vote is either 1 or -1
   if (![1, -1].includes(vote)) {
@@ -48,8 +46,8 @@ const vote = async (req, res) => {
       // Check for existing vote
       const existingVote = await prisma.postVote.findFirst({
         where: {
-          user_id: parsedUserId,
-          post_id: parsedPostId,
+          user_id: userId,
+          post_id: postId,
         },
       });
 
@@ -58,15 +56,15 @@ const vote = async (req, res) => {
         // Create the vote
         await prisma.postVote.create({
           data: {
-            user_id: parsedUserId,
-            post_id: parsedPostId,
+            user_id: userId,
+            post_id: postId,
             vote: vote,
           },
         });
 
         // Update the post score
         await prisma.post.update({
-          where: { id: parsedPostId },
+          where: { id: postId },
           data: {
             score: { increment: vote },
           },
@@ -96,8 +94,6 @@ const vote = async (req, res) => {
 // CHANGE VOTE TO THE OPPOSITE IF YOU ALREADY VOTED (CHANGED FROM UPVOTE TO DOWNVOTE AND VICE VERSA)
 const changeVote = async (req, res) => {
   const { userId, postId, vote } = req.body; // vote = 1 or -1
-  const parsedPostId = parseInt(postId);
-  const parsedUserId = parseInt(userId);
 
   // check if vote is either 1 or -1
   if (![1, -1].includes(vote)) {
@@ -111,8 +107,8 @@ const changeVote = async (req, res) => {
       const existingVote = await prisma.postVote.findUnique({
         where: {
           user_id_post_id: {
-            user_id: parsedUserId,
-            post_id: parsedPostId,
+            user_id: userId,
+            post_id: postId,
           },
         },
       });
@@ -136,8 +132,8 @@ const changeVote = async (req, res) => {
       await prisma.postVote.update({
         where: {
           user_id_post_id: {
-            user_id: parsedUserId,
-            post_id: parsedPostId,
+            user_id: userId,
+            post_id: postId,
           },
         },
         data: {
@@ -149,7 +145,7 @@ const changeVote = async (req, res) => {
       // Update the post score - adjust by 2x vote (to reverse the old vote and add the new one)
       const scoreChange = 2 * vote;
       await prisma.post.update({
-        where: { id: parsedPostId },
+        where: { id: postId },
         data: {
           score: { increment: scoreChange },
         },
@@ -171,7 +167,7 @@ const changeVote = async (req, res) => {
 
 // DELETE VOTE
 const deleteVote = async (req, res) => {
-  const postId = parseInt(req.params.postId);
+  const postId = req.params.postId;
   const userId = req.user.id;
   console.log("User ID:", userId);
   console.log("Post ID:", postId);

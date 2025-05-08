@@ -2,7 +2,7 @@ const prisma = require("../prisma/client");
 
 // GET all comments from post
 const getAllCommentsFromPost = async (req, res) => {
-  const postId = parseInt(req.params.postId);
+  const postId = req.params.postId;
 
   try {
     const comments = await prisma.comment.findMany({
@@ -33,7 +33,7 @@ const getAllCommentsFromPost = async (req, res) => {
 
 // POST a comment
 const postComment = async (req, res) => {
-  const postId = parseInt(req.params.postId);
+  const postId = req.params.postId;
   const { userId, content } = req.body;
 
   try {
@@ -54,7 +54,7 @@ const postComment = async (req, res) => {
 
 // DELETE a comment
 const deleteComment = async (req, res) => {
-  const commentId = parseInt(req.params.commentId);
+  const commentId = req.params.commentId;
 
   try {
     // Find the comment

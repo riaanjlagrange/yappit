@@ -21,9 +21,10 @@ const getAllPosts = async (req, res) => {
 
 // GET post by id
 const getPostById = async (req, res) => {
+  const postId = req.params.id;
   try {
     const post = await prisma.post.findUnique({
-      where: { id: parseInt(req.params.id) },
+      where: { id: postId },
       include: {
         author: {
           select: {
@@ -47,12 +48,16 @@ const getPostById = async (req, res) => {
 
 // GET posts by user id
 const getPostsByUserId = async (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
 
   try {
     const posts = await prisma.post.findMany({
       where: { created_by: userId },
     });
+
+    if (!posts || posts.length === 0) {
+      return res.status(404).send("No posts found for this user.");
+    }
 
     res.json(posts);
   } catch (err) {
@@ -63,7 +68,7 @@ const getPostsByUserId = async (req, res) => {
 
 // GET posts score
 const getPostScore = async (req, res) => {
-  const postId = parseInt(req.params.id);
+  const postId = req.params.id;
 
   try {
     const post = await prisma.post.findUnique({
@@ -109,7 +114,7 @@ const createPost = async (req, res) => {
 
 // PUT update a post by id
 const updatePostById = async (req, res) => {
-  const postId = parseInt(req.params.id);
+  const postId = req.params.id;
 
   try {
     // check if post exists and user is owner
@@ -148,7 +153,7 @@ const updatePostById = async (req, res) => {
 
 // DELETE a post by id
 const deletePostById = async (req, res) => {
-  const postId = parseInt(req.params.id);
+  const postId = req.params.id;
 
   try {
     // check post ownership and exists

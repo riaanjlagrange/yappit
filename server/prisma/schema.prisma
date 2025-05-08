@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
+  id         String       @id @default(uuid())
   name       String
   description String
   email      String    @unique
@@ -27,19 +27,19 @@ model Role {
 }
 
 model UserRole {
-  id      Int   @id @default(autoincrement())  
-  user_id Int?
+  id      String   @id @default(uuid())  
+  user_id String?
   role_id Int
   user    User? @relation(fields: [user_id], references: [id], onDelete: SetNull)
   role    Role @relation(fields: [role_id], references: [id])
 }
 
 model Post {
-  id         Int       @id @default(autoincrement())
+  id         String       @id @default(uuid())
   title      String
   content    String
   created_at DateTime  @default(now())
-  created_by Int?
+  created_by String?
   topic      String
   score      Int       @default(0)
   author     User?     @relation("UserPosts", fields: [created_by], references: [id], onDelete: SetNull)
@@ -48,9 +48,9 @@ model Post {
 }
 
 model Comment {
-  id         Int      @id @default(autoincrement())
-  post_id    Int
-  user_id    Int?
+  id         String      @id @default(uuid())
+  post_id    String
+  user_id    String?
   content    String
   created_at DateTime @default(now())
   post       Post     @relation(fields: [post_id], references: [id], onDelete: Cascade)
@@ -59,8 +59,8 @@ model Comment {
 
 model PostVote {
   id         Int      @id @default(autoincrement())
-  user_id    Int?
-  post_id    Int
+  user_id    String?
+  post_id    String
   vote       Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

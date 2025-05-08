@@ -10,7 +10,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
 
   // get userId from params in as int
-  const profileUserId = parseInt(useParams().userId);
+  const profileUserId = useParams().userId;
 
   // check if user is author
   const { user } = useAuth();

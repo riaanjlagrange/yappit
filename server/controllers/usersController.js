@@ -26,7 +26,7 @@ const getAllUsers = async (req, res) => {
 
 // GET user by id
 const getUserById = async (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -55,8 +55,9 @@ const getUserById = async (req, res) => {
   }
 };
 
+// PUT update user by id
 const updateUserById = async (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
   const { name, email } = req.body;
   try {
     const user = await prisma.user.findUnique({
@@ -85,7 +86,7 @@ const updateUserById = async (req, res) => {
 
 // DELETE a user
 const deleteUserById = async (req, res) => {
-  const userId = parseInt(req.params.id);
+  const userId = req.params.id;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
