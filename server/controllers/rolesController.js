@@ -1,5 +1,4 @@
 const prisma = require("../prisma/client");
-
 // GET all roles
 const getAllRoles = async (req, res) => {
   try {

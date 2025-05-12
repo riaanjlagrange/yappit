@@ -33,7 +33,7 @@ model UserRole {
   user    User? @relation(fields: [user_id], references: [id], onDelete: SetNull)
   role    Role @relation(fields: [role_id], references: [id])
   
-  @@unique([user_id, role_id])
+  @@unique([user_id, role_id], name: "user_id_role_id")
 }
 
 model Post {
