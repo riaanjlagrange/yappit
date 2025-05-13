@@ -4,6 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
 import getTimeAgo from "../../utils/getTimeAgo";
 import Votes from "../votes/Votes";
+import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
 
 function CardPost({ post, onPostDeleted }) {
   // to fetch the author name from the API
@@ -97,11 +98,11 @@ function CardPost({ post, onPostDeleted }) {
         </div>
 
         {loading ? (
-          <span className="italic">Loading...</span>
+          <ContentLoadingSpinner />
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : (
-          <div className="mb-4">
+          <div className="mb-2">
             <p className="text-gray-700">
               Posted by{" "}
               <Link
@@ -117,12 +118,12 @@ function CardPost({ post, onPostDeleted }) {
           </div>
         )}
 
-        <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 border-t border-gray-300 py-10">
+        <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 py-5">
           {post.content}
         </p>
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pt-3">
         <Votes postId={post.id} />
 
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}

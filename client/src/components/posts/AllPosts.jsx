@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CardPost from "./CardPost";
 import api from "../../utils/api";
+import PageLoadingSpinner from "../layout/PageLoadingSpinner";
 
 function AllPosts() {
   const [posts, setPosts] = useState([]);
@@ -27,7 +28,7 @@ function AllPosts() {
     fetchPosts();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <PageLoadingSpinner />;
   if (errorMessage) return <div>{errorMessage}</div>;
 
   return (

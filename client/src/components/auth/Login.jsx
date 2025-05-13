@@ -3,6 +3,8 @@ import api from "../../utils/api";
 import { useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
+import { CiLogin } from "react-icons/ci";
+import { FaUserPlus } from "react-icons/fa";
 
 // TODO: add validation for email and password from client side
 const Login = () => {
@@ -66,7 +68,7 @@ const Login = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
           required
         />
 
@@ -76,7 +78,7 @@ const Login = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full mb-3 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full mb-3 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
           required
         />
         {message && (
@@ -85,9 +87,10 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full mt-5 bg-indigo-600 text-white py-3 rounded hover:bg-indigo-500 transition cursor-pointer"
+          className="w-full mt-5 bg-indigo-500 text-white py-3 rounded hover:bg-indigo-600 transition cursor-pointer flex items-center justify-center gap-2"
         >
-          Login
+          <CiLogin />
+          <span>Login</span>
         </button>
         <div className="flex flex-col items-center justify-between mt-4">
           <span className="text-sm text-gray-500 mt-2 mb-1">
@@ -95,9 +98,10 @@ const Login = () => {
           </span>
           <Link
             to="/register"
-            className="w-full bg-red-400 text-white py-3 rounded hover:bg-red-500 transition text-center"
+            className="w-full bg-red-400 text-white py-3 rounded hover:bg-red-500 transition flex items-center justify-center gap-2"
           >
-            Register here
+            <FaUserPlus />
+            <span>Register Here</span>
           </Link>
         </div>
       </form>

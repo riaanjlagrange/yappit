@@ -4,6 +4,8 @@ import useAuth from "../../hooks/useAuth";
 import getUserNameById from "../../utils/getUserById";
 import logo from "../../assets/logo.svg";
 import profilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
+import { CiLogout, CiLogin } from "react-icons/ci";
+import { FaUserPlus } from "react-icons/fa";
 // TODO: change Link to NavLink
 
 function NavBar() {
@@ -67,10 +69,11 @@ function NavBar() {
                 {userName || "Unknown User"}
               </Link>
               <button
-                className="text-gray-600 hover:text-gray-500 cursor-pointer italic"
+                className="text-gray-600 hover:text-gray-500 cursor-pointer italic flex gap-2 items-center"
                 onClick={handleLogout}
               >
-                Logout
+                <CiLogout />
+                <span>Logout</span>
               </button>
             </div>
             <Link to={`/users/${user.id}`}>
@@ -129,16 +132,24 @@ function NavBar() {
         {/* Show "Login" link only if the user is not logged in */}
         {!isLoggedIn && (
           <li>
-            <Link to="/login" className="hover:text-gray-400">
-              Login
+            <Link
+              to="/login"
+              className="bg-indigo-500 text-white hover:bg-indigo-600 px-4 py-2 rounded-sm flex items-center gap-2 font-semibold"
+            >
+              <CiLogin />
+              <span>Login</span>
             </Link>
           </li>
         )}
         {/* Show "Register" link only if the user is not logged in */}
         {!isLoggedIn && (
           <li>
-            <Link to="/register" className="hover:text-gray-400">
-              Register
+            <Link
+              to="/register"
+              className="bg-red-400 text-white hover:bg-red-500 px-4 py-2 rounded-sm flex items-center gap-2 font-semibold"
+            >
+              <FaUserPlus />
+              <span>Register</span>
             </Link>
           </li>
         )}

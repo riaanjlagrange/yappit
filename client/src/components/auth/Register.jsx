@@ -3,6 +3,8 @@ import api from "../../utils/api";
 import { useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router-dom";
+import { CiLogin } from "react-icons/ci";
+import { FaUserPlus } from "react-icons/fa";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -63,7 +65,7 @@ const Register = () => {
           placeholder="Name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
           required
         />
 
@@ -73,7 +75,7 @@ const Register = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
           required
         />
 
@@ -83,7 +85,7 @@ const Register = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm"
+          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
           required
         />
 
@@ -93,9 +95,10 @@ const Register = () => {
 
         <button
           type="submit"
-          className="w-full mt-5 bg-indigo-600 text-white py-3 rounded hover:bg-indigo-500 transition cursor-pointer"
+          className="w-full mt-5 bg-red-400 text-white py-3 rounded hover:bg-red-500 transition cursor-pointer flex items-center justify-center gap-2"
         >
-          Register
+          <FaUserPlus />
+          <span>Register</span>
         </button>
         <div className="flex flex-col items-center justify-between mt-4">
           <span className="text-sm text-gray-500 mt-2 mb-1">
@@ -103,9 +106,10 @@ const Register = () => {
           </span>
           <Link
             to="/login"
-            className="w-full bg-red-400 text-white py-3 rounded hover:bg-red-500 transition text-center"
+            className="w-full bg-indigo-500 text-white py-3 rounded hover:bg-indigo-600 transition text-center flex items-center justify-center gap-2"
           >
-            Login here
+            <CiLogin />
+            <span>Login here</span>
           </Link>
         </div>
       </form>

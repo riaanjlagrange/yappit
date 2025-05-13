@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import profilePicture from "../../assets/temp-profile.svg";
+import PageLoadingSpinner from "../layout/PageLoadingSpinner";
 
 function Profile() {
   const [profileUser, setProfileUser] = useState(null);
@@ -37,7 +38,7 @@ function Profile() {
     getUser(profileUserId);
   }, [profileUserId]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <PageLoadingSpinner />;
   if (errorMessage) return <div>{errorMessage}</div>;
 
   return (

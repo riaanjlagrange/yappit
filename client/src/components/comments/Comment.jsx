@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import getUserNameById from "../../utils/getUserById";
 import getTimeAgo from "../../utils/getTimeAgo";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function Comment({ postAuthorId, comment, onCommentDeleted }) {
   const [error, setError] = useState(null);
@@ -13,7 +13,6 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
   const isCommentAuthor = user && user.id === comment.user_id;
   const { postId } = useParams(); // Get the post ID from the URL
   const isPostAuthor = user && user.id === postAuthorId;
-
 
   const getUserById = async (userId) => {
     setUserName(await getUserNameById(userId));
@@ -43,7 +42,12 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
       className={`flex flex-col gap-2 p-4 rounded shadow-sm border-t-2 ${commentColor}`}
     >
       <div className="flex items-center gap-2">
-        <h2 className="text-lg font-semibold">{userName}</h2>
+        <Link
+          to={`/users/${comment.user_id}`}
+          className="text-lg font-semibold hover:underline hover:text-red-400"
+        >
+          {userName}
+        </Link>
         <span className="text-sm text-gray-500 italic">
           ({getTimeAgo(comment.created_at)})
         </span>

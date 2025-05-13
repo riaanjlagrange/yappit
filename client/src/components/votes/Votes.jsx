@@ -1,19 +1,25 @@
 import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
+import { FaCircleArrowUp, FaCircleArrowDown } from "react-icons/fa6";
+import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
 
 function Votes({ postId }) {
   const [vote, setVote] = useState(0);
+  const [voteError, setVoteError] = useState(null);
 
   const [score, setScore] = useState(0);
-  const [scoreLoading, setScoreLoading] = useState(true);
   const [scoreError, setScoreError] = useState(null);
+  const [scoreLoading, setScoreLoading] = useState(true);
 
   const { user, isLoggedIn } = useAuth();
 
   const castVote = async (voteValue) => {
     if (!isLoggedIn || !user) {
-      console.log("You must be logged in to vote.");
+      setVoteError("You must be logged in to vote.");
+      setTimeout(() => {
+        setVoteError(null);
+      }, 3000);
       return;
     }
 
@@ -43,6 +49,10 @@ function Votes({ postId }) {
         setScore((prevScore) => prevScore + voteValue);
       } catch (err) {
         console.log(err.message);
+        setVoteError(err.message);
+        setTimeout(() => {
+          setVoteError(null);
+        }, 3000);
       }
     } else {
       try {
@@ -53,6 +63,10 @@ function Votes({ postId }) {
         setScore((prevScore) => prevScore - vote + voteValue);
       } catch (err) {
         console.log(err.message);
+        setVoteError(err.message);
+        setTimeout(() => {
+          setVoteError(null);
+        }, 3000);
       }
     }
   };
@@ -70,6 +84,10 @@ function Votes({ postId }) {
           return;
         }
         console.log(err.message);
+        setVoteError(err.message);
+        setTimeout(() => {
+          setVoteError(null);
+        }, 3000); // clear vote error
       }
     };
 
@@ -79,9 +97,6 @@ function Votes({ postId }) {
         setScore(response.data.score);
       } catch (err) {
         setScoreError(err.message);
-        setTimeout(() => {
-          setScoreError(null);
-        }, 3000); // Clear the error after 3 seconds
       } finally {
         setScoreLoading(false);
       }
@@ -90,33 +105,37 @@ function Votes({ postId }) {
     fetchVote();
     getPostScore();
   }, [postId, isLoggedIn]);
+
+  if (scoreLoading) return <ContentLoadingSpinner />;
+  if (scoreError) return <span>{scoreError}</span>;
+
   return (
-    <div className="flex gap-5 justify-evenly items-center">
+    <div className="flex gap-2 justify-evenly items-center text-gray-700">
       <span
-        className={`font-bold ${
+        className={`font-bold w-5 ${
           score >= 0 ? "text-indigo-500" : "text-red-500"
         }`}
       >
         {score}
       </span>
-      {scoreLoading && <div className="text-gray-500">Score Loading...</div>}
       {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(1)}
-        className={`border p-2 ${
+        className={`border p-1 rounded-full cursor-pointer ${
           vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
         }`}
       >
-        Upvote
+        <FaCircleArrowUp className="size-5" />
       </button>
       <button
         onClick={() => castVote(-1)}
-        className={`border p-2 ${
+        className={`border p-1 rounded-full cursor-pointer ${
           vote === -1 ? "bg-red-400 text-white" : "bg-white"
         }`}
       >
-        Downvote
+        <FaCircleArrowDown className="size-5" />
       </button>
+      {voteError && <div className="text-red-400 italic">{voteError}</div>}
     </div>
   );
 }

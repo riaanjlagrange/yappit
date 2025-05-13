@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import getTimeAgo from "../../utils/getTimeAgo";
 import AllComments from "../comments/AllComments";
 import Votes from "../votes/Votes";
+import PageLoadingSpinner from "../layout/PageLoadingSpinner";
 import api from "../../utils/api";
 
 function FullPost() {
@@ -97,8 +98,7 @@ function FullPost() {
     }
   };
 
-  if (loading)
-    return <div className="text-center mt-10 text-gray-500">Loading...</div>;
+  if (loading) return <PageLoadingSpinner />;
   if (error)
     return <div className="text-center mt-10 text-red-500">{error}</div>;
   if (!post) return null;

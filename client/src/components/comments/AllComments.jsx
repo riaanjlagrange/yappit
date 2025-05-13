@@ -4,6 +4,7 @@ import Comment from "./Comment.jsx";
 import { useParams } from "react-router-dom";
 import PostComment from "./PostComment.jsx";
 import useAuth from "../../hooks/useAuth.js";
+import ContentLoadingSpinner from "../layout/ContentLoadingSpinner.jsx";
 // TODO: fix url to give the postId from the url
 
 function AllComments({ postAuthorId }) {
@@ -48,7 +49,7 @@ function AllComments({ postAuthorId }) {
         </span>
       </div>
       <ul className="flex flex-col gap-2">
-        {loading && <li>Loading...</li>}
+        {loading && <ContentLoadingSpinner />}
         {error && <li>{error}</li>}
         {!loading && !error && comments.length === 0 && (
           <li>No comments yet</li>

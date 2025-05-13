@@ -7,3 +7,11 @@
 .pageTitle {
   font-family: "Titillium Web", sans-serif;
 }
+
+/* autofill override */
+input:-webkit-autofill {
+  @apply bg-indigo-50 text-gray-900;
+  box-shadow: 0 0 0 1000px rgb(239, 239, 255) inset !important;
+  -webkit-text-fill-color: #111827 !important; /* Tailwind gray-900 */
+  transition: background-color 5000s ease-in-out 0s;
+}
