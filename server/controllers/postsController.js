@@ -127,7 +127,11 @@ const updatePostById = async (req, res) => {
     }
 
     // check if user is authorized to update the post
-    if (post.created_by !== req.user.id && !isAdmin && !isModerator) {
+    if (
+      post.created_by !== req.user.id &&
+      !req.user.isAdmin &&
+      !req.user.isModerator
+    ) {
       return res
         .status(403)
         .send("You are not authorized to update this post.");
@@ -166,6 +170,9 @@ const deletePostById = async (req, res) => {
 
     // check if user is authorized to delete the post
     // allow admins and moderators to delete any post
+    const isAdmin = req.user.roles.includes("ADMIN");
+    const isModerator = req.user.roles.includes("MODERATOR");
+
     if (post.created_by !== req.user.id && !isAdmin && !isModerator) {
       return res
         .status(403)
