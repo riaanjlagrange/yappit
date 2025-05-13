@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 import PostComment from "./PostComment.jsx";
 import useAuth from "../../hooks/useAuth.js";
 import ContentLoadingSpinner from "../layout/ContentLoadingSpinner.jsx";
-// TODO: fix url to give the postId from the url
 
 function AllComments({ postAuthorId }) {
   const [comments, setComments] = useState([]);

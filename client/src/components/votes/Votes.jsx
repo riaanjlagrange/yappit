@@ -2,7 +2,7 @@ import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
-import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md'
+import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 
 function Votes({ postId }) {
   const [vote, setVote] = useState(0);
@@ -32,20 +32,24 @@ function Votes({ postId }) {
 
     if (vote === voteValue) {
       try {
+        setVote(0);
         await api.delete(`/votes/${data.postId}`);
         console.log("Vote deleted successfully.");
 
-        setVote(0);
         setScore((prevScore) => prevScore - voteValue);
       } catch (err) {
         console.log(err.message);
+        setVoteError(err.message);
+        setTimeout(() => {
+          setVoteError(null);
+        }, 3000);
       }
     } else if (vote === 0) {
       try {
+        setVote(voteValue);
         await api.post("/votes/", data);
         console.log("Vote added successfully!");
 
-        setVote(voteValue);
         setScore((prevScore) => prevScore + voteValue);
       } catch (err) {
         console.log(err.message);
@@ -56,10 +60,10 @@ function Votes({ postId }) {
       }
     } else {
       try {
+        setVote(voteValue);
         await api.patch("/votes/", data);
         console.log("Vote changed successfully!");
 
-        setVote(voteValue);
         setScore((prevScore) => prevScore - vote + voteValue);
       } catch (err) {
         console.log(err.message);
@@ -112,23 +116,26 @@ function Votes({ postId }) {
   return (
     <div className="flex gap-2 justify-evenly items-center text-gray-700">
       <span
-        className={`font-bold w-5 ${score >= 0 ? "text-indigo-500" : "text-red-500"
-          }`}
+        className={`font-bold w-5 ${
+          score >= 0 ? "text-indigo-500" : "text-red-500"
+        }`}
       >
         {score}
       </span>
       {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(1)}
-        className={`border p-1 rounded-full cursor-pointer ${vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
-          }`}
+        className={`border p-1 rounded-full cursor-pointer ${
+          vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
+        }`}
       >
         <MdArrowDropUp className="size-5" />
       </button>
       <button
         onClick={() => castVote(-1)}
-        className={`border p-1 rounded-full cursor-pointer ${vote === -1 ? "bg-red-400 text-white" : "bg-white"
-          }`}
+        className={`border p-1 rounded-full cursor-pointer ${
+          vote === -1 ? "bg-red-400 text-white" : "bg-white"
+        }`}
       >
         <MdArrowDropDown className="size-5" />
       </button>
