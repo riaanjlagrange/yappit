@@ -10,8 +10,12 @@ require("dotenv").config();
 // middleware
 const cors = require("cors");
 app.use(cors());
-app.use(express.json());
 
+//must be before
+const uploadRoutes = require("./routes/uploadRoutes");
+app.use("/api/upload", uploadRoutes);
+
+app.use(express.json());
 // routes
 const postsRoutes = require("./routes/postsRoutes");
 app.use("/api/posts", postsRoutes);
@@ -35,5 +39,5 @@ app.use("/api/roles", rolesRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () =>
-  console.log(`Listening on port http://localhost:${PORT}`),
+  console.log(`Listening on port http://localhost:${PORT}`)
 );

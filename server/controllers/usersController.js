@@ -1,4 +1,7 @@
 const prisma = require("../prisma/client");
+const { s3 } = require("../s3");
+const { GetObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 // GET all users
 const getAllUsers = async (req, res) => {
@@ -8,8 +11,22 @@ const getAllUsers = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        profilePic: true,
       },
     });
+
+    for (const user of users) {
+      const getObjectParams = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `profile_pics/${user.id}/${user.profilePic}`,
+      };
+
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+      // Add the URL to the user object
+      user.profilePicUrl = url;
+    }
 
     // Check if users exist
     if (users.length === 0) {
@@ -34,6 +51,7 @@ const getUserById = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        profilePic: true,
         description: true,
         userRoles: {
           include: {
@@ -42,6 +60,21 @@ const getUserById = async (req, res) => {
         },
       },
     });
+
+    console.log("Fetched user:", user);
+
+    if (user.profilePic) {
+      const getObjectParams = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `profile_pics/${userId}/${user.profilePic}`,
+      };
+
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+      // Add the URL to the user object
+      user.profilePicUrl = url;
+    }
 
     // Check if user exists
     if (!user) {
