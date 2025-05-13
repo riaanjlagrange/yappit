@@ -7,6 +7,8 @@ import AllComments from "../comments/AllComments";
 import Votes from "../votes/Votes";
 import PageLoadingSpinner from "../layout/PageLoadingSpinner";
 import api from "../../utils/api";
+import { MdDeleteForever } from 'react-icons/md'
+import { AiFillEdit } from 'react-icons/ai'
 
 function FullPost() {
   const [post, setPost] = useState(null);
@@ -133,18 +135,18 @@ function FullPost() {
 
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
         {(isAuthor || isAdmin || isModerator) && (
-          <div className="flex justify-between gap-3 absolute bottom-5 right-5 w-1/2">
+          <div className="flex justify-end items-center gap-3 absolute bottom-5 right-5 w-1/2">
             <button
               onClick={handleUpdate}
-              className="bg-indigo-500 text-white p-2 rounded hover:bg-indigo-600 w-full cursor-pointer"
+              className="bg-indigo-500 text-white p-2 rounded hover:bg-indigo-600 cursor-pointer"
             >
-              Update Post
+              <AiFillEdit />
             </button>
             <button
               onClick={handleDelete}
-              className="bg-red-400 text-white p-2 rounded hover:bg-red-500 w-full cursor-pointer"
+              className="bg-red-400 text-white p-2 rounded hover:bg-red-500 cursor-pointer"
             >
-              Delete Post
+              <MdDeleteForever />
             </button>
           </div>
         )}

@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import getTimeAgo from "../../utils/getTimeAgo";
 import Votes from "../votes/Votes";
 import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
+import { MdDeleteForever } from 'react-icons/md'
+import { AiFillEdit } from 'react-icons/ai'
 
 function CardPost({ post, onPostDeleted }) {
   // to fetch the author name from the API
@@ -131,15 +133,15 @@ function CardPost({ post, onPostDeleted }) {
           <div className="flex justify-end w-full gap-2">
             <button
               onClick={handleUpdate}
-              className="bg-indigo-500 text-white p-2 hover:bg-indigo-600 cursor-pointer rounded w-60"
+              className="bg-indigo-500 text-white p-2 hover:bg-indigo-600 cursor-pointer rounded"
             >
-              Update Post
+              <AiFillEdit />
             </button>
             <button
               onClick={handleDelete}
-              className="bg-red-400 text-white p-2  hover:bg-red-500 cursor-pointer rounded w-60"
+              className="bg-red-400 text-white p-2  hover:bg-red-500 cursor-pointer rounded"
             >
-              Delete Post
+              <MdDeleteForever />
             </button>
           </div>
         )}

@@ -6,6 +6,7 @@ import logo from "../../assets/logo.svg";
 import profilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
 import { CiLogout, CiLogin } from "react-icons/ci";
 import { FaUserPlus } from "react-icons/fa";
+import { MdPostAdd } from "react-icons/md";
 // TODO: change Link to NavLink
 
 function NavBar() {
@@ -101,10 +102,13 @@ function NavBar() {
             <Link
               to="/posts/new"
               // className="bg-gradient-to-br from-blue-600 via-pink-500 to-orange-400 text-white hover:bg-white p-3 rounded font-semibold"
-              className="text-white bg-red-400 hover:bg-red-500 p-3 rounded font-semibold"
+              className="text-white bg-red-400 hover:bg-red-500 p-3 rounded font-semibold flex items-center justify-center gap-2"
               style={{ transition: "all 0.3s ease" }}
             >
-              Create Post
+              <MdPostAdd />
+              <span>
+                Create Post
+              </span>
             </Link>
           </li>
         )}

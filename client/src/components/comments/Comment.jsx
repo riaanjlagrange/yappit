@@ -4,6 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import getUserNameById from "../../utils/getUserById";
 import getTimeAgo from "../../utils/getTimeAgo";
 import { useParams, Link } from "react-router-dom";
+import { MdDeleteForever } from 'react-icons/md'
 
 function Comment({ postAuthorId, comment, onCommentDeleted }) {
   const [error, setError] = useState(null);
@@ -57,9 +58,9 @@ function Comment({ postAuthorId, comment, onCommentDeleted }) {
         {(isCommentAuthor || isPostAuthor || isAdmin || isModerator) && (
           <button
             onClick={handleDelete}
-            className="bg-red-400 hover:bg-red-500 text-white px-2 py-1 rounded w-60 cursor-pointer"
+            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded cursor-pointer"
           >
-            Delete
+            <MdDeleteForever />
           </button>
         )}
       </div>

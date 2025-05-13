@@ -1,8 +1,8 @@
 import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
-import { FaCircleArrowUp, FaCircleArrowDown } from "react-icons/fa6";
 import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
+import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md'
 
 function Votes({ postId }) {
   const [vote, setVote] = useState(0);
@@ -24,7 +24,7 @@ function Votes({ postId }) {
     }
 
     const data = {
-      postId: parseInt(postId) || postId,
+      postId: postId,
       userId: user.id,
       vote: voteValue,
     };
@@ -112,28 +112,25 @@ function Votes({ postId }) {
   return (
     <div className="flex gap-2 justify-evenly items-center text-gray-700">
       <span
-        className={`font-bold w-5 ${
-          score >= 0 ? "text-indigo-500" : "text-red-500"
-        }`}
+        className={`font-bold w-5 ${score >= 0 ? "text-indigo-500" : "text-red-500"
+          }`}
       >
         {score}
       </span>
       {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(1)}
-        className={`border p-1 rounded-full cursor-pointer ${
-          vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
-        }`}
+        className={`border p-1 rounded-full cursor-pointer ${vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
+          }`}
       >
-        <FaCircleArrowUp className="size-5" />
+        <MdArrowDropUp className="size-5" />
       </button>
       <button
         onClick={() => castVote(-1)}
-        className={`border p-1 rounded-full cursor-pointer ${
-          vote === -1 ? "bg-red-400 text-white" : "bg-white"
-        }`}
+        className={`border p-1 rounded-full cursor-pointer ${vote === -1 ? "bg-red-400 text-white" : "bg-white"
+          }`}
       >
-        <FaCircleArrowDown className="size-5" />
+        <MdArrowDropDown className="size-5" />
       </button>
       {voteError && <div className="text-red-400 italic">{voteError}</div>}
     </div>
