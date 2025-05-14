@@ -89,9 +89,9 @@ function Profile() {
             Edit Profile
           </Link>
         )}
-        {/* {isAuthor && (
+        {isAuthor && (
           <ProfilePicUpload fetchUser={getUser} userId={profileUser.id} />
-        )} */}
+        )}
       </div>
       <div className="flex flex-col mt-3 w-2/3 items-center">
         <div className="w-full">

@@ -67,7 +67,7 @@ const getUserById = async (req, res) => {
     if (user.profilePic) {
       const getObjectParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `profile_pics/${userId}/${user.profilePic}`,
+        Key: `profile_pics/${userId}/${userId}`,
       };
 
       const command = new GetObjectCommand(getObjectParams);

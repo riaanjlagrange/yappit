@@ -3,7 +3,6 @@ import api from "../../utils/api";
 
 function ProfilePicUpload({ userId, fetchUser }) {
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState(null);
 
@@ -15,10 +14,13 @@ function ProfilePicUpload({ userId, fetchUser }) {
 
     try {
       const upload = await api.post("/upload/profilePic", formData);
+      // refresh the browser
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       const { message, imageUrl } = await upload;
       setSuccessMessage(message);
       console.log(imageUrl);
-      setImageUrl(imageUrl);
     } catch (err) {
       console.error(err.message);
       setError(err.message);
@@ -38,7 +40,6 @@ function ProfilePicUpload({ userId, fetchUser }) {
       <button type="submit">Upload</button>
       {successMessage && <span>{successMessage}</span>}
       {error && <span>{error}</span>}
-      <a href={imageUrl}>{imageUrl}</a>
     </form>
   );
 }
