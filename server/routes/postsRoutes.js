@@ -10,7 +10,7 @@ router.get("/", postsController.getAllPosts);
 router.get("/:id", postsController.getPostById);
 
 // GET posts by userid
-router.get("/user/:id", authenticateToken, postsController.getPostsByUserId);
+router.get("/users/:id", authenticateToken, postsController.getPostsByUserId);
 
 // GET post scores by post id
 router.get("/score/:id", postsController.getPostScore);
