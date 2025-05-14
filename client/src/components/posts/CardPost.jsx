@@ -24,6 +24,7 @@ function CardPost({ post, onPostDeleted }) {
 
   // Fetch the author name when the component mounts or when post.created_by changes
   // TODO: could use helper function "getUserNameById" to fetch the author name in future
+  // UPDATE!: I think that ^ was a dumb idea...
 
   const handleDelete = async () => {
     try {
@@ -60,23 +61,23 @@ function CardPost({ post, onPostDeleted }) {
   };
 
   return (
-    <div className="shadow-md rounded bg-white flex flex-col p-4 relative">
-      <div className="flex flex-col justify-between p-4">
-        <div className="flex justify-between">
+    <div className="shadow-md rounded bg-white flex flex-col p-8 relative">
+      <div className="flex flex-col justify-between">
+        <div className="flex justify-between items-center mb-4">
+          <UserCard userId={post.created_by} createdAt={post.created_at} />
+          <p className="font-semibold text-sm bg-indigo-500 flex justify-center rounded-sm text-white py-2 px-5">
+            {post.topic}
+          </p>
+        </div>
+        <span>
           <Link
             to={`/posts/${post.id}`}
             className="text-xl font-semibold hover:text-red-400 hover:underline"
           >
             {post.title}
           </Link>
-          <p className="font-semibold mb-4 text-sm bg-indigo-500 w-1/8 flex justify-center rounded-full text-white p-1">
-            {post.topic}
-          </p>
-        </div>
-
-        <UserCard userId={post.created_by} createdAt={post.created_at} />
-
-        <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 py-5">
+        </span>
+        <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 py-2">
           {post.content}
         </p>
       </div>

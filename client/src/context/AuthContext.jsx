@@ -6,13 +6,12 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [roles, setRoles] = useState([])
+  const [roles, setRoles] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isModerator, setIsModerator] = useState(false);
   const [logoutTimer, setLogoutTimer] = useState(null);
 
   // Helper: logout user and clear state
-
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -20,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(false);
     setIsAdmin(false);
     setIsModerator(false);
-    setRoles()
+    setRoles();
     if (logoutTimer) clearTimeout(logoutTimer);
   };
 
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(token);
       setIsLoggedIn(true);
       setUser(decoded);
-      setRoles(decoded.roles || [])
+      setRoles(decoded.roles || []);
       setIsAdmin(decoded.roles.includes("ADMIN"));
       setIsModerator(decoded.roles.includes("MODERATOR"));
 
@@ -76,7 +75,9 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, roles, isAdmin, isModerator, isLoggedIn, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, roles, isAdmin, isModerator, isLoggedIn, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -41,13 +41,11 @@ function AllComments({ postAuthorId }) {
   }, [postId, fetchComments]);
 
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex gap-2 items-center">
-        <h1 className="text-xl font-bold mb-4">Comments</h1>
-        <span className="text-md text-gray-500 mb-4">
-          ({comments.length > 0 ? comments.length : 0})
-        </span>
-      </div>
+    <div className="flex flex-col gap-5">
+      {isLoggedIn && <PostComment onCommentPosted={fetchComments} />}
+      <span className="text-md text-gray-500">
+        Comments ({comments.length > 0 ? comments.length : 0})
+      </span>
       <ul className="flex flex-col gap-2">
         {loading && <ContentLoadingSpinner />}
         {error && <li>{error}</li>}
@@ -66,7 +64,6 @@ function AllComments({ postAuthorId }) {
             </li>
           ))}
       </ul>
-      {isLoggedIn && <PostComment onCommentPosted={fetchComments} />}
     </div>
   );
 }

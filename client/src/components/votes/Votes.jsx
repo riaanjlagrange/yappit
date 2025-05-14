@@ -115,14 +115,6 @@ function Votes({ postId }) {
 
   return (
     <div className="flex gap-2 justify-evenly items-center text-gray-700">
-      <span
-        className={`font-bold w-5 ${
-          score >= 0 ? "text-indigo-500" : "text-red-500"
-        }`}
-      >
-        {score}
-      </span>
-      {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(1)}
         className={`border p-1 rounded-full cursor-pointer ${
@@ -131,6 +123,14 @@ function Votes({ postId }) {
       >
         <MdArrowDropUp className="size-5" />
       </button>
+      <span
+        className={`text-sm font-bold ${
+          score >= 0 ? "text-indigo-500" : "text-red-500"
+        }`}
+      >
+        {score}
+      </span>
+      {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(-1)}
         className={`border p-1 rounded-full cursor-pointer ${

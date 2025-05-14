@@ -49,7 +49,7 @@ function Profile() {
 
   return (
     <div className="flex w-full h-full flex-col items-center pb-20">
-      <div className="w-2/3 bg-white h-full flex flex-col p-8 rounded-sm gap-5 justify-evenly relative">
+      <div className="w-full bg-white h-full flex flex-col p-8 rounded-sm gap-5 justify-evenly relative shadow-md">
         <img
           src={profilePicUrl ? profilePicUrl : profilePicture}
           href="Profile Picture"
@@ -93,12 +93,14 @@ function Profile() {
           <ProfilePicUpload fetchUser={getUser} userId={profileUser.id} />
         )}
       </div>
-      <div className="flex flex-col mt-3 w-2/3 items-center">
-        <div className="w-full">
-          <h1 className="text-xl font-semibold mb-4">
-            Latest from <span className="italic">{profileUser.name}</span>
-          </h1>
-          <UserPosts userId={profileUserId} />
+      <div className="flex mt-5 gap-5 w-full">
+        <div className="w-8/10">
+          <div className="w-full">
+            <UserPosts userId={profileUserId} />
+          </div>
+        </div>
+        <div className="bg-white w-2/10 p-8 rounded shadow-md">
+          Friends: WIP
         </div>
       </div>
     </div>

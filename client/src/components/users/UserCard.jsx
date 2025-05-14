@@ -5,7 +5,7 @@ import tempProfilePic from "../../assets/temp-profile.svg";
 import getTimeAgo from "../../utils/getTimeAgo";
 import { Link } from "react-router-dom";
 
-function UserCard({ userId, createdAt }) {
+function UserCard({ userId, createdAt = null }) {
   const [profilePicUrl, setProfilePicUrl] = useState(null);
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,8 +43,7 @@ function UserCard({ userId, createdAt }) {
     <div className="flex items-center mb-2">
       <img
         src={profilePicUrl || tempProfilePic}
-        alt="profile picture"
-        className="size-8 mr-3 rounded-full"
+        className="size-8 mr-3 rounded-sm"
       />
       <Link
         to={`/users/${userId}`}
@@ -52,9 +51,11 @@ function UserCard({ userId, createdAt }) {
       >
         {author}
       </Link>
-      <span className="text-gray-500 text-sm italic ml-2">
-        ({postedTimeAgo})
-      </span>
+      {createdAt && (
+        <span className="text-gray-500 text-sm italic ml-2">
+          ({postedTimeAgo})
+        </span>
+      )}
     </div>
   );
 }

@@ -37,8 +37,8 @@ function CommentAnnotation({ postId }) {
 
   return (
     <Link to={`/posts/${postId}#comments`} className="flex items-center gap-2">
-      <FaComment className="text-gray-500" />
-      <span className="text-gray-500">{commentCount}</span>
+      <FaComment className="text-gray-500 size-5" />
+      <span className="text-gray-500 text-sm">{commentCount}</span>
     </Link>
   );
 }

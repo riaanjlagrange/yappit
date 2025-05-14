@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../../utils/api.js";
 import { useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth.js";
+import UserCard from "../users/UserCard.jsx";
 
 function PostComment({ onCommentPosted }) {
   const [commentContent, setCommentContent] = useState("");
@@ -31,7 +32,7 @@ function PostComment({ onCommentPosted }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 p-4 rounded shadow-sm border-t-2 border-indigo-500"
+      className="flex flex-col gap-2 px-4 py-2 rounded shadow-sm border-t-2 border-indigo-500"
     >
       <textarea
         value={commentContent}
@@ -40,12 +41,15 @@ function PostComment({ onCommentPosted }) {
         className="p-2 border-b border-gray-300 rounded-md italic min-h-20 max-h-40 resize-none"
         required
       ></textarea>
-      <button
-        type="submit"
-        className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md cursor-pointer"
-      >
-        Post Comment
-      </button>
+      <div className="flex justify-between items-center">
+        <UserCard userId={user.id} />
+        <button
+          type="submit"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-sm cursor-pointer"
+        >
+          Post Comment
+        </button>
+      </div>
       {error && <div className="text-red-400 text-sm mt-2">{error}</div>}
     </form>
   );

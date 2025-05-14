@@ -82,8 +82,7 @@ function NavBar() {
             <Link to={`/users/${user.id}`}>
               <img
                 src={profilePicUrl || tempProfilePicture}
-                alt="Profile"
-                className="w-10 h-10 rounded-full"
+                className="w-10 h-10 rounded-sm"
               />
             </Link>
           </li>
@@ -122,10 +121,7 @@ function NavBar() {
         {/* Show "My Posts" link only if the user is logged in */}
         {isLoggedIn && (
           <li>
-            <Link
-              to={`/users/${userName}/posts`}
-              className="hover:text-red-400"
-            >
+            <Link to={`/users/${user.id}/posts`} className="hover:text-red-400">
               My Posts
             </Link>
           </li>

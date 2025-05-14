@@ -16,6 +16,7 @@ function ProfilePicUpload({ userId, fetchUser }) {
       const upload = await api.post("/upload/profilePic", formData);
       // refresh the browser
       setTimeout(() => {
+        // this works but not ideal. need to replace TODO
         window.location.reload();
       }, 1000);
       const { message, imageUrl } = await upload;
