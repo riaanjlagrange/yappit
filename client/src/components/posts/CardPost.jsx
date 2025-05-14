@@ -6,6 +6,7 @@ import Votes from "../votes/Votes";
 import { MdDeleteForever } from "react-icons/md";
 import { AiFillEdit } from "react-icons/ai";
 import UserCard from "../users/UserCard";
+import CommentAnnotation from "../comments/CommentAnnotation";
 
 function CardPost({ post, onPostDeleted }) {
   const [deleteError, setDeleteError] = useState(null);
@@ -80,9 +81,10 @@ function CardPost({ post, onPostDeleted }) {
         </p>
       </div>
 
-      <div className="flex justify-between items-center pt-3">
+      <div className="flex justify-between items-center pt-3 gap-5">
         <Votes postId={post.id} />
-
+        {/* Show the number of comments */}
+        <CommentAnnotation postId={post.id} />
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
         {(isAuthor || isAdmin || isModerator) && (
           <div className="flex justify-end w-full gap-2">

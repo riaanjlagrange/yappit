@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,10 @@ function FullPost() {
   const { user, isLoggedIn, isAdmin, isModerator } = useAuth();
 
   const navigate = useNavigate();
+
+  // to jump to comments after clicking comments button on CardPost
+  const { hash } = useLocation();
+  // console.log(hash);
 
   const { postId } = useParams(); // Get the post ID from the URL
 
@@ -81,7 +85,23 @@ function FullPost() {
     if (postId) {
       fetchPostData();
     }
-  }, [postId, user]); // Fetch post data when the component mounts or when postId changes
+
+    console.log(hash);
+
+    // Scroll to the comments section if the URL contains a hash
+    if (hash === "#comments") {
+      const scrollToHash = () => {
+        const commentsSection = document.getElementById("comments");
+        console.log(commentsSection);
+        if (commentsSection) {
+          commentsSection.scrollIntoView({ behavior: "smooth" });
+        } else {
+          setTimeout(scrollToHash, 100);
+        }
+      };
+      scrollToHash();
+    }
+  }, [postId, user, hash]); // Fetch post data when the component mounts or when postId changes
 
   if (loading) return <PageLoadingSpinner />;
   if (error)
@@ -131,7 +151,9 @@ function FullPost() {
     */}
       </div>
       <div className="bg-white w-full p-8 rounded shadow-md">
-        <AllComments postAuthorId={post.created_by} />
+        <div id="comments">
+          <AllComments postAuthorId={post.created_by} />
+        </div>
         {!isLoggedIn && (
           <p className="text-red-400 mt-2">
             You must be logged in to post a comment. Click{" "}
