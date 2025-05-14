@@ -1,14 +1,13 @@
 import api from "./api";
 
-const getUserNameById = async (userId) => {
+const getUserById = async (userId) => {
   try {
-    console.log("Fetching user name for ID:", userId);
     const response = await api.get(`/users/${userId}`);
-    return response.data.name;
+    return response.data;
   } catch (err) {
     console.error("Error fetching user:", err);
-    return "Unknown Author";
+    return null;
   }
 };
 
-export default getUserNameById;
+export default getUserById;

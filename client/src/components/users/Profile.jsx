@@ -51,7 +51,7 @@ function Profile() {
         <img
           src={profilePicUrl ? profilePicUrl : profilePicture}
           href="Profile Picture"
-          className="max-w-32"
+          className="max-w-32 rounded-full"
         />
         <p>{profileUser.name}</p>
         <p>{profileUser.email}</p>

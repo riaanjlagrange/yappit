@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
-import getUserNameById from "../../utils/getUserById";
+import getUserById from "../../utils/getUserById";
 import logo from "../../assets/logo.svg";
-import profilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
+import tempProfilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
 import { CiLogout, CiLogin } from "react-icons/ci";
 import { FaUserPlus } from "react-icons/fa";
 import { MdPostAdd } from "react-icons/md";
@@ -12,20 +12,22 @@ import { MdPostAdd } from "react-icons/md";
 function NavBar() {
   const { user, isLoggedIn, logout } = useAuth();
   const [userName, setUserName] = useState(null);
+  const [profilePicUrl, setProfilePicUrl] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [userError, setUserError] = useState(null);
 
   // Get user name by user id
-  const getUserName = async (userId) => {
+  const getUser = async (userId) => {
     try {
-      const userName = await getUserNameById(userId);
-      if (!userName) {
+      const user = await getUserById(userId);
+      if (!user) {
         setUserError("User not found");
         return;
       }
-      setUserName(userName);
+      setUserName(user.name);
+      setProfilePicUrl(user.profilePicUrl);
       setUserLoading(false);
-      return userName;
+      return user;
     } catch (error) {
       setUserError(error);
       setUserLoading(false);
@@ -34,7 +36,7 @@ function NavBar() {
 
   useEffect(() => {
     if (user && user.id) {
-      getUserName(user.id);
+      getUser(user.id);
     } else {
       setUserLoading(false);
     }
@@ -79,7 +81,7 @@ function NavBar() {
             </div>
             <Link to={`/users/${user.id}`}>
               <img
-                src={profilePicture}
+                src={profilePicUrl || tempProfilePicture}
                 alt="Profile"
                 className="w-10 h-10 rounded-full"
               />
@@ -106,9 +108,7 @@ function NavBar() {
               style={{ transition: "all 0.3s ease" }}
             >
               <MdPostAdd />
-              <span>
-                Create Post
-              </span>
+              <span>Create Post</span>
             </Link>
           </li>
         )}

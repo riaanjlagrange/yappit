@@ -19,6 +19,7 @@ function AllComments({ postAuthorId }) {
   const fetchComments = useCallback(async () => {
     try {
       const response = await api.get(`/comments/${postId}`);
+      console.log(response.data);
       if (response.data.length === 0) {
         setError("No comments yet");
         setLoading(false);

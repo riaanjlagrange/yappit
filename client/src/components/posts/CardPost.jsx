@@ -1,18 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import api from "../../utils/api";
 import useAuth from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-import getTimeAgo from "../../utils/getTimeAgo";
 import Votes from "../votes/Votes";
-import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
-import { MdDeleteForever } from 'react-icons/md'
-import { AiFillEdit } from 'react-icons/ai'
+import { MdDeleteForever } from "react-icons/md";
+import { AiFillEdit } from "react-icons/ai";
+import UserCard from "../users/UserCard";
 
 function CardPost({ post, onPostDeleted }) {
-  // to fetch the author name from the API
-  const [author, setAuthor] = useState("Unknown Author");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
 
   const [updateError, setUpdateError] = useState(null);
@@ -21,10 +16,10 @@ function CardPost({ post, onPostDeleted }) {
 
   const navigate = useNavigate();
 
+  console.log(post.created_at);
+
   // Check if the user is logged in and if they are the author of the post
   const isAuthor = user && user.id === post.created_by;
-
-  const postedTimeAgo = getTimeAgo(post.created_at);
 
   // Fetch the author name when the component mounts or when post.created_by changes
   // TODO: could use helper function "getUserNameById" to fetch the author name in future
@@ -63,27 +58,6 @@ function CardPost({ post, onPostDeleted }) {
     navigate(`/posts/${post.id}/update`);
   };
 
-  // Fetch the author name from the API
-  useEffect(() => {
-    if (post.created_by) {
-      api
-        .get(`/users/${post.created_by}`)
-        .then((response) => response.data)
-        .then((data) => {
-          setAuthor(data.name || "Unknown Author");
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching author:", error);
-          setAuthor("Unknown Author");
-          setError("Failed to load author.");
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, [post.created_by]);
-
   return (
     <div className="shadow-md rounded bg-white flex flex-col p-4 relative">
       <div className="flex flex-col justify-between p-4">
@@ -99,26 +73,7 @@ function CardPost({ post, onPostDeleted }) {
           </p>
         </div>
 
-        {loading ? (
-          <ContentLoadingSpinner />
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : (
-          <div className="mb-2">
-            <p className="text-gray-700">
-              Posted by{" "}
-              <Link
-                to={`/users/${post.created_by}`}
-                className="font-bold hover:underline hover:text-red-400"
-              >
-                {author}
-              </Link>
-              <span className="text-gray-500 text-sm italic ml-2">
-                ({postedTimeAgo})
-              </span>
-            </p>
-          </div>
-        )}
+        <UserCard userId={post.created_by} createdAt={post.created_at} />
 
         <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 py-5">
           {post.content}
