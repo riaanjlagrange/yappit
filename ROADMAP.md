@@ -14,8 +14,8 @@
 
 ## 🛡 Admin Panel (Basic)
 
-- [ ] Admin user can view all posts
-- [ ] Admin can delete any post
+- [x] Admin user can view all posts
+- [x] Admin can delete any post
 
 ## 📦 Backend Essentials
 
@@ -36,8 +36,8 @@
 ## 👥 User Features
 
 - [ ] OAuth login (Google sign-in)
-- [ ] Profile pages
-- [ ] User avatars
+- [x] Profile pages
+- [x] User avatars
 - [ ] Edit user profile info
 - [ ] Password reset via email
 
@@ -66,7 +66,7 @@
 - [ ] Pagination or infinite scroll
 - [ ] Rich text editor for posts
 - [ ] Add Animations
-- [ ] Add Icons
+- [x] Add Icons
 - [x] Change Fonts
 
 ## 🧠 Technical Improvements

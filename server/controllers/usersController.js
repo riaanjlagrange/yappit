@@ -53,6 +53,7 @@ const getUserById = async (req, res) => {
         email: true,
         profilePic: true,
         description: true,
+        created_at: true,
         userRoles: {
           include: {
             role: true,
