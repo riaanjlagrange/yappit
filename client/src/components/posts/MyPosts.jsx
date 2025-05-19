@@ -35,7 +35,7 @@ function MyPosts() {
   if (errorMessage || !user) return <div>{errorMessage}</div>;
 
   return (
-    <div>
+    <div className="pb-60">
       <h1 className="text-2xl font-semibold mb-10 pageTitle">My Posts</h1>
       <ul className="flex flex-col gap-10">
         {posts.map((post, index) => (
