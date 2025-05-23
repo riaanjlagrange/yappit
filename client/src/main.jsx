@@ -18,6 +18,7 @@ import ManageUsers from "./components/admin/ManageUsers.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import AssignAdmin from "./components/auth/AssignAdmin.jsx";
 import Profile from "./components/users/Profile.jsx";
+import Settings from "./components/users/Settings.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <Profile />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: "/users/:userId/settings",
+        element: (
+          <RequireAuth>
+            <Settings />
           </RequireAuth>
         ),
       },

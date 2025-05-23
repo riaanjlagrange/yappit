@@ -7,7 +7,7 @@ router.get("/", usersController.getAllUsers);
 
 router.get("/:id", usersController.getUserById);
 
-// TODO: Implement PUT/PATCH to update a user
+router.put("/:id", usersController.updateUserById);
 
 router.delete("/:id", usersController.deleteUserById);
 
