@@ -1,9 +1,9 @@
+// configure dotenv
+require("dotenv").config();
+
 // configure express
 const express = require("express");
 const app = express();
-
-// configure dotenv
-require("dotenv").config();
 
 // const pool = require("./db");
 
@@ -39,5 +39,5 @@ app.use("/api/roles", rolesRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () =>
-  console.log(`Listening on port http://localhost:${PORT}`)
+  console.log(`Listening on port http://localhost:${PORT}`),
 );

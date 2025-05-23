@@ -64,6 +64,11 @@ const getUserById = async (req, res) => {
 
     console.log("Fetched user:", user);
 
+    // Check if user exists
+    if (!user) {
+      return res.status(404).send("User not found.");
+    }
+
     if (user.profilePic) {
       const getObjectParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -75,11 +80,6 @@ const getUserById = async (req, res) => {
 
       // Add the URL to the user object
       user.profilePicUrl = url;
-    }
-
-    // Check if user exists
-    if (!user) {
-      return res.status(404).send("User not found.");
     }
 
     res.json(user);
