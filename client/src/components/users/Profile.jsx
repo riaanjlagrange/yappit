@@ -89,9 +89,6 @@ function Profile() {
             Edit Profile
           </Link>
         )}
-        {isAuthor && (
-          <ProfilePicUpload fetchUser={getUser} userId={profileUser.id} />
-        )}
       </div>
       <div className="flex mt-5 gap-5 w-full">
         <div className="w-8/10">
