@@ -1,11 +1,11 @@
-const prisma = require("../prisma/client");
+const prisma = require('../prisma/client');
 // GET all roles
 const getAllRoles = async (req, res) => {
   try {
     const roles = await prisma.role.findMany();
     res.json(roles);
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 
@@ -17,14 +17,14 @@ const assignRole = async (req, res) => {
     const role = await prisma.role.findUnique({ where: { name: roleName } });
 
     if (!role) {
-      return res.status(404).send({ error: "Role not found" });
+      return res.status(404).send({ error: 'Role not found' });
     }
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
 
     // check if user exists
     if (!user) {
-      res.status(404).send({ error: "User not found" });
+      res.status(404).send({ error: 'User not found' });
     }
 
     // Assign role
@@ -38,10 +38,10 @@ const assignRole = async (req, res) => {
         role_id: role.id,
       },
     });
-    res.send("Role successfully assigned");
+    res.send('Role successfully assigned');
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -54,7 +54,7 @@ const removeRole = async (req, res) => {
     const role = await prisma.role.findUnique({ where: { name: roleName } });
 
     if (!role) {
-      return res.status(404).send("Role not found");
+      return res.status(404).send('Role not found');
     }
 
     await prisma.userRole.delete({
@@ -63,10 +63,10 @@ const removeRole = async (req, res) => {
       },
     });
 
-    res.status(201).send("Role removed successfully");
+    res.status(201).send('Role removed successfully');
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 

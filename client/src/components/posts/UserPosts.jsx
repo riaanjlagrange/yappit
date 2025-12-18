@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import CardPost from "./CardPost";
-import api from "../../utils/api";
-import PageLoadingSpinner from "../layout/PageLoadingSpinner";
+import { useState, useEffect } from 'react';
+import CardPost from './CardPost';
+import api from '../../utils/api';
+import PageLoadingSpinner from '../layout/PageLoadingSpinner';
 
 function UserPosts({ userId }) {
   const [posts, setPosts] = useState([]);
@@ -15,7 +15,7 @@ function UserPosts({ userId }) {
     } catch (err) {
       console.error(err);
       if (err.status === 404) {
-        setMessage("No posts available.");
+        setMessage('No posts available.');
         return;
       }
       setMessage(err.message);

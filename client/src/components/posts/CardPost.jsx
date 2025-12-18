@@ -1,12 +1,12 @@
-import { useState } from "react";
-import api from "../../utils/api";
-import useAuth from "../../hooks/useAuth";
-import { useNavigate, Link } from "react-router-dom";
-import Votes from "../votes/Votes";
-import { MdDeleteForever } from "react-icons/md";
-import { AiFillEdit } from "react-icons/ai";
-import UserCard from "../users/UserCard";
-import CommentAnnotation from "../comments/CommentAnnotation";
+import { useState } from 'react';
+import api from '../../utils/api';
+import useAuth from '../../hooks/useAuth';
+import { useNavigate, Link } from 'react-router-dom';
+import Votes from '../votes/Votes';
+import { MdDeleteForever } from 'react-icons/md';
+import { AiFillEdit } from 'react-icons/ai';
+import UserCard from '../users/UserCard';
+import CommentAnnotation from '../comments/CommentAnnotation';
 
 function CardPost({ post, onPostDeleted }) {
   const [deleteError, setDeleteError] = useState(null);
@@ -30,10 +30,10 @@ function CardPost({ post, onPostDeleted }) {
     try {
       await api.delete(`/posts/${post.id}`);
       onPostDeleted();
-      console.log("Post deleted successfully");
+      console.log('Post deleted successfully');
     } catch (err) {
       console.error(err);
-      setDeleteError("Failed to delete post." + " " + err.message);
+      setDeleteError('Failed to delete post.' + ' ' + err.message);
       setTimeout(() => {
         setDeleteError(null);
       }, 3000); // Clear the error after 3 seconds
@@ -43,7 +43,7 @@ function CardPost({ post, onPostDeleted }) {
 
   const handleUpdate = async () => {
     if (!isLoggedIn) {
-      setUpdateError("You must be logged in to update a post.");
+      setUpdateError('You must be logged in to update a post.');
       setTimeout(() => {
         setUpdateError(null);
       }, 3000);

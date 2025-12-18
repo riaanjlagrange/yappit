@@ -1,19 +1,19 @@
-import { useState } from "react";
-import api from "../../utils/api";
+import { useState } from 'react';
+import api from '../../utils/api';
 
 function ProfilePicUpload({ userId, fetchUser }) {
   const [file, setFile] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState('');
   const [error, setError] = useState(null);
 
   const handleUpload = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("profilePic", file);
-    formData.append("userId", userId);
+    formData.append('profilePic', file);
+    formData.append('userId', userId);
 
     try {
-      const upload = await api.post("/upload/profilePic", formData);
+      const upload = await api.post('/upload/profilePic', formData);
       // refresh the browser
       setTimeout(() => {
         // this works but not ideal. need to replace TODO
@@ -37,9 +37,7 @@ function ProfilePicUpload({ userId, fetchUser }) {
       className="bg-white flex items-center gap-4 p-4 rounded-lg shadow-md w-full max-w-md"
     >
       <label className="w-full">
-        <span className="block text-sm font-medium text-gray-700 mb-1">
-          Upload Profile Picture
-        </span>
+        <span className="block text-sm font-medium text-gray-700 mb-1">Upload Profile Picture</span>
         <input
           type="file"
           name="profilePic"

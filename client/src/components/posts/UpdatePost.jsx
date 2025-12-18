@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import api from "../../utils/api";
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
 
 function UpdatePost() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [topic, setTopic] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [topic, setTopic] = useState('');
 
   const { postId } = useParams(); // Get the post ID from the URL
 
@@ -21,20 +21,20 @@ function UpdatePost() {
     // created_by is set in backend to the logged in user id
     const post = { title, content, topic };
 
-    console.log("Post data:", post);
+    console.log('Post data:', post);
 
     // Update the post using the API
     // TODO: maybe more error handling
     try {
       await api.put(`/posts/${postId}`, post).then((response) => {
-        console.log("Post updated:", response.data);
-        setTitle("");
-        setContent("");
-        setTopic("");
+        console.log('Post updated:', response.data);
+        setTitle('');
+        setContent('');
+        setTopic('');
         navigate(-1); // Go back to the previous page after updating
       });
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.error('Error creating post:', err);
     }
   };
 
@@ -52,14 +52,14 @@ function UpdatePost() {
       try {
         const response = await api.get(`/posts/${postId}`);
         const post = response.data;
-        console.log("Fetched post data:", post);
+        console.log('Fetched post data:', post);
 
-        setTitle(post.title || "");
-        setContent(post.content || "");
-        setTopic(post.topic || "");
+        setTitle(post.title || '');
+        setContent(post.content || '');
+        setTopic(post.topic || '');
       } catch (err) {
-        console.error("Error fetching post data:", err);
-        setError("Failed to load post data.");
+        console.error('Error fetching post data:', err);
+        setError('Failed to load post data.');
       } finally {
         setLoading(false);
       }

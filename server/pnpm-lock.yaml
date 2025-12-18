@@ -17,9 +17,6 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.808.0
         version: 3.808.0
-      '@prisma/client':
-        specifier: 6.7.0
-        version: 6.7.0(prisma@6.7.0)
       aws-sdk:
         specifier: ^2.1692.0
         version: 2.1692.0
@@ -54,6 +51,9 @@ importers:
         specifier: ^0.34.1
         version: 0.34.1
     devDependencies:
+      '@prisma/client':
+        specifier: 6.7.0
+        version: 6.7.0(prisma@6.7.0)
       nodemon:
         specifier: ^3.1.9
         version: 3.1.9

@@ -1,24 +1,32 @@
 {
-  "name": "myBlog",
+  "name": "yappit",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "server": "cd server && pnpm run dev",
-    "client": "cd client && pnpm run dev",
-    "dev": "concurrently \"pnpm run server\" \"pnpm run client\"",
+    "setup": "pnpm install-all && pnpm db:setup && pnpm format",
+    "install-all": "pnpm run install-server && pnpm run install-client && pnpm install",
     "install-server": "cd server && pnpm install",
     "install-client": "cd client && pnpm install",
-    "install-base": "pnpm install",
-    "install-dependencies": "pnpm run install-server && pnpm run install-client && pnpm install"
+    "dev": "concurrently \"pnpm --filter server dev\" \"pnpm --filter client dev\"",
+    "lint": "eslint \"client/**/*.{js,jsx,ts,tsx}\" \"server/**/*.{js,ts}\"",
+    "lint:fix": "eslint --fix \"client/**/*.{js,jsx,ts,tsx}\" \"server/**/*.{js,ts}\"",
+    "format": "prettier --write \"client/**/*.{js,jsx,ts,tsx}\" \"server/**/*.{js,ts}\"",
+    "db:setup": "pnpm --filter server db:setup",
+    "db:reset": "pnpm --filter server db:reset"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.9.0",
   "devDependencies": {
-    "@tailwindcss/line-clamp": "^0.4.4",
-    "concurrently": "^9.1.2"
-  },
-  "dependencies": {}
+    "@eslint/js": "^9.39.2",
+    "concurrently": "^9.2.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.26",
+    "globals": "^16.5.0",
+    "prettier": "^3.7.4"
+  }
 }

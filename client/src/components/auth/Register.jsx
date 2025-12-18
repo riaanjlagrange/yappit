@@ -1,23 +1,23 @@
-import { useState, useEffect } from "react";
-import api from "../../utils/api";
-import { useNavigate, useLocation } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router-dom";
-import { CiLogin } from "react-icons/ci";
-import { FaUserPlus } from "react-icons/fa";
+import { useState, useEffect } from 'react';
+import api from '../../utils/api';
+import { useNavigate, useLocation } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import { Link } from 'react-router-dom';
+import { CiLogin } from 'react-icons/ci';
+import { FaUserPlus } from 'react-icons/fa';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: '',
+    email: '',
+    password: '',
   });
 
   const [message, setMessage] = useState(null);
 
   // check where the user is coming from
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/posts";
+  const from = location.state?.from?.pathname || '/posts';
 
   const navigate = useNavigate();
 
@@ -40,23 +40,20 @@ const Register = () => {
     e.preventDefault();
 
     try {
-      const res = await api.post("/auth/register", formData);
-      setMessage("Registration successful!");
+      const res = await api.post('/auth/register', formData);
+      setMessage('Registration successful!');
       console.log(res.data);
-      navigate("/login", { replace: true });
+      navigate('/login', { replace: true });
     } catch (err) {
       // TODO: show appropriate error message to user like if email already exists
       console.error(err);
-      setMessage(err.response?.data?.error || "Something went wrong");
+      setMessage(err.response?.data?.error || 'Something went wrong');
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 shadow-md w-full max-w-md"
-      >
+      <form onSubmit={handleSubmit} className="bg-white p-8 shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6">Register</h2>
 
         <input
@@ -89,9 +86,7 @@ const Register = () => {
           required
         />
 
-        {message && (
-          <div className="text-sm text-center text-red-400">{message}</div>
-        )}
+        {message && <div className="text-sm text-center text-red-400">{message}</div>}
 
         <button
           type="submit"
@@ -101,9 +96,7 @@ const Register = () => {
           <span>Register</span>
         </button>
         <div className="flex flex-col items-center justify-between mt-4">
-          <span className="text-sm text-gray-500 mt-2 mb-1">
-            Don't have an account?{" "}
-          </span>
+          <span className="text-sm text-gray-500 mt-2 mb-1">Don't have an account? </span>
           <Link
             to="/login"
             className="w-full bg-indigo-500 text-white py-3 rounded hover:bg-indigo-600 transition text-center flex items-center justify-center gap-2"

@@ -1,4 +1,4 @@
-const prisma = require("../prisma/client");
+const prisma = require('../prisma/client');
 
 // GET all posts
 const getAllPosts = async (req, res) => {
@@ -15,7 +15,7 @@ const getAllPosts = async (req, res) => {
     res.json(posts);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -35,14 +35,14 @@ const getPostById = async (req, res) => {
     });
 
     if (!post) {
-      return res.status(404).send("Post not found.");
+      return res.status(404).send('Post not found.');
     }
 
-    console.log("Fetched post:", post);
+    console.log('Fetched post:', post);
     res.json(post);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -56,13 +56,13 @@ const getPostsByUserId = async (req, res) => {
     });
 
     if (!posts || posts.length === 0) {
-      return res.status(404).send("No posts found for this user.");
+      return res.status(404).send('No posts found for this user.');
     }
 
     res.json(posts);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -81,13 +81,13 @@ const getPostScore = async (req, res) => {
     });
 
     if (!post) {
-      return res.status(404).json({ error: "Post not found." });
+      return res.status(404).json({ error: 'Post not found.' });
     }
 
     res.status(200).json({ score: post.score });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Something went wrong fetching votes." });
+    res.status(500).json({ error: 'Something went wrong fetching votes.' });
   }
 };
 
@@ -108,7 +108,7 @@ const createPost = async (req, res) => {
     res.status(201).json(newPost);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -123,18 +123,12 @@ const updatePostById = async (req, res) => {
     });
 
     if (!post) {
-      return res.status(404).send("Post not found.");
+      return res.status(404).send('Post not found.');
     }
 
     // check if user is authorized to update the post
-    if (
-      post.created_by !== req.user.id &&
-      !req.user.isAdmin &&
-      !req.user.isModerator
-    ) {
-      return res
-        .status(403)
-        .send("You are not authorized to update this post.");
+    if (post.created_by !== req.user.id && !req.user.isAdmin && !req.user.isModerator) {
+      return res.status(403).send('You are not authorized to update this post.');
     }
     const { title, content, topic } = req.body;
 
@@ -150,7 +144,7 @@ const updatePostById = async (req, res) => {
     res.status(200).json(updatedPost);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -165,18 +159,16 @@ const deletePostById = async (req, res) => {
     });
 
     if (!post) {
-      return res.status(404).send("Post not found.");
+      return res.status(404).send('Post not found.');
     }
 
     // check if user is authorized to delete the post
     // allow admins and moderators to delete any post
-    const isAdmin = req.user.roles.includes("ADMIN");
-    const isModerator = req.user.roles.includes("MODERATOR");
+    const isAdmin = req.user.roles.includes('ADMIN');
+    const isModerator = req.user.roles.includes('MODERATOR');
 
     if (post.created_by !== req.user.id && !isAdmin && !isModerator) {
-      return res
-        .status(403)
-        .send("You are not authorized to delete this post.");
+      return res.status(403).send('You are not authorized to delete this post.');
     }
 
     // use a prisma transaction to delete posts and comments
@@ -195,10 +187,10 @@ const deletePostById = async (req, res) => {
       }),
     ]);
 
-    res.status(204).send("Post deleted successfully.");
+    res.status(204).send('Post deleted successfully.');
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 

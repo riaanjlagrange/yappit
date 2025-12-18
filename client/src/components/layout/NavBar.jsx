@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import getUserById from "../../utils/getUserById";
-import logo from "../../assets/logo.svg";
-import tempProfilePicture from "../../assets/temp-profile.svg"; // Placeholder for profile picture
-import { CiLogout, CiLogin } from "react-icons/ci";
-import { FaUserPlus } from "react-icons/fa";
-import { MdPostAdd } from "react-icons/md";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import getUserById from '../../utils/getUserById';
+import logo from '../../assets/logo.svg';
+import tempProfilePicture from '../../assets/temp-profile.svg'; // Placeholder for profile picture
+import { CiLogout, CiLogin } from 'react-icons/ci';
+import { FaUserPlus } from 'react-icons/fa';
+import { MdPostAdd } from 'react-icons/md';
 // TODO: change Link to NavLink
 
 function NavBar() {
@@ -21,7 +21,7 @@ function NavBar() {
     try {
       const user = await getUserById(userId);
       if (!user) {
-        setUserError("User not found");
+        setUserError('User not found');
         return;
       }
       setUserName(user.name);
@@ -65,11 +65,8 @@ function NavBar() {
         return (
           <li className="flex items-center space-x-2 gap-3">
             <div className="flex flex-col items-end justify-center space-between">
-              <Link
-                to={`/users/${user.id}`}
-                className="hover:text-indigo-600 font-bold"
-              >
-                {userName || "Unknown User"}
+              <Link to={`/users/${user.id}`} className="hover:text-indigo-600 font-bold">
+                {userName || 'Unknown User'}
               </Link>
               <button
                 className="text-gray-600 hover:text-gray-500 cursor-pointer italic flex gap-2 items-center"
@@ -80,10 +77,7 @@ function NavBar() {
               </button>
             </div>
             <Link to={`/users/${user.id}`}>
-              <img
-                src={profilePicUrl || tempProfilePicture}
-                className="w-10 h-10 rounded-sm"
-              />
+              <img src={profilePicUrl || tempProfilePicture} className="w-10 h-10 rounded-sm" />
             </Link>
           </li>
         );
@@ -104,7 +98,7 @@ function NavBar() {
               to="/posts/new"
               // className="bg-gradient-to-br from-blue-600 via-pink-500 to-orange-400 text-white hover:bg-white p-3 rounded font-semibold"
               className="text-white bg-red-400 hover:bg-red-500 p-3 rounded font-semibold flex items-center justify-center gap-2"
-              style={{ transition: "all 0.3s ease" }}
+              style={{ transition: 'all 0.3s ease' }}
             >
               <MdPostAdd />
               <span>Create Post</span>

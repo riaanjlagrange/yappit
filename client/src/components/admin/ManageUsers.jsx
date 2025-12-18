@@ -9,11 +9,11 @@ function ManageUsers() {
   const handleDelete = async (userId) => {
     try {
       await api.delete(`/users/${userId}`);
-      setUsers(users.filter(user => user.id !== userId));
+      setUsers(users.filter((user) => user.id !== userId));
     } catch (err) {
       setError(err);
     }
-  }
+  };
 
   // TODO: Implement PUT/PATCH to update a user
 
@@ -41,33 +41,38 @@ function ManageUsers() {
   }
 
   return (
-    <div className='w-full h-full flex flex-col items-center justify-center'>
-      <h1 className='text-2xl font-bold mb-4'>Manage Users</h1>
-      <table className='w-full border-collapse'>
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      <h1 className="text-2xl font-bold mb-4">Manage Users</h1>
+      <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th className='border p-2'>ID</th>
-            <th className='border p-2'>Name</th>
-            <th className='border p-2'>Email</th>
-            <th className='border p-2'>Actions</th>
+            <th className="border p-2">ID</th>
+            <th className="border p-2">Name</th>
+            <th className="border p-2">Email</th>
+            <th className="border p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {users.map((user) => (
             <tr key={user.id}>
-              <td className='border p-2'>{user.id}</td>
-              <td className='border p-2'>{user.name}</td>
-              <td className='border p-2'>{user.email}</td>
-              <td className='border p-2'>
+              <td className="border p-2">{user.id}</td>
+              <td className="border p-2">{user.name}</td>
+              <td className="border p-2">{user.email}</td>
+              <td className="border p-2">
                 {/* Add action buttons here */}
                 {/* <button className='bg-blue-500 text-white px-4 py-2 rounded'>Edit</button> */}
-                <button onClick={() => handleDelete(user.id)} className='bg-red-500 text-white px-4 py-2 rounded ml-2'>Delete</button>
+                <button
+                  onClick={() => handleDelete(user.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded ml-2"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
-  )
+  );
 }
-export default ManageUsers
+export default ManageUsers;

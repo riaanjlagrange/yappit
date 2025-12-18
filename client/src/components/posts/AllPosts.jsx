@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import CardPost from "./CardPost";
-import api from "../../utils/api";
-import PageLoadingSpinner from "../layout/PageLoadingSpinner";
+import { useEffect, useState } from 'react';
+import CardPost from './CardPost';
+import api from '../../utils/api';
+import PageLoadingSpinner from '../layout/PageLoadingSpinner';
 
 function AllPosts() {
   const [posts, setPosts] = useState([]);
@@ -10,9 +10,9 @@ function AllPosts() {
 
   const fetchPosts = async () => {
     try {
-      const posts = await api.get("/posts");
+      const posts = await api.get('/posts');
       if (posts.data.length === 0) {
-        setErrorMessage("No posts available.");
+        setErrorMessage('No posts available.');
         return;
       }
       setPosts(posts.data);

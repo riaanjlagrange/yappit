@@ -1,8 +1,8 @@
-import { FaComment } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
-import api from "../../utils/api";
-import { Link } from "react-router-dom";
+import { FaComment } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
+import ContentLoadingSpinner from '../layout/ContentLoadingSpinner';
+import api from '../../utils/api';
+import { Link } from 'react-router-dom';
 
 function CommentAnnotation({ postId }) {
   const [commentCount, setCommentCount] = useState(0);

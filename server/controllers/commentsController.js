@@ -1,4 +1,4 @@
-const prisma = require("../prisma/client");
+const prisma = require('../prisma/client');
 
 // GET all comments from post
 const getAllCommentsFromPost = async (req, res) => {
@@ -23,11 +23,11 @@ const getAllCommentsFromPost = async (req, res) => {
     //   name: comment.user.name,
     // }));
 
-    console.log("Fetched comments:", comments);
+    console.log('Fetched comments:', comments);
     res.json(comments);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -48,7 +48,7 @@ const postComment = async (req, res) => {
     res.status(201).json(newComment);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -66,7 +66,7 @@ const deleteComment = async (req, res) => {
 
     // Check if comment exists
     if (!comment) {
-      return res.status(404).send("Comment not found.");
+      return res.status(404).send('Comment not found.');
     }
 
     // Find the post to check ownership
@@ -80,20 +80,13 @@ const deleteComment = async (req, res) => {
     const postUserId = post.created_by;
 
     // check if user is authorized to update the post
-    const isAdmin = req.user.roles.includes("ADMIN");
-    const isModerator = req.user.roles.includes("MODERATOR");
+    const isAdmin = req.user.roles.includes('ADMIN');
+    const isModerator = req.user.roles.includes('MODERATOR');
     console.log(isAdmin);
     console.log(isModerator);
 
-    if (
-      comment.user_id !== req.user.id &&
-      !isAdmin &&
-      !isModerator &&
-      postUserId !== req.user.id
-    ) {
-      return res
-        .status(403)
-        .send("You are not authorized to update this post.");
+    if (comment.user_id !== req.user.id && !isAdmin && !isModerator && postUserId !== req.user.id) {
+      return res.status(403).send('You are not authorized to update this post.');
     }
 
     // Delete the comment
@@ -103,10 +96,10 @@ const deleteComment = async (req, res) => {
       },
     });
 
-    res.json({ message: "Comment deleted successfully." });
+    res.json({ message: 'Comment deleted successfully.' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: 'Server error' });
   }
 };
 

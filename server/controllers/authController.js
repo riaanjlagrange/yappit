@@ -1,6 +1,6 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const prisma = require("../prisma/client");
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const prisma = require('../prisma/client');
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body;
@@ -12,7 +12,7 @@ const registerUser = async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: 'User already exists' });
     }
 
     // hash password
@@ -24,13 +24,13 @@ const registerUser = async (req, res) => {
       data: {
         name,
         email,
-        description: "Hey there! I am a new user.",
+        description: 'Hey there! I am a new user.',
         password: hashedPassword,
         userRoles: {
           create: {
             role: {
               connect: {
-                name: "USER",
+                name: 'USER',
               },
             },
           },
@@ -56,15 +56,15 @@ const registerUser = async (req, res) => {
 
     res.status(201).json({ user: userResponse });
   } catch (err) {
-    console.error("Error registering user:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error registering user:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log("Login attempt with email:", email);
-  console.log("Login attempt with password:", password);
+  console.log('Login attempt with email:', email);
+  console.log('Login attempt with password:', password);
 
   try {
     // check if user exists
@@ -80,24 +80,20 @@ const loginUser = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     // compare password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     // generate jwt token with roles
     const roles = user.userRoles.map((ur) => ur.role.name);
-    const token = jwt.sign(
-      { id: user.id, email: user.email, roles },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "1h",
-      }
-    );
+    const token = jwt.sign({ id: user.id, email: user.email, roles }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
 
     const userResponse = {
       id: user.id,
@@ -109,8 +105,8 @@ const loginUser = async (req, res) => {
 
     res.json({ token, user: userResponse });
   } catch (err) {
-    console.error("Error logging in user:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error('Error logging in user:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 };
 
@@ -119,7 +115,7 @@ const getAllRoles = async (req, res) => {
     const roles = await prisma.role.findMany();
     res.json(roles);
   } catch (error) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: 'Server error' });
   }
 };
 

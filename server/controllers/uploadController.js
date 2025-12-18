@@ -1,7 +1,7 @@
-const prisma = require("../prisma/client");
-const { PutObjectCommand } = require("@aws-sdk/client-s3");
-const { s3 } = require("../s3");
-const sharp = require("sharp");
+const prisma = require('../prisma/client');
+const { PutObjectCommand } = require('@aws-sdk/client-s3');
+const { s3 } = require('../s3');
+const sharp = require('sharp');
 
 const uploadProfilePicture = async (req, res) => {
   const userId = req.user.id;
@@ -9,7 +9,7 @@ const uploadProfilePicture = async (req, res) => {
 
   // Resize the image to 500x500 pixels
   const resizedImageBuffer = await sharp(req.file.buffer)
-    .resize({ height: 500, width: 500, fit: "contain" })
+    .resize({ height: 500, width: 500, fit: 'contain' })
     .toBuffer();
 
   const params = {
@@ -28,9 +28,9 @@ const uploadProfilePicture = async (req, res) => {
       where: { id: userId },
       data: { profilePic: userId },
     });
-    res.status(200).send("Profile picture uploaded successfully");
+    res.status(200).send('Profile picture uploaded successfully');
   } catch (error) {
-    console.error("Error uploading profile picture:", error);
+    console.error('Error uploading profile picture:', error);
     res.status(500).send(error.message);
   }
 };

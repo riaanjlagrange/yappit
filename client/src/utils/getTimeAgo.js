@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from "date-fns";
+import { formatDistanceToNow } from 'date-fns';
 
 const getTimeAgo = (postDate) => {
   const date = new Date(postDate);

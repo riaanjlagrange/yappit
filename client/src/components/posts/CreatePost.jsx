@@ -1,11 +1,11 @@
-import { useState } from "react";
-import api from "../../utils/api";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import api from '../../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 function CreatePost() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [topic, setTopic] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [topic, setTopic] = useState('');
 
   const navigate = useNavigate();
 
@@ -15,18 +15,18 @@ function CreatePost() {
     // created_by is set in backend to the logged in user id
     const post = { title, content, topic }; // need to change the created_by to the logged in user id
 
-    console.log("Post data:", post);
+    console.log('Post data:', post);
 
     try {
-      await api.post("/posts", post).then((response) => {
-        console.log("Post updated:", response.data);
-        setTitle("");
-        setContent("");
-        setTopic("");
+      await api.post('/posts', post).then((response) => {
+        console.log('Post updated:', response.data);
+        setTitle('');
+        setContent('');
+        setTopic('');
         navigate(`/posts/${response.data.id}`); // Go to the new post page after creating
       });
     } catch (err) {
-      console.error("Error creating post:", err);
+      console.error('Error creating post:', err);
     }
   };
 
@@ -41,9 +41,7 @@ function CreatePost() {
 
   return (
     <div className="mx-auto p-8 bg-white shadow-md mt-10 mb-10">
-      <h1 className="text-2xl font-semibold mb-10 pageTitle">
-        Create a New Post
-      </h1>
+      <h1 className="text-2xl font-semibold mb-10 pageTitle">Create a New Post</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex gap-2">
           <input

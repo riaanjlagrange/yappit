@@ -1,16 +1,13 @@
-import ProfilePicUpload from "./ProfilePicUpload";
-import { useEffect, useState } from "react";
-import api from "../../utils/api";
-import useAuth from "../../hooks/useAuth"
+import ProfilePicUpload from './ProfilePicUpload';
+import { useEffect, useState } from 'react';
+import api from '../../utils/api';
+import useAuth from '../../hooks/useAuth';
 
 function Settings() {
-  const [name, setName] = useState("")
+  const [name, setName] = useState('');
   const { user, isLoggedIn } = useAuth();
 
-  useEffect(() => {
-
-
-  }, [])
+  useEffect(() => {}, []);
 
   return (
     <div className="flex w-full h-full justify-center items-center">

@@ -1,14 +1,14 @@
-import { Link, useLocation, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import useAuth from "../../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
-import AllComments from "../comments/AllComments";
-import Votes from "../votes/Votes";
-import PageLoadingSpinner from "../layout/PageLoadingSpinner";
-import api from "../../utils/api";
-import { MdDeleteForever } from "react-icons/md";
-import { AiFillEdit } from "react-icons/ai";
-import UserCard from "../users/UserCard";
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import useAuth from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import AllComments from '../comments/AllComments';
+import Votes from '../votes/Votes';
+import PageLoadingSpinner from '../layout/PageLoadingSpinner';
+import api from '../../utils/api';
+import { MdDeleteForever } from 'react-icons/md';
+import { AiFillEdit } from 'react-icons/ai';
+import UserCard from '../users/UserCard';
 
 function FullPost() {
   const [post, setPost] = useState(null);
@@ -33,14 +33,14 @@ function FullPost() {
     try {
       const response = await api.delete(`/posts/${postId}`);
       if (response.status === 204) {
-        console.log("Post deleted successfully");
+        console.log('Post deleted successfully');
         // go back to top of the page
         window.scrollTo(0, 0);
-        navigate("/posts"); // Redirect to the posts page after deletion
+        navigate('/posts'); // Redirect to the posts page after deletion
       }
     } catch (err) {
       console.error(err);
-      setDeleteError("Failed to delete post." + " " + err.message);
+      setDeleteError('Failed to delete post.' + ' ' + err.message);
       setTimeout(() => {
         setDeleteError(null);
       }, 3000); // Clear the error after 3 seconds
@@ -49,7 +49,7 @@ function FullPost() {
 
   const handleUpdate = async () => {
     if (!isLoggedIn) {
-      setUpdateError("You must be logged in to update a post.");
+      setUpdateError('You must be logged in to update a post.');
       setTimeout(() => {
         setUpdateError(null);
       }, 3000);
@@ -71,12 +71,12 @@ function FullPost() {
       try {
         const response = await api.get(`/posts/${postId}`);
         const post = response.data;
-        console.log("Fetched post data:", post);
+        console.log('Fetched post data:', post);
         setPost(post);
         setIsAuthor(user && user.id === post.created_by); // Check if the logged-in user is the author of the post
       } catch (err) {
-        console.error("Error fetching post data:", err);
-        setError("Failed to load post data.");
+        console.error('Error fetching post data:', err);
+        setError('Failed to load post data.');
       } finally {
         setLoading(false);
       }
@@ -89,12 +89,12 @@ function FullPost() {
     console.log(hash);
 
     // Scroll to the comments section if the URL contains a hash
-    if (hash === "#comments") {
+    if (hash === '#comments') {
       const scrollToHash = () => {
-        const commentsSection = document.getElementById("comments");
+        const commentsSection = document.getElementById('comments');
         console.log(commentsSection);
         if (commentsSection) {
-          commentsSection.scrollIntoView({ behavior: "smooth" });
+          commentsSection.scrollIntoView({ behavior: 'smooth' });
         } else {
           setTimeout(scrollToHash, 100);
         }
@@ -104,8 +104,7 @@ function FullPost() {
   }, [postId, user, hash]); // Fetch post data when the component mounts or when postId changes
 
   if (loading) return <PageLoadingSpinner />;
-  if (error)
-    return <div className="text-center mt-10 text-red-500">{error}</div>;
+  if (error) return <div className="text-center mt-10 text-red-500">{error}</div>;
   if (!post) return null;
 
   return (
@@ -113,9 +112,7 @@ function FullPost() {
       <div className="bg-white min-h-[60vh] shadow-md w-full p-8 rounded relative">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
         <UserCard userId={post.created_by} createdAt={post.created_at} />
-        <p className="w-full h-1/2 break-words whitespace-normal mb-10 pt-5 px-3">
-          {post.content}
-        </p>
+        <p className="w-full h-1/2 break-words whitespace-normal mb-10 pt-5 px-3">{post.content}</p>
 
         <p className="font-semibold mb-4 text-sm bg-indigo-500 w-1/8 flex justify-center rounded-sm text-white p-1 absolute top-5 right-5">
           {post.topic}
@@ -144,25 +141,18 @@ function FullPost() {
         )}
         {deleteError && <p className="text-red-500 mt-2">{deleteError}</p>}
         {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
-        {/* TODO: implement comments section
-      <div className="bg-white p-8 shadow-md w-1/3">
-        <h1 className="text-xl font-bold mb-4">Comments</h1>
       </div>
-    */}
-      </div>
+      {/* Comments section */}
       <div className="bg-white w-full p-8 rounded shadow-md">
         <div id="comments">
           <AllComments postAuthorId={post.created_by} />
         </div>
         {!isLoggedIn && (
           <p className="text-red-400 mt-2">
-            You must be logged in to post a comment. Click{" "}
-            <Link
-              className="font-semibold hover:text-indigo-500 underline italic"
-              to="/login"
-            >
+            You must be logged in to post a comment. Click{' '}
+            <Link className="font-semibold hover:text-indigo-500 underline italic" to="/login">
               here
-            </Link>{" "}
+            </Link>{' '}
             to log in.
           </p>
         )}

@@ -1,8 +1,8 @@
-import api from "../../utils/api";
-import useAuth from "../../hooks/useAuth";
-import { useEffect, useState } from "react";
-import ContentLoadingSpinner from "../layout/ContentLoadingSpinner";
-import { MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import api from '../../utils/api';
+import useAuth from '../../hooks/useAuth';
+import { useEffect, useState } from 'react';
+import ContentLoadingSpinner from '../layout/ContentLoadingSpinner';
+import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 
 function Votes({ postId }) {
   const [vote, setVote] = useState(0);
@@ -16,7 +16,7 @@ function Votes({ postId }) {
 
   const castVote = async (voteValue) => {
     if (!isLoggedIn || !user) {
-      setVoteError("You must be logged in to vote.");
+      setVoteError('You must be logged in to vote.');
       setTimeout(() => {
         setVoteError(null);
       }, 3000);
@@ -28,13 +28,13 @@ function Votes({ postId }) {
       userId: user.id,
       vote: voteValue,
     };
-    console.log("Vote data:", data);
+    console.log('Vote data:', data);
 
     if (vote === voteValue) {
       try {
         setVote(0);
         await api.delete(`/votes/${data.postId}`);
-        console.log("Vote deleted successfully.");
+        console.log('Vote deleted successfully.');
 
         setScore((prevScore) => prevScore - voteValue);
       } catch (err) {
@@ -47,8 +47,8 @@ function Votes({ postId }) {
     } else if (vote === 0) {
       try {
         setVote(voteValue);
-        await api.post("/votes/", data);
-        console.log("Vote added successfully!");
+        await api.post('/votes/', data);
+        console.log('Vote added successfully!');
 
         setScore((prevScore) => prevScore + voteValue);
       } catch (err) {
@@ -61,8 +61,8 @@ function Votes({ postId }) {
     } else {
       try {
         setVote(voteValue);
-        await api.patch("/votes/", data);
-        console.log("Vote changed successfully!");
+        await api.patch('/votes/', data);
+        console.log('Vote changed successfully!');
 
         setScore((prevScore) => prevScore - vote + voteValue);
       } catch (err) {
@@ -84,7 +84,7 @@ function Votes({ postId }) {
       } catch (err) {
         if (err.response && err.response.status === 404) {
           setVote(0); // No vote found, set to 0
-          console.log("No vote found for this post.");
+          console.log('No vote found for this post.');
           return;
         }
         console.log(err.message);
@@ -118,23 +118,19 @@ function Votes({ postId }) {
       <button
         onClick={() => castVote(1)}
         className={`border p-1 rounded-full cursor-pointer ${
-          vote === 1 ? "bg-indigo-500 text-white" : "bg-white"
+          vote === 1 ? 'bg-indigo-500 text-white' : 'bg-white'
         }`}
       >
         <MdArrowDropUp className="size-5" />
       </button>
-      <span
-        className={`text-sm font-bold ${
-          score >= 0 ? "text-indigo-500" : "text-red-500"
-        }`}
-      >
+      <span className={`text-sm font-bold ${score >= 0 ? 'text-indigo-500' : 'text-red-500'}`}>
         {score}
       </span>
       {scoreError && <div className="text-gray-500">{scoreError}</div>}
       <button
         onClick={() => castVote(-1)}
         className={`border p-1 rounded-full cursor-pointer ${
-          vote === -1 ? "bg-red-400 text-white" : "bg-white"
+          vote === -1 ? 'bg-red-400 text-white' : 'bg-white'
         }`}
       >
         <MdArrowDropDown className="size-5" />

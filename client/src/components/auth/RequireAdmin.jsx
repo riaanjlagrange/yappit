@@ -1,4 +1,5 @@
-import { Navigate, useLocation } from "react-router-dom"; import useAuth from "../../hooks/useAuth";
+import { Navigate, useLocation } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
 const RequireAdmin = ({ children }) => {
   const { user, roles } = useAuth();
@@ -10,12 +11,12 @@ const RequireAdmin = ({ children }) => {
   }
 
   const isAdmin = roles.includes('ADMIN');
-  console.log(user)
-  console.log(roles)
-  console.log(isAdmin)
+  console.log(user);
+  console.log(roles);
+  console.log(isAdmin);
 
   if (!isAdmin) {
-    console.log("You are not an admin")
+    console.log('You are not an admin');
     return <Navigate to="/posts" state={{ from: location }} replace />;
   }
   return children;

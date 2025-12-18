@@ -1,17 +1,17 @@
-import api from "../../utils/api";
-import { useState, useEffect } from "react";
-import useAuth from "../../hooks/useAuth";
-import { useParams } from "react-router-dom";
-import profilePicture from "../../assets/temp-profile.svg";
-import PageLoadingSpinner from "../layout/PageLoadingSpinner";
-import ProfilePicUpload from "./ProfilePicUpload";
-import { Link } from "react-router-dom";
-import UserPosts from "../posts/UserPosts";
+import api from '../../utils/api';
+import { useState, useEffect } from 'react';
+import useAuth from '../../hooks/useAuth';
+import { useParams } from 'react-router-dom';
+import profilePicture from '../../assets/temp-profile.svg';
+import PageLoadingSpinner from '../layout/PageLoadingSpinner';
+import ProfilePicUpload from './ProfilePicUpload';
+import { Link } from 'react-router-dom';
+import UserPosts from '../posts/UserPosts';
 
 function Profile() {
   const [profileUser, setProfileUser] = useState(null);
-  const [profilePicUrl, setProfilePicUrl] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [profilePicUrl, setProfilePicUrl] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
   const profileUserId = useParams().userId;
@@ -58,10 +58,7 @@ function Profile() {
         <ul className="flex gap-2 absolute top-8 right-8">
           {/* TODO: need to add a color for each role in schema */}
           {profileUser.userRoles.map((role) => (
-            <li
-              className="p-2 text-sm rounded-sm bg-indigo-500 text-white"
-              key={role.role.id}
-            >
+            <li className="p-2 text-sm rounded-sm bg-indigo-500 text-white" key={role.role.id}>
               {role.role.name}
             </li>
           ))}
@@ -72,11 +69,11 @@ function Profile() {
             <p className="text-gray-700">({profileUser.email})</p>
           </div>
           <p className="text-gray-700 text-sm">
-            Joined:{" "}
-            {new Date(profileUser.created_at).toLocaleString("en-ZA", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
+            Joined:{' '}
+            {new Date(profileUser.created_at).toLocaleString('en-ZA', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
             })}
           </p>
         </div>
@@ -96,9 +93,7 @@ function Profile() {
             <UserPosts userId={profileUserId} />
           </div>
         </div>
-        <div className="bg-white w-2/10 p-8 rounded shadow-md">
-          Friends: WIP
-        </div>
+        <div className="bg-white w-2/10 p-8 rounded shadow-md">Friends: WIP</div>
       </div>
     </div>
   );

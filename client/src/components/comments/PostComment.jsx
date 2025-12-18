@@ -1,11 +1,11 @@
-import { useState } from "react";
-import api from "../../utils/api.js";
-import { useParams } from "react-router-dom";
-import useAuth from "../../hooks/useAuth.js";
-import UserCard from "../users/UserCard.jsx";
+import { useState } from 'react';
+import api from '../../utils/api.js';
+import { useParams } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth.js';
+import UserCard from '../users/UserCard.jsx';
 
 function PostComment({ onCommentPosted }) {
-  const [commentContent, setCommentContent] = useState("");
+  const [commentContent, setCommentContent] = useState('');
   const [error, setError] = useState(null);
 
   const { user } = useAuth();
@@ -17,7 +17,7 @@ function PostComment({ onCommentPosted }) {
     e.preventDefault();
     try {
       await api.post(`/comments/${postId}`, commentData);
-      setCommentContent(""); // Clear the input field after submission
+      setCommentContent(''); // Clear the input field after submission
     } catch (err) {
       console.error(err.message);
       setError(err.message);

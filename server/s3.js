@@ -1,5 +1,5 @@
-const { S3Client } = require("@aws-sdk/client-s3");
-const multer = require("multer");
+const { S3Client } = require('@aws-sdk/client-s3');
+const multer = require('multer');
 
 const s3 = new S3Client({
   credentials: {

@@ -1,28 +1,28 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./index.css";
-import App from "./App.jsx";
-import AllPosts from "./components/posts/AllPosts.jsx";
-import CreatePost from "./components/posts/CreatePost.jsx";
-import Register from "./components/auth/Register.jsx";
-import Login from "./components/auth/Login.jsx";
-import RequireAuth from "./components/auth/RequireAuth.jsx";
-import RequireAdmin from "./components/auth/RequireAdmin.jsx";
-import UpdatePost from "./components/posts/UpdatePost.jsx";
-import FullPost from "./components/posts/FullPost.jsx";
-import MyPosts from "./components/posts/MyPosts.jsx";
-import NotFoundPage from "./components/layout/NotFoundPage.jsx";
-import AdminPanel from "./components/admin/AdminPanel.jsx";
-import ManageUsers from "./components/admin/ManageUsers.jsx";
-import { AuthProvider } from "./context/AuthContext.jsx";
-import AssignAdmin from "./components/auth/AssignAdmin.jsx";
-import Profile from "./components/users/Profile.jsx";
-import Settings from "./components/users/Settings.jsx";
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import './index.css';
+import App from './App.jsx';
+import AllPosts from './components/posts/AllPosts.jsx';
+import CreatePost from './components/posts/CreatePost.jsx';
+import Register from './components/auth/Register.jsx';
+import Login from './components/auth/Login.jsx';
+import RequireAuth from './components/auth/RequireAuth.jsx';
+import RequireAdmin from './components/auth/RequireAdmin.jsx';
+import UpdatePost from './components/posts/UpdatePost.jsx';
+import FullPost from './components/posts/FullPost.jsx';
+import MyPosts from './components/posts/MyPosts.jsx';
+import NotFoundPage from './components/layout/NotFoundPage.jsx';
+import AdminPanel from './components/admin/AdminPanel.jsx';
+import ManageUsers from './components/admin/ManageUsers.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import AssignAdmin from './components/auth/AssignAdmin.jsx';
+import Profile from './components/users/Profile.jsx';
+import Settings from './components/users/Settings.jsx';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: (
       <AuthProvider>
         <App />
@@ -30,11 +30,11 @@ const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/posts",
+        path: '/posts',
         element: <AllPosts />,
       },
       {
-        path: "/posts/new",
+        path: '/posts/new',
         element: (
           <RequireAuth>
             <CreatePost />
@@ -42,11 +42,11 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/posts/:postId",
+        path: '/posts/:postId',
         element: <FullPost />,
       },
       {
-        path: "/users/:userName/posts",
+        path: '/users/:userName/posts',
         element: (
           <RequireAuth>
             <MyPosts />
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/users/:userId",
+        path: '/users/:userId',
         element: (
           <RequireAuth>
             <Profile />
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/users/:userId/settings",
+        path: '/users/:userId/settings',
         element: (
           <RequireAuth>
             <Settings />
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/posts/:postId/update",
+        path: '/posts/:postId/update',
         element: (
           <RequireAuth>
             <UpdatePost />
@@ -78,15 +78,15 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/register",
+        path: '/register',
         element: <Register />,
       },
       {
-        path: "/login",
+        path: '/login',
         element: <Login />,
       },
       {
-        path: "/admin",
+        path: '/admin',
         element: (
           <RequireAdmin>
             <AdminPanel />
@@ -94,7 +94,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/admin/users",
+        path: '/admin/users',
         element: (
           <RequireAdmin>
             <ManageUsers />
@@ -102,7 +102,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/admin/assign",
+        path: '/admin/assign',
         element: (
           <RequireAuth>
             <AssignAdmin />
@@ -112,13 +112,13 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "*",
+    path: '*',
     element: <NotFoundPage />,
   },
 ]);
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={router} />
-  </StrictMode>
+  </StrictMode>,
 );

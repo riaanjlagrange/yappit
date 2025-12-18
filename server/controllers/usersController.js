@@ -1,7 +1,7 @@
-const prisma = require("../prisma/client");
-const { s3 } = require("../s3");
-const { GetObjectCommand } = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const prisma = require('../prisma/client');
+const { s3 } = require('../s3');
+const { GetObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 // GET all users
 const getAllUsers = async (req, res) => {
@@ -30,14 +30,14 @@ const getAllUsers = async (req, res) => {
 
     // Check if users exist
     if (users.length === 0) {
-      return res.status(404).send("No users found.");
+      return res.status(404).send('No users found.');
     }
-    console.log("Fetched users:", users);
+    console.log('Fetched users:', users);
 
     res.json(users);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -62,11 +62,11 @@ const getUserById = async (req, res) => {
       },
     });
 
-    console.log("Fetched user:", user);
+    console.log('Fetched user:', user);
 
     // Check if user exists
     if (!user) {
-      return res.status(404).send("User not found.");
+      return res.status(404).send('User not found.');
     }
 
     if (user.profilePic) {
@@ -85,7 +85,7 @@ const getUserById = async (req, res) => {
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -100,7 +100,7 @@ const updateUserById = async (req, res) => {
 
     // Check if user exists
     if (!user) {
-      return res.status(404).send("User not found.");
+      return res.status(404).send('User not found.');
     }
 
     const updatedUser = await prisma.user.update({
@@ -114,7 +114,7 @@ const updateUserById = async (req, res) => {
     res.json(updatedUser);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 
@@ -128,7 +128,7 @@ const deleteUserById = async (req, res) => {
 
     // Check if user exists
     if (!user) {
-      res.status(404).send("User not found.");
+      res.status(404).send('User not found.');
     }
 
     await prisma.userRole.deleteMany({
@@ -142,7 +142,7 @@ const deleteUserById = async (req, res) => {
     res.status(204).send();
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 };
 

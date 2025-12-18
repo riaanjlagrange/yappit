@@ -1,8 +1,8 @@
-require("dotenv").config();
-const prisma = require("./client");
+require('dotenv').config();
+const prisma = require('./client');
 
 async function main() {
-  const roles = [{ name: "ADMIN" }, { name: "USER" }, { name: "MODERATOR" }];
+  const roles = [{ name: 'ADMIN' }, { name: 'USER' }, { name: 'MODERATOR' }];
 
   for (const role of roles) {
     await prisma.role.upsert({
@@ -11,7 +11,7 @@ async function main() {
       create: { name: role.name },
     });
   }
-  console.log("Roles seeded successfully");
+  console.log('Roles seeded successfully');
 }
 
 main()

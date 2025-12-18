@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
-import api from "../../utils/api.js";
-import Comment from "./Comment.jsx";
-import { useParams } from "react-router-dom";
-import PostComment from "./PostComment.jsx";
-import useAuth from "../../hooks/useAuth.js";
-import ContentLoadingSpinner from "../layout/ContentLoadingSpinner.jsx";
+import { useState, useEffect, useCallback } from 'react';
+import api from '../../utils/api.js';
+import Comment from './Comment.jsx';
+import { useParams } from 'react-router-dom';
+import PostComment from './PostComment.jsx';
+import useAuth from '../../hooks/useAuth.js';
+import ContentLoadingSpinner from '../layout/ContentLoadingSpinner.jsx';
 
 function AllComments({ postAuthorId }) {
   const [comments, setComments] = useState([]);
@@ -21,7 +21,7 @@ function AllComments({ postAuthorId }) {
       const response = await api.get(`/comments/${postId}`);
       console.log(response.data);
       if (response.data.length === 0) {
-        setError("No comments yet");
+        setError('No comments yet');
         setLoading(false);
         return;
       }
@@ -49,9 +49,7 @@ function AllComments({ postAuthorId }) {
       <ul className="flex flex-col gap-2">
         {loading && <ContentLoadingSpinner />}
         {error && <li>{error}</li>}
-        {!loading && !error && comments.length === 0 && (
-          <li>No comments yet</li>
-        )}
+        {!loading && !error && comments.length === 0 && <li>No comments yet</li>}
         {!loading &&
           !error &&
           comments.map((comment) => (

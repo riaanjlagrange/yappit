@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // Bearer token
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer token
 
   if (!token) return res.sendStatus(401); // Unauthorized
 
@@ -21,14 +21,14 @@ const isAdmin = async (req, res, next) => {
   try {
     if (!user) return res.sendStatus(401); // Unauthorized
 
-    if (!user.roles.includes("ADMIN")) {
-      res.sendStatus(403).send("Admin Access Required");
+    if (!user.roles.includes('ADMIN')) {
+      res.sendStatus(403).send('Admin Access Required');
     }
 
     next();
   } catch (err) {
     console.error(err);
-    res.status(400).send("An Unknown Error Occured");
+    res.status(400).send('An Unknown Error Occured');
   }
 };
 
@@ -43,11 +43,11 @@ const hasRole = (roles) => async (req, res, next) => {
     const hasRequiredRole = roles.some((role) => user.roles.includes(role));
 
     if (!hasRequiredRole) {
-      return res.status(403).json({ error: "Insufficient permissions" });
+      return res.status(403).json({ error: 'Insufficient permissions' });
     }
     next();
   } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
+    res.status(401).json({ error: 'Invalid token' });
   }
 };
 

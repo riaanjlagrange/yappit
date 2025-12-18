@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import { createContext, useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext();
 
@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   // Helper: logout user and clear state
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     setUser(null);
     setIsLoggedIn(false);
     setIsAdmin(false);
@@ -25,14 +25,14 @@ export const AuthProvider = ({ children }) => {
 
   // Helper: login user and schedule auto-logout
   const login = (token) => {
-    localStorage.setItem("token", token);
+    localStorage.setItem('token', token);
     try {
       const decoded = jwtDecode(token);
       setIsLoggedIn(true);
       setUser(decoded);
       setRoles(decoded.roles || []);
-      setIsAdmin(decoded.roles.includes("ADMIN"));
-      setIsModerator(decoded.roles.includes("MODERATOR"));
+      setIsAdmin(decoded.roles.includes('ADMIN'));
+      setIsModerator(decoded.roles.includes('MODERATOR'));
 
       // Schedule logout when token expires
       const timeUntilExpiry = decoded.exp * 1000 - Date.now();
@@ -41,14 +41,14 @@ export const AuthProvider = ({ children }) => {
       }, timeUntilExpiry);
       setLogoutTimer(timer);
     } catch (err) {
-      console.error("Invalid token", err);
+      console.error('Invalid token', err);
       logout();
     }
   };
 
   // On initial load, check if token exists and is valid
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) return;
 
     try {
@@ -60,13 +60,16 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(true);
         setUser(decoded);
         setRoles(decoded.roles || []);
-        setIsAdmin(decoded.roles.includes("ADMIN"));
-        setIsModerator(decoded.roles.includes("MODERATOR"));
+        setIsAdmin(decoded.roles.includes('ADMIN'));
+        setIsModerator(decoded.roles.includes('MODERATOR'));
 
         // Schedule logout
-        const timer = setTimeout(() => {
-          logout();
-        }, decoded.exp * 1000 - Date.now());
+        const timer = setTimeout(
+          () => {
+            logout();
+          },
+          decoded.exp * 1000 - Date.now(),
+        );
         setLogoutTimer(timer);
       }
     } catch {
@@ -75,9 +78,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider
-      value={{ user, roles, isAdmin, isModerator, isLoggedIn, login, logout }}
-    >
+    <AuthContext.Provider value={{ user, roles, isAdmin, isModerator, isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
