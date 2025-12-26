@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: yappit-postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    image: yappit-api
+    pull_policy: never
+    container_name: yappit-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+      target: runner
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    command: >
+      sh -c "
+        pnpm prisma migrate deploy &&
+        pnpm prisma generate &&
+        pnpm prisma db seed &&
+        pnpm start
+      "
+    ports:
+      - "3000:3000"
+
+  client:
+    image: yappit-client
+    pull_policy: never
+    container_name: yappit-client
+    depends_on:
+      - api
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+
+volumes:
+  postgres-data:
+ 
