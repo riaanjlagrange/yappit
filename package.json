@@ -4,15 +4,15 @@
   "description": "",
   "scripts": {
     "setup": "pnpm install-all && pnpm db:setup && pnpm format",
-    "install-all": "pnpm run install-server && pnpm run install-client && pnpm install",
-    "install-server": "cd server && pnpm install",
+    "install-all": "pnpm run install-api && pnpm run install-client && pnpm install",
+    "install-api": "cd api && pnpm install",
     "install-client": "cd client && pnpm install",
-    "dev": "concurrently \"pnpm --filter server dev\" \"pnpm --filter client dev\"",
-    "lint": "eslint \"client/**/*.{js,jsx,ts,tsx}\" \"server/**/*.{js,ts}\"",
-    "lint:fix": "eslint --fix \"client/**/*.{js,jsx,ts,tsx}\" \"server/**/*.{js,ts}\"",
-    "format": "prettier --write \"client/**/*.{js,jsx,ts,tsx}\" \"server/**/*.{js,ts}\"",
-    "db:setup": "pnpm --filter server db:setup",
-    "db:reset": "pnpm --filter server db:reset"
+    "dev": "concurrently \"pnpm --filter api dev\" \"pnpm --filter client dev\"",
+    "lint": "eslint \"client/**/*.{js,jsx,ts,tsx}\" \"api/**/*.{js,ts}\"",
+    "lint:fix": "eslint --fix \"client/**/*.{js,jsx,ts,tsx}\" \"api/**/*.{js,ts}\"",
+    "format": "prettier --write \"client/**/*.{js,jsx,ts,tsx}\" \"api/**/*.{js,ts}\"",
+    "db:setup": "pnpm --filter api db:setup",
+    "db:reset": "pnpm --filter api db:reset"
   },
   "keywords": [],
   "author": "",
