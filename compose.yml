@@ -14,6 +14,7 @@ services:
     image: yappit-api
     pull_policy: never
     container_name: yappit-api
+    restart: always
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -35,6 +36,7 @@ services:
     image: yappit-client
     pull_policy: never
     container_name: yappit-client
+    restart: always
     depends_on:
       - api
     build:
