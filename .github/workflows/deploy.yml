@@ -41,6 +41,8 @@ jobs:
           docker-compose up -d --build
 
           echo "Running Prisma setup..."
-          docker-compose exec -T api pnpm db:setup
+          docker-compose exec api pnpm prisma generate
+          docker-compose exec api pnpm prisma migrate deploy
+          docker-compose exec api pnpm prisma db seed
 
           echo "Deployment complete!"
