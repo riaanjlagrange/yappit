@@ -40,9 +40,4 @@ jobs:
           echo "Building and starting containers..."
           docker-compose up -d --build
 
-          echo "Running Prisma setup..."
-          docker-compose exec api pnpm prisma generate
-          docker-compose exec api pnpm prisma migrate deploy
-          docker-compose exec api pnpm prisma db seed
-
           echo "Deployment complete!"
