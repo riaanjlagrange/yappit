@@ -15,6 +15,7 @@ model User {
   password   String
   description String
   profilePic String?
+  refreshToken String? // Add this line
   created_at DateTime  @default(now())
   posts      Post[]    @relation("UserPosts")
   comments   Comment[]

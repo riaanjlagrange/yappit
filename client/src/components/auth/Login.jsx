@@ -46,7 +46,7 @@ const Login = () => {
       const res = await api.post('/auth/login', formData);
       setMessage('Login successful!');
       // use login from context to manage auth
-      login(res.data.token);
+      login(res.data.accessToken);
       navigate(from, { replace: true });
     } catch (err) {
       console.error(err);

@@ -39,6 +39,8 @@ services:
     restart: always
     depends_on:
       - api
+    env_file:
+      - .env
     build:
       context: ./client
       dockerfile: Dockerfile

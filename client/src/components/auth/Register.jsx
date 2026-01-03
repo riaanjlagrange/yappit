@@ -11,6 +11,7 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
 
   const [message, setMessage] = useState(null);
@@ -38,6 +39,11 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setMessage('Passwords do not match');
+      return;
+    }
 
     try {
       const res = await api.post('/auth/register', formData);
@@ -81,6 +87,16 @@ const Register = () => {
           type="password"
           placeholder="Password"
           value={formData.password}
+          onChange={handleChange}
+          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
+          required
+        />
+
+        <input
+          name="confirmPassword"
+          type="password"
+          placeholder="Confirm Password"
+          value={formData.confirmPassword}
           onChange={handleChange}
           className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
           required
