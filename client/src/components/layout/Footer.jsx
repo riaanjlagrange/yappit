@@ -1,24 +1,27 @@
 import logo from '../../assets/logo.svg';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="bg-white fixed right-0 bottom-0 w-1/8 flex justify-evenly items-center py-4 gap-3 rounded-tl">
-      <img src={logo} alt="Yappit Logo" className="w-1/4 h-1/4" />
-      <div className="text-center">
-        <p className="text-sm">
-          © 2025 <span className="font-extrabold text-indigo-500">Yapp</span>
-          <span className="font-bold text-red-400">it</span>
+    <footer className="w-full bg-gray-200 py-6 mt-8 flex gap-10 justify-center items-center">
+      <Link to="/" className="text-2xl font-bold text-gray-800">
+	<img src={logo} alt="Logo" className="w-12 h-12" />
+      </Link>
+      <div className="flex flex-col items-center">
+        <p className="text-sm mb-2">
+          © {new Date().getFullYear()} Yappit
         </p>
-        <p className="text-sm">Made by</p>
-        {/* Add github logo here */}
-        <a
-          href="https://github.com/riaanjlagrange"
-          target="_blank"
-          className="text-sm font-semibold hover:text-red-400 hover:underline pageTitle"
-        >
-          riaanjlagrange
-        </a>
+        <p className="text-xs text-gray-700 mb-2">
+          Built by{' '}
+          <a
+            href="https://github.com/riaanjlagrange"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold hover:text-red-400 hover:underline"
+          >
+            riaanjlagrange
+          </a>
+        </p>
       </div>
     </footer>
   );

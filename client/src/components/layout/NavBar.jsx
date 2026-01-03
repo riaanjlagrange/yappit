@@ -88,7 +88,7 @@ function NavBar() {
   return (
     <nav className="fixed bg-white w-full h-20 top-0 flex justify-between items-center px-5 shadow-md z-10">
       <ul className="flex space-x-4 items-center justify-center gap-5">
-        <Link to="/posts" className="text-2xl font-bold text-gray-800">
+        <Link to="/" className="text-2xl font-bold text-gray-800">
           <img src={logo} alt="Logo" className="w-12 h-12" />
         </Link>
         {/* Show "Create Post" link only if the user is logged in */}

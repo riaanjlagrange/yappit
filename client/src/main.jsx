@@ -19,6 +19,8 @@ import { AuthProvider } from './context/AuthContext.jsx';
 import AssignAdmin from './components/auth/AssignAdmin.jsx';
 import Profile from './components/users/Profile.jsx';
 import Settings from './components/users/Settings.jsx';
+import Root from './components/layout/Root.jsx';
+import { Navigate } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
       </AuthProvider>
     ),
     children: [
+      {
+        path: '/',
+        element: <Root />,
+      },
       {
         path: '/posts',
         element: <AllPosts />,
