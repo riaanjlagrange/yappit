@@ -1,4 +1,5 @@
 const prisma = require('../prisma/client');
+const { getProfilePicUrl } = require('../s3');
 
 // GET all comments from post
 const getAllCommentsFromPost = async (req, res) => {
@@ -13,18 +14,26 @@ const getAllCommentsFromPost = async (req, res) => {
         user: {
           select: {
             name: true,
+            profilePic: true,
           },
         },
       },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
 
-    // const formattedComments = comments.map((comment) => ({
-    //   ...comment,
-    //   name: comment.user.name,
-    // }));
+    const commentsWithSignedUrls = await Promise.all(
+      comments.map(async (comment) => {
+        if (comment.user.profilePic) {
+          comment.user.profilePic = await getProfilePicUrl(comment.user.profilePic);
+        }
+        return comment;
+      }),
+    );
 
-    console.log('Fetched comments:', comments);
-    res.json(comments);
+    console.log('Fetched comments:', commentsWithSignedUrls);
+    res.json(commentsWithSignedUrls);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server error' });

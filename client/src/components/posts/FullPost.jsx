@@ -111,7 +111,12 @@ function FullPost() {
     <div className="pb-50 flex flex-col gap-5">
       <div className="bg-white min-h-[60vh] shadow-md w-full p-8 rounded relative">
         <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-        <UserCard userId={post.created_by} createdAt={post.created_at} />
+        <UserCard
+          userId={post.created_by}
+          authorName={post.author.name}
+          authorProfilePic={post.author.profilePic}
+          createdAt={post.created_at}
+        />
         <p className="w-full h-1/2 break-words whitespace-normal mb-10 pt-5 px-3">{post.content}</p>
 
         <p className="font-semibold mb-4 text-sm bg-indigo-500 w-1/8 flex justify-center rounded-sm text-white p-1 absolute top-5 right-5">

@@ -1,5 +1,7 @@
 const prisma = require('../prisma/client');
 
+const { getProfilePicUrl } = require('../s3');
+
 // GET all posts
 const getAllPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -30,7 +32,16 @@ const getAllPosts = async (req, res) => {
       },
     });
 
-    const posts = postsData.map((post) => {
+    const postsWithSignedUrls = await Promise.all(
+      postsData.map(async (post) => {
+        if (post.author.profilePic) {
+          post.author.profilePic = await getProfilePicUrl(post.author.profilePic);
+        }
+        return post;
+      }),
+    );
+
+    const posts = postsWithSignedUrls.map((post) => {
       const userVote = post.votes.find((vote) => vote.user_id === userId);
       return {
         ...post,
@@ -62,6 +73,7 @@ const getPostById = async (req, res) => {
         author: {
           select: {
             name: true,
+	    profilePic: true,
           },
         },
       },
@@ -69,6 +81,10 @@ const getPostById = async (req, res) => {
 
     if (!post) {
       return res.status(404).send('Post not found.');
+    }
+
+    if (post.author.profilePic) {
+      post.author.profilePic = await getProfilePicUrl(post.author.profilePic);
     }
 
     console.log('Fetched post:', post);
@@ -111,7 +127,16 @@ const getPostsByUserId = async (req, res) => {
       },
     });
 
-    const posts = postsData.map((post) => {
+    const postsWithSignedUrls = await Promise.all(
+      postsData.map(async (post) => {
+        if (post.author.profilePic) {
+          post.author.profilePic = await getProfilePicUrl(post.author.profilePic);
+        }
+        return post;
+      }),
+    );
+
+    const posts = postsWithSignedUrls.map((post) => {
       const userVote = post.votes.find((vote) => vote.user_id === currentUserId);
       return {
         ...post,
@@ -123,10 +148,6 @@ const getPostsByUserId = async (req, res) => {
     const totalPosts = await prisma.post.count({
       where: { created_by: userId },
     });
-
-    if (posts.length === 0) {
-      return res.status(404).send('No posts found for this user.');
-    }
 
     res.json({
       posts,

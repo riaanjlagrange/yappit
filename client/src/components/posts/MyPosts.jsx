@@ -24,7 +24,9 @@ function MyPosts() {
     } catch (err) {
       console.error(err);
       if (err.response && err.response.status === 404) {
-        setErrorMessage('No posts available.');
+        setErrorMessage('No posts found for this user.');
+        setPosts([]); // Ensure posts are cleared if a 404 is received
+        setTotalPages(0); // Set total pages to 0 if no posts
       } else {
         setErrorMessage(err.message);
       }
@@ -52,12 +54,13 @@ function MyPosts() {
   };
 
   if (loading) return <PageLoadingSpinner />;
-  if (errorMessage) return <div>{errorMessage}</div>;
 
   return (
     <div className="pb-60">
       <h1 className="text-2xl font-semibold mb-10 pageTitle">My Posts</h1>
-      {posts.length > 0 ? (
+      {errorMessage ? (
+        <p className="text-red-500">{errorMessage}</p>
+      ) : posts.length > 0 ? (
         <>
           <ul className="flex flex-col gap-10">
             {posts.map((post, index) => (

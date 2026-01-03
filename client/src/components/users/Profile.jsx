@@ -29,7 +29,7 @@ function Profile() {
     try {
       const user = await api.get(`/users/${profileUserId}`);
       setProfileUser(user.data);
-      setProfilePicUrl(user.data.profilePicUrl);
+      setProfilePicUrl(user.data.profilePic);
       console.log(user.data.profilePicUrl);
       console.log(user.data);
     } catch (err) {

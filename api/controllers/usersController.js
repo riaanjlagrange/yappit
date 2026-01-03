@@ -1,7 +1,5 @@
 const prisma = require('../prisma/client');
-const { s3 } = require('../s3');
-const { GetObjectCommand } = require('@aws-sdk/client-s3');
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const { getProfilePicUrl } = require('../s3');
 
 // GET all users
 const getAllUsers = async (req, res) => {
@@ -15,26 +13,22 @@ const getAllUsers = async (req, res) => {
       },
     });
 
-    for (const user of users) {
-      const getObjectParams = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `profile_pics/${user.id}/${user.profilePic}`,
-      };
-
-      const command = new GetObjectCommand(getObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-      // Add the URL to the user object
-      user.profilePicUrl = url;
-    }
+    const usersWithSignedUrls = await Promise.all(
+      users.map(async (user) => {
+        if (user.profilePic) {
+          user.profilePic = await getProfilePicUrl(user.profilePic);
+        }
+        return user;
+      }),
+    );
 
     // Check if users exist
-    if (users.length === 0) {
+    if (usersWithSignedUrls.length === 0) {
       return res.status(404).send('No users found.');
     }
-    console.log('Fetched users:', users);
+    console.log('Fetched users:', usersWithSignedUrls);
 
-    res.json(users);
+    res.json(usersWithSignedUrls);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -70,16 +64,7 @@ const getUserById = async (req, res) => {
     }
 
     if (user.profilePic) {
-      const getObjectParams = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `profile_pics/${userId}/${userId}`,
-      };
-
-      const command = new GetObjectCommand(getObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-      // Add the URL to the user object
-      user.profilePicUrl = url;
+      user.profilePic = await getProfilePicUrl(user.profilePic);
     }
 
     res.json(user);

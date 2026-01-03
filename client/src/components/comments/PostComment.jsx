@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import api from '../../utils/api.js';
 import { useParams } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth.js';
@@ -7,11 +7,31 @@ import UserCard from '../users/UserCard.jsx';
 function PostComment({ onCommentPosted }) {
   const [commentContent, setCommentContent] = useState('');
   const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loadingCurrentUser, setLoadingCurrentUser] = useState(true);
 
-  const { user } = useAuth();
+  const { user } = useAuth(); // 'user' here is from JWT, only has id, email, roles
 
   const { postId } = useParams();
   const commentData = { userId: user.id, content: commentContent };
+
+  useEffect(() => {
+    const fetchCurrentUserData = async () => {
+      if (user && user.id) {
+        try {
+          const response = await api.get(`/users/${user.id}`);
+          setCurrentUser(response.data);
+        } catch (err) {
+          console.error('Error fetching current user data:', err);
+        } finally {
+          setLoadingCurrentUser(false);
+        }
+      } else {
+        setLoadingCurrentUser(false);
+      }
+    };
+    fetchCurrentUserData();
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +49,9 @@ function PostComment({ onCommentPosted }) {
     }
   };
 
+  // Only render UserCard if current user data is loaded
+  if (loadingCurrentUser) return null; // Or a loading spinner
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -42,7 +65,13 @@ function PostComment({ onCommentPosted }) {
         required
       ></textarea>
       <div className="flex justify-between items-center">
-        <UserCard userId={user.id} />
+        {currentUser && (
+          <UserCard
+            userId={currentUser.id}
+            authorName={currentUser.name}
+            authorProfilePic={currentUser.profilePic}
+          />
+        )}
         <button
           type="submit"
           className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-sm cursor-pointer"

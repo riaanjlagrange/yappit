@@ -25,7 +25,7 @@ function NavBar() {
         return;
       }
       setUserName(user.name);
-      setProfilePicUrl(user.profilePicUrl);
+      setProfilePicUrl(user.profilePic);
       setUserLoading(false);
       return user;
     } catch (error) {

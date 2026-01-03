@@ -26,7 +26,7 @@ const uploadProfilePicture = async (req, res) => {
     // Update the user's profile picture in the database
     await prisma.user.update({
       where: { id: userId },
-      data: { profilePic: userId },
+      data: { profilePic: `profile_pics/${userId}/${userId}` },
     });
     res.status(200).send('Profile picture uploaded successfully');
   } catch (error) {
