@@ -64,7 +64,12 @@ function CardPost({ post, onPostDeleted }) {
     <div className="shadow-md rounded bg-white flex flex-col p-8 relative">
       <div className="flex flex-col justify-between">
         <div className="flex justify-between items-center mb-4">
-          <UserCard userId={post.created_by} createdAt={post.created_at} />
+          <UserCard
+            userId={post.created_by}
+            authorName={post.author.name}
+            authorProfilePic={post.author.profilePic}
+            createdAt={post.created_at}
+          />
           <p className="font-semibold text-sm bg-indigo-500 flex justify-center rounded-sm text-white py-2 px-5">
             {post.topic}
           </p>
@@ -83,9 +88,9 @@ function CardPost({ post, onPostDeleted }) {
       </div>
 
       <div className="flex justify-between items-center pt-3 gap-5">
-        <Votes postId={post.id} />
+        <Votes postId={post.id} initialScore={post.score} initialVote={post.userVote} />
         {/* Show the number of comments */}
-        <CommentAnnotation postId={post.id} />
+        <CommentAnnotation postId={post.id} commentCount={post.commentCount} />
         {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
         {(isAuthor || isAdmin || isModerator) && (
           <div className="flex justify-end w-full gap-2">

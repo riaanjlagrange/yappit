@@ -2,17 +2,50 @@ const prisma = require('../prisma/client');
 
 // GET all posts
 const getAllPosts = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const userId = req.user?.id;
+
   try {
-    const posts = await prisma.post.findMany({
+    const postsData = await prisma.post.findMany({
+      skip,
+      take: limit,
       include: {
         author: {
           select: {
             name: true,
+            profilePic: true,
+          },
+        },
+        votes: true, // Include votes to calculate user's vote
+        _count: {
+          select: {
+            comments: true,
           },
         },
       },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
-    res.json(posts);
+
+    const posts = postsData.map((post) => {
+      const userVote = post.votes.find((vote) => vote.user_id === userId);
+      return {
+        ...post,
+        userVote: userVote ? userVote.vote : 0,
+        commentCount: post._count.comments,
+      };
+    });
+
+    const totalPosts = await prisma.post.count();
+    res.json({
+      posts,
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -49,17 +82,58 @@ const getPostById = async (req, res) => {
 // GET posts by user id
 const getPostsByUserId = async (req, res) => {
   const userId = req.params.id;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+  const currentUserId = req.user?.id;
 
   try {
-    const posts = await prisma.post.findMany({
+    const postsData = await prisma.post.findMany({
+      where: { created_by: userId },
+      skip,
+      take: limit,
+      include: {
+        author: {
+          select: {
+            name: true,
+            profilePic: true,
+          },
+        },
+        votes: true, // Include votes to calculate user's vote
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    const posts = postsData.map((post) => {
+      const userVote = post.votes.find((vote) => vote.user_id === currentUserId);
+      return {
+        ...post,
+        userVote: userVote ? userVote.vote : 0,
+        commentCount: post._count.comments,
+      };
+    });
+
+    const totalPosts = await prisma.post.count({
       where: { created_by: userId },
     });
 
-    if (!posts || posts.length === 0) {
+    if (posts.length === 0) {
       return res.status(404).send('No posts found for this user.');
     }
 
-    res.json(posts);
+    res.json({
+      posts,
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

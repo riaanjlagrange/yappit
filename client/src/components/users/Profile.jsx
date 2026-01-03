@@ -88,12 +88,9 @@ function Profile() {
         )}
       </div>
       <div className="flex mt-5 gap-5 w-full">
-        <div className="w-8/10">
-          <div className="w-full">
-            <UserPosts userId={profileUserId} />
-          </div>
-        </div>
-        <div className="bg-white w-2/10 p-8 rounded shadow-md">Friends: WIP</div>
+	<div className="w-full">
+	  <UserPosts userId={profileUserId} />
+	</div>
       </div>
     </div>
   );
