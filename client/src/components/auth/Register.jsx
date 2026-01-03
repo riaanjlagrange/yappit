@@ -17,18 +17,11 @@ const Register = () => {
   const [message, setMessage] = useState(null);
 
   // check where the user is coming from
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/posts';
 
   const navigate = useNavigate();
 
-  // if already logged in, redirect to previous page
-  const { isLoggedIn } = useAuth();
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate(from, { replace: true });
-    }
-  }, [isLoggedIn, from, navigate]);
+  // useAuth to get auth from AuthContext
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -48,8 +41,8 @@ const Register = () => {
     try {
       const res = await api.post('/auth/register', formData);
       setMessage('Registration successful!');
-      console.log(res.data);
-      navigate('/login', { replace: true });
+      login(res.data.accessToken); // Automatically log in the user
+      navigate('/posts', { replace: true }); // Redirect to home page
     } catch (err) {
       // TODO: show appropriate error message to user like if email already exists
       console.error(err);

@@ -45,16 +45,44 @@ const registerUser = async (req, res) => {
       },
     });
 
+    // generate jwt token with roles
+    const roles = newUser.userRoles.map((ur) => ur.role.name);
+    const accessToken = jwt.sign(
+      { id: newUser.id, email: newUser.email, roles },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h',
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: newUser.id, email: newUser.email },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+        expiresIn: '1d',
+      }
+    );
+
+    // save refresh token to db
+    await prisma.user.update({
+      where: { id: newUser.id },
+      data: { refreshToken },
+    });
+
     const userResponse = {
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,
-      role: newUser.userRoles.map((ur) => ur.role.name),
+      roles,
     };
 
-    console.log(userResponse);
-
-    res.status(201).json({ user: userResponse });
+    res.cookie('jwt', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.status(201).json({ accessToken, user: userResponse });
   } catch (err) {
     console.error('Error registering user:', err);
     res.status(500).json({ message: 'Server error' });
