@@ -21,15 +21,6 @@ import Profile from './components/users/Profile.jsx';
 import Settings from './components/users/Settings.jsx';
 import Root from './components/layout/Root.jsx';
 
-import * as Sentry from "@sentry/react";
-
-Sentry.init({
-  dsn: "https://32b35809feb1ccdb815875ddbc9b62bd@o4510334692950016.ingest.de.sentry.io/4510652794732624",
-  // Setting this option to true will send default PII data to Sentry.
-  // For example, automatic IP address collection on events
-  sendDefaultPii: true,
-});
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -39,8 +30,14 @@ const router = createBrowserRouter([
       </AuthProvider>
     ),
     children: [
-      { path: '/', element: <Root /> },
-      { path: '/posts', element: <AllPosts /> },
+      {
+        path: '/',
+        element: <Root />,
+      },
+      {
+        path: '/posts',
+        element: <AllPosts />,
+      },
       {
         path: '/posts/new',
         element: (
@@ -49,7 +46,10 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
-      { path: '/posts/:postId', element: <FullPost /> },
+      {
+        path: '/posts/:postId',
+        element: <FullPost />,
+      },
       {
         path: '/users/:userName/posts',
         element: (
@@ -82,8 +82,14 @@ const router = createBrowserRouter([
           </RequireAuth>
         ),
       },
-      { path: '/register', element: <Register /> },
-      { path: '/login', element: <Login /> },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+      },
       {
         path: '/admin',
         element: (
@@ -110,16 +116,14 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: '*', element: <NotFoundPage /> },
+  {
+    path: '*',
+    element: <NotFoundPage />,
+  },
 ]);
 
-const container = document.getElementById('app');
-const root = createRoot(container);
-root.render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Sentry.ErrorBoundary fallback={<p>An error occured</p>}>
-      <RouterProvider router={router} />
-    </Sentry.ErrorBoundary>
-  </StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>,
 );
-

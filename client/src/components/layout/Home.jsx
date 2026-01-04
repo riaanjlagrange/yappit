@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.svg';
-import ErrorButton from './SentryError.jsx';
-import { ErrorBoundary } from '@sentry/react';
 
 const Home = () => {
   return (
@@ -18,9 +16,6 @@ const Home = () => {
         >
           Explore Posts
         </Link>
-	<ErrorBoundary>
-	  <ErrorButton />
-	</ErrorBoundary>
       </div>
     </div>
   );
