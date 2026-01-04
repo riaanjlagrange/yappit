@@ -25,6 +25,8 @@ import * as Sentry from "@sentry/react";
 
 Sentry.init({
   dsn: "https://32b35809feb1ccdb815875ddbc9b62bd@o4510334692950016.ingest.de.sentry.io/4510652794732624",
+  // Setting this option to true will send default PII data to Sentry.
+  // For example, automatic IP address collection on events
   sendDefaultPii: true,
 });
 
@@ -115,7 +117,9 @@ const container = document.getElementById('app');
 const root = createRoot(container);
 root.render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <Sentry.ErrorBoundary fallback={<p>An error occured</p>}>
+      <RouterProvider router={router} />
+    </Sentry.ErrorBoundary>
   </StrictMode>
 );
 

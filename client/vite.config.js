@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig(() => {
@@ -7,7 +8,19 @@ export default defineConfig(() => {
     process.env.VITE_API_URL || 'http://localhost:3000';
 
   return {
-    plugins: [react(), tailwindcss()],
+    build: {
+      sourcemap: true, // Source map generation must be turned on
+    },
+    plugins: [
+      react(),
+      tailwindcss(),
+    sentryVitePlugin({
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      org: "riaan-la-grange",
+      project: "yappit",
+    }),
+
+    ],
     server: {
       proxy: {
         '/api': {
@@ -18,4 +31,3 @@ export default defineConfig(() => {
     },
   };
 });
-
