@@ -15,6 +15,7 @@ export default defineConfig(() => {
       react(),
       tailwindcss(),
     sentryVitePlugin({
+      telemetry: false,
       authToken: process.env.SENTRY_AUTH_TOKEN,
       org: "riaan-la-grange",
       project: "yappit",
