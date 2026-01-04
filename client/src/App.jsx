@@ -7,7 +7,7 @@ function App() {
     <div>
       <div className="bg-indigo-50 min-h-screen relative">
         <NavBar />
-        <div className="container mx-auto w-3/4 pt-32 min-h-screen">
+        <div className="container mx-auto md:w-3/4 w-full px-4 pt-32 min-h-screen">
           <Outlet />
         </div>
         <Footer />

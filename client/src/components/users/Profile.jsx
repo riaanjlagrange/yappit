@@ -1,11 +1,9 @@
 import api from '../../utils/api';
 import { useState, useEffect } from 'react';
 import useAuth from '../../hooks/useAuth';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import profilePicture from '../../assets/temp-profile.svg';
 import PageLoadingSpinner from '../layout/PageLoadingSpinner';
-import ProfilePicUpload from './ProfilePicUpload';
-import { Link } from 'react-router-dom';
 import UserPosts from '../posts/UserPosts';
 
 function Profile() {
@@ -14,26 +12,17 @@ function Profile() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const profileUserId = useParams().userId;
-
-  // check if user is author
+  const { userId: profileUserId } = useParams();
   const { user } = useAuth();
-  const userId = user.id;
 
-  const isAuthor = userId === profileUserId;
-  console.log(userId);
-  console.log(profileUserId);
-  console.log(isAuthor);
+  const isAuthor = user?.id === profileUserId;
 
-  const getUser = async (profileUserId) => {
+  const getUser = async (id) => {
     try {
-      const user = await api.get(`/users/${profileUserId}`);
-      setProfileUser(user.data);
-      setProfilePicUrl(user.data.profilePic);
-      console.log(user.data.profilePicUrl);
-      console.log(user.data);
+      const res = await api.get(`/users/${id}`);
+      setProfileUser(res.data);
+      setProfilePicUrl(res.data.profilePic);
     } catch (err) {
-      console.error(err);
       setErrorMessage(err.message);
     } finally {
       setLoading(false);
@@ -48,52 +37,77 @@ function Profile() {
   if (errorMessage) return <div>{errorMessage}</div>;
 
   return (
-    <div className="flex w-full h-full flex-col items-center pb-20">
-      <div className="w-full bg-white h-full flex flex-col p-8 rounded-sm gap-5 justify-evenly relative shadow-md">
-        <img
-          src={profilePicUrl ? profilePicUrl : profilePicture}
-          href="Profile Picture"
-          className="max-w-32 rounded-sm"
-        />
-        <ul className="flex gap-2 absolute top-8 right-8">
-          {/* TODO: need to add a color for each role in schema */}
-          {profileUser.userRoles.map((role) => (
-            <li className="p-2 text-sm rounded-sm bg-indigo-500 text-white" key={role.role.id}>
-              {role.role.name}
-            </li>
-          ))}
-        </ul>
-        <div className="flex flex-col gap-1">
-          <div className="flex gap-2 items-center">
-            <p className="font-semibold">{profileUser.name}</p>
-            <p className="text-gray-700">({profileUser.email})</p>
+    <div className="w-full flex flex-col items-center pb-20 px-3 md:px-0">
+      {/* Profile Card */}
+      <div className="w-full max-w-4xl bg-white rounded-sm shadow-md p-4 md:p-8 relative">
+        {/* Top section */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+          {/* Profile Picture */}
+          <div className="flex justify-start">
+            <img
+              src={profilePicUrl || profilePicture}
+              alt="Profile"
+              className="w-28 h-28 md:w-32 md:h-32 rounded-sm object-cover"
+            />
           </div>
-          <p className="text-gray-700 text-sm">
-            Joined:{' '}
-            {new Date(profileUser.created_at).toLocaleString('en-ZA', {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-            })}
-          </p>
+
+          {/* User Info */}
+          <div className="flex-1 flex flex-col gap-2">
+            {/* Name + email */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+              <p className="font-semibold text-lg">{profileUser.name}</p>
+              <p className="text-gray-600 text-sm break-all">
+                ({profileUser.email})
+              </p>
+            </div>
+
+            {/* Joined */}
+            <p className="text-gray-700 text-sm">
+              Joined:{' '}
+              {new Date(profileUser.created_at).toLocaleDateString('en-ZA')}
+            </p>
+
+            {/* Roles */}
+            <ul className="flex flex-wrap gap-2 mt-2">
+              {profileUser.userRoles.map((role) => (
+                <li
+                  key={role.role.id}
+                  className="px-3 py-1 text-xs rounded-sm bg-indigo-500 text-white"
+                >
+                  {role.role.name}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-        <p>{profileUser.description}</p>
+
+        {/* Description */}
+        {profileUser.description && (
+          <p className="mt-5 text-sm md:text-base text-gray-800">
+            {profileUser.description}
+          </p>
+        )}
+
+        {/* Edit Button */}
         {isAuthor && (
-          <Link
-            to={`/users/${profileUserId}/settings`}
-            className="bg-red-400 hover:bg-red-500 text-white p-2 rounded-sm absolute bottom-8 right-8"
-          >
-            Edit Profile
-          </Link>
+          <div className="mt-6 md:mt-0 md:absolute md:bottom-8 md:right-8">
+            <Link
+              to={`/users/${profileUserId}/settings`}
+              className="block w-full md:w-auto text-center bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-sm font-semibold"
+            >
+              Edit Profile
+            </Link>
+          </div>
         )}
       </div>
-      <div className="flex mt-5 gap-5 w-full">
-	<div className="w-full">
-	  <UserPosts userId={profileUserId} />
-	</div>
+
+      {/* User Posts */}
+      <div className="w-full max-w-4xl mt-6">
+        <UserPosts userId={profileUserId} />
       </div>
     </div>
   );
 }
 
 export default Profile;
+

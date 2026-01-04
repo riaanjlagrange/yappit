@@ -53,34 +53,64 @@ function PostComment({ onCommentPosted }) {
   if (loadingCurrentUser) return null; // Or a loading spinner
 
   return (
-    <form
+      <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 px-4 py-2 rounded shadow-sm border-t-2 border-indigo-500"
+      className="flex flex-col gap-3 px-3 sm:px-4 py-3 rounded shadow-sm border-t-2 border-indigo-500"
     >
       <textarea
-        value={commentContent}
-        onChange={(e) => setCommentContent(e.target.value)}
-        placeholder="Write a comment..."
-        className="p-2 border-b border-gray-300 rounded-md italic min-h-20 max-h-40 resize-none"
-        required
-      ></textarea>
-      <div className="flex justify-between items-center">
-        {currentUser && (
-          <UserCard
-            userId={currentUser.id}
-            authorName={currentUser.name}
-            authorProfilePic={currentUser.profilePic}
-          />
-        )}
-        <button
-          type="submit"
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-sm cursor-pointer"
-        >
-          Post Comment
-        </button>
+	value={commentContent}
+	onChange={(e) => setCommentContent(e.target.value)}
+	placeholder="Write a comment..."
+	className="
+	  p-3
+	  border border-gray-300
+	  rounded-md
+	  italic
+	  min-h-[80px]
+	  max-h-[200px]
+	  resize-none
+	  focus:outline-none
+	  focus:ring-2
+	  focus:ring-indigo-400
+	  break-words
+	"
+	required
+      />
+
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+	{currentUser && (
+	  <div className="w-full sm:w-auto">
+	    <UserCard
+	      userId={currentUser.id}
+	      authorName={currentUser.name}
+	      authorProfilePic={currentUser.profilePic}
+	    />
+	  </div>
+	)}
+
+	<button
+	  type="submit"
+	  className="
+	    w-full
+	    sm:w-auto
+	    bg-indigo-500
+	    hover:bg-indigo-600
+	    text-white
+	    px-5
+	    py-2.5
+	    rounded-md
+	    font-semibold
+	    cursor-pointer
+	    transition-colors
+	  "
+	>
+	  Post Comment
+	</button>
       </div>
-      {error && <div className="text-red-400 text-sm mt-2">{error}</div>}
+
+      {error && <div className="text-red-400 text-sm mt-1">{error}</div>}
     </form>
+
   );
 }
 

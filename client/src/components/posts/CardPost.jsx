@@ -10,109 +10,103 @@ import CommentAnnotation from '../comments/CommentAnnotation';
 
 function CardPost({ post, onPostDeleted }) {
   const [deleteError, setDeleteError] = useState(null);
-
   const [updateError, setUpdateError] = useState(null);
 
   const { user, isLoggedIn, isAdmin, isModerator } = useAuth();
-
   const navigate = useNavigate();
 
-  console.log(post.created_at);
-
-  // Check if the user is logged in and if they are the author of the post
   const isAuthor = user && user.id === post.created_by;
-
-  // Fetch the author name when the component mounts or when post.created_by changes
-  // TODO: could use helper function "getUserNameById" to fetch the author name in future
-  // UPDATE!: I think that ^ was a dumb idea...
 
   const handleDelete = async () => {
     try {
       await api.delete(`/posts/${post.id}`);
       onPostDeleted();
-      console.log('Post deleted successfully');
     } catch (err) {
-      console.error(err);
-      setDeleteError('Failed to delete post.' + ' ' + err.message);
-      setTimeout(() => {
-        setDeleteError(null);
-      }, 3000); // Clear the error after 3 seconds
-      window.scrollTo(0, 0); // Scroll to the top of the page
+      setDeleteError('Failed to delete post.');
+      setTimeout(() => setDeleteError(null), 3000);
+      window.scrollTo(0, 0);
     }
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     if (!isLoggedIn) {
       setUpdateError('You must be logged in to update a post.');
-      setTimeout(() => {
-        setUpdateError(null);
-      }, 3000);
+      setTimeout(() => setUpdateError(null), 3000);
       return;
     }
-    // if (user.id !== post.created_by) {
-    //   setUpdateError("You are not authorized to update this post.");
-    //   setTimeout(() => {
-    //     setUpdateError(null);
-    //   }, 3000);
-    //   return;
-    // }
-    window.scrollTo(0, 0); // Scroll to the top of the page
     navigate(`/posts/${post.id}/update`);
   };
 
   return (
-    <div className="shadow-md rounded bg-white flex flex-col p-8 relative">
-      <div className="flex flex-col justify-between">
-        <div className="flex justify-between items-center mb-4">
-          <UserCard
-            userId={post.created_by}
-            authorName={post.author.name}
-            authorProfilePic={post.author.profilePic}
-            createdAt={post.created_at}
-          />
-          <p className="font-semibold text-sm bg-indigo-500 flex justify-center rounded-sm text-white py-2 px-5">
-            {post.topic}
-          </p>
-        </div>
-        <span>
-          <Link
-            to={`/posts/${post.id}`}
-            className="text-xl font-semibold hover:text-red-400 hover:underline"
-          >
-            {post.title}
-          </Link>
+    <div className="bg-white shadow-md rounded p-4 md:p-8 flex flex-col gap-4">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+        <UserCard
+          userId={post.created_by}
+          authorName={post.author.name}
+          authorProfilePic={post.author.profilePic}
+          createdAt={post.created_at}
+        />
+
+        {/* Topic */}
+        <span className="self-start md:self-auto text-xs font-semibold bg-indigo-500 text-white px-3 py-1 rounded-sm">
+          {post.topic}
         </span>
-        <p className="text-gray-700 overflow-ellipsis break-words line-clamp-2 py-2">
-          {post.content}
-        </p>
       </div>
 
-      <div className="flex justify-between items-center pt-3 gap-5">
-        <Votes postId={post.id} initialScore={post.score} initialVote={post.userVote} />
-        {/* Show the number of comments */}
-        <CommentAnnotation postId={post.id} commentCount={post.commentCount} />
-        {/* Show the delete and update buttons only if the user is logged in and is the author of the post */}
+      {/* Title */}
+      <Link
+        to={`/posts/${post.id}`}
+        className="text-lg md:text-xl font-semibold hover:text-red-400 hover:underline"
+      >
+        {post.title}
+      </Link>
+
+      {/* Content Preview */}
+      <p className="text-gray-700 text-sm md:text-base break-words line-clamp-2">
+        {post.content}
+      </p>
+
+      {/* Footer */}
+      <div className="flex flex-wrap md:flex-nowrap items-center justify-between gap-3 pt-2">
+        <div className="flex items-center gap-4">
+          <Votes
+            postId={post.id}
+            initialScore={post.score}
+            initialVote={post.userVote}
+          />
+          <CommentAnnotation
+            postId={post.id}
+            commentCount={post.commentCount}
+          />
+        </div>
+
         {(isAuthor || isAdmin || isModerator) && (
-          <div className="flex justify-end w-full gap-2">
+          <div className="flex gap-2">
             <button
               onClick={handleUpdate}
-              className="bg-indigo-500 text-white p-2 hover:bg-indigo-600 cursor-pointer rounded"
+              className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 text-white w-10 h-10 rounded"
+              aria-label="Edit post"
             >
               <AiFillEdit />
             </button>
             <button
               onClick={handleDelete}
-              className="bg-red-400 text-white p-2  hover:bg-red-500 cursor-pointer rounded"
+              className="flex items-center justify-center bg-red-400 hover:bg-red-500 text-white w-10 h-10 rounded"
+              aria-label="Delete post"
             >
               <MdDeleteForever />
             </button>
           </div>
         )}
       </div>
-      {deleteError && <p className="text-red-500 mt-2">{deleteError}</p>}
-      {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
+
+      {/* Errors */}
+      {deleteError && <p className="text-red-500 text-sm">{deleteError}</p>}
+      {updateError && <p className="text-red-500 text-sm">{updateError}</p>}
     </div>
   );
 }
 
 export default CardPost;
+

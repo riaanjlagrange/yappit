@@ -61,7 +61,7 @@ const Register = () => {
           placeholder="Name"
           value={formData.name}
           onChange={handleChange}
-          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
+          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-sm md:text-md bg-indigo-50"
           required
         />
 
@@ -71,7 +71,7 @@ const Register = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
+          className="w-full mb-4 p-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-sm md:text-md bg-indigo-50"
           required
         />
 
@@ -81,7 +81,7 @@ const Register = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
+          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-sm md:text-md bg-indigo-50"
           required
         />
 
@@ -91,7 +91,7 @@ const Register = () => {
           placeholder="Confirm Password"
           value={formData.confirmPassword}
           onChange={handleChange}
-          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-indigo-50"
+          className="w-full p-3 mb-3 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm text-sm md:text-md bg-indigo-50"
           required
         />
 
